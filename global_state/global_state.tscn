@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctrh2j33hfbgy"]
+
+[ext_resource type="Script" path="res://global_state/input.gd" id="1_clj83"]
+
+[node name="GlobalState" type="Node"]
+
+[node name="Input" type="Node" parent="."]
+script = ExtResource("1_clj83")

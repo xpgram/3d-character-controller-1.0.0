@@ -1,12 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvt4747kc5u2t"]
+[gd_scene load_steps=6 format=3 uid="uid://bvt4747kc5u2t"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_1il7v"]
+[ext_resource type="PackedScene" uid="uid://ctrh2j33hfbgy" path="res://global_state/global_state.tscn" id="2_bbco6"]
 [ext_resource type="PackedScene" uid="uid://bw2yt2kjem3le" path="res://player/player_3d.tscn" id="4_0xcq0"]
 [ext_resource type="PackedScene" uid="uid://cnedxfn2pxh2t" path="res://level/level.tscn" id="7_2frud"]
 [ext_resource type="PackedScene" uid="uid://bxg6oejpaitdt" path="res://level/interactable/flag/flag_reached_screen.tscn" id="19_cpgj4"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_1il7v")
+
+[node name="GlobalState" parent="." instance=ExtResource("2_bbco6")]
 
 [node name="FlagReachedScreen" parent="." instance=ExtResource("19_cpgj4")]
 
