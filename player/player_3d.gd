@@ -19,6 +19,7 @@ func _move_character_body(delta: float) -> void:
          "move_right",
          "move_up",
          "move_down",
+         0.4
    )
    # This step squares the "strength" of the input vector, allowing finer control near the
    # lower end of the range.
