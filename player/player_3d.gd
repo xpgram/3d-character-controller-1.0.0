@@ -8,6 +8,8 @@ extends CharacterBody3D
 
 var _last_movement_direction := Vector3.BACK
 
+var _gravity := -30.0
+
 @onready var _camera: Camera3D = %Camera3D
 @onready var _character_model: SophiaSkin = %SophiaSkin
 
@@ -40,13 +42,16 @@ func _move_character_body(delta: float) -> void:
          forward_vector * curved_input.y
          + rightward_vector * curved_input.x
    )
-   # Prevent movement up or into the ground.
-   move_direction.y = 0.0
+   var lateral_velocity := Vector3(velocity.x, 0, velocity.z)
+   var vertical_velocity := velocity.y
+
    # Normalize the camera-angled movement vector onto the ground plane.
    move_direction = move_direction.normalized() * curved_input.length()
 
    # Move the character
-   velocity = velocity.move_toward(move_direction * move_speed, acceleration * delta)
+   velocity = lateral_velocity.move_toward(move_direction * move_speed, acceleration * delta)
+   velocity.y = vertical_velocity + (_gravity * delta)
+
    move_and_slide()
 
    # Store the last input direction
