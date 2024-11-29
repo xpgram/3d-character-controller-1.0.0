@@ -39,6 +39,8 @@ func _move_character_body(delta: float) -> void:
    )
    # Prevent movement up or into the ground.
    move_direction.y = 0.0
+   # Normalize the camera-angled movement vector onto the ground plane.
+   move_direction = move_direction.normalized() * curved_input.length()
 
    # Move the character
    velocity = velocity.move_toward(move_direction * move_speed, acceleration * delta)
