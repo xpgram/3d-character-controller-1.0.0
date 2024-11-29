@@ -5,6 +5,8 @@ extends CharacterBody3D
 @export var move_speed := 8.0
 @export var acceleration := 30.0
 @export var rotation_speed := 15.0
+@export var jump_impulse := 12.0
+@export var min_jump_impulse := 4.0
 
 var _last_movement_direction := Vector3.BACK
 
@@ -18,12 +20,26 @@ func _physics_process(delta: float) -> void:
    _move_character_body(delta)
 
    # Animation steps
-   _angle_character_body(delta)
+   _rotate_character_body(delta)
    _update_animation_state()
 
 
 ## Handle character movement input.
 func _move_character_body(delta: float) -> void:
+   _apply_gravity(delta)
+   _handle_movement_input(delta)
+   _handle_jump_input()
+
+   move_and_slide()
+
+
+## Manages character fall behavior.
+func _apply_gravity(delta: float) -> void:
+   velocity.y += _gravity * delta
+
+
+## Manages character lateral (ground plane) movement.
+func _handle_movement_input(delta: float) -> void:
    var raw_input := Input.get_vector(
          "move_left",
          "move_right",
@@ -42,26 +58,36 @@ func _move_character_body(delta: float) -> void:
          forward_vector * curved_input.y
          + rightward_vector * curved_input.x
    )
-   var lateral_velocity := Vector3(velocity.x, 0, velocity.z)
-   var vertical_velocity := velocity.y
-
    # Normalize the camera-angled movement vector onto the ground plane.
    move_direction = move_direction.normalized() * curved_input.length()
 
-   # Move the character
-   velocity = lateral_velocity.move_toward(move_direction * move_speed, acceleration * delta)
-   velocity.y = vertical_velocity + (_gravity * delta)
+   var lateral_velocity := Vector3(velocity.x, 0, velocity.z)
+   var new_velocity = lateral_velocity.move_toward(move_direction * move_speed, acceleration * delta)
 
-   move_and_slide()
+   # Move the character
+   velocity.x = new_velocity.x
+   velocity.z = new_velocity.z
 
    # Store the last input direction
    if move_direction.length() > 0:
       _last_movement_direction = move_direction
 
 
+## Manages character jump behavior.
+func _handle_jump_input() -> void:
+   var is_starting_jump := Input.is_action_just_pressed("jump") and is_on_floor()
+   var is_ending_jump := Input.is_action_just_released("jump") and velocity.y > min_jump_impulse
+
+   if is_starting_jump:
+      velocity.y += jump_impulse
+
+   if is_ending_jump:
+      velocity.y = min_jump_impulse
+
+
 # TODO Accept an argument instead of depending on script-globals?
 ## Rotates the character body into the direction of travel.
-func _angle_character_body(delta: float) -> void:
+func _rotate_character_body(delta: float) -> void:
    var target_angle := Vector3.BACK.signed_angle_to(_last_movement_direction, Vector3.UP)
 
    # Smoothly rotate to the direction of travel.
@@ -72,6 +98,7 @@ func _angle_character_body(delta: float) -> void:
    )
 
 
+## Update animation state to reflect new input values.
 func _update_animation_state() -> void:
    var ground_speed := velocity.length()
 
