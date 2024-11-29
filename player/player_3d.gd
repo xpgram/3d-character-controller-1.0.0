@@ -17,8 +17,8 @@ func _physics_process(delta: float) -> void:
    _angle_character_body(delta)
 
 
+## Handle character movement input.
 func _move_character_body(delta: float) -> void:
-   ## Handle character movement input.
    var raw_input := Input.get_vector(
          "move_left",
          "move_right",

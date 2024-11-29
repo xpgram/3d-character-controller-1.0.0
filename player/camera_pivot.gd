@@ -25,8 +25,8 @@ func _physics_process(delta: float) -> void:
    _constrain_camera_angles_to_limits()
 
 
+## Saves mouse motion event as a vector input to process later.
 func _capture_input_mouse_motion(event: InputEvent) -> void:
-   ## Saves mouse motion event as a vector input to process later.
    var is_camera_motion := (
          event is InputEventMouseMotion
          and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
@@ -35,8 +35,8 @@ func _capture_input_mouse_motion(event: InputEvent) -> void:
       _camera_mouse_input_direction = event.screen_relative * mouse_sensitivity
 
 
+## Uses mouse motion input to move the camera.
 func _move_camera_by_mouse_motion(delta: float) -> void:
-   ## Uses mouse motion input to move the camera.
    # TODO Invert axis via game settings
    rotation.y -= _camera_mouse_input_direction.x * delta
    rotation.x += _camera_mouse_input_direction.y * delta
@@ -45,8 +45,8 @@ func _move_camera_by_mouse_motion(delta: float) -> void:
    _camera_mouse_input_direction = Vector2.ZERO
 
 
+## Uses joystick input to move the camera.
 func _move_camera_by_gamepad_stick(delta: float) -> void:
-   ## Uses joystick input to move the camera.
    var raw_input := Input.get_vector(
       "look_left",
       "look_right",
@@ -63,6 +63,6 @@ func _move_camera_by_gamepad_stick(delta: float) -> void:
    rotation.x -= scaled_input.y
 
 
+## Constrains the camera's pivot angle to predefined limits.
 func _constrain_camera_angles_to_limits() -> void:
-   ## Constrains the camera's pivot angle to predefined limits.
    rotation.x = clamp(rotation.x, CAMERA_UPPER_BOUND, CAMERA_LOWER_BOUND)
