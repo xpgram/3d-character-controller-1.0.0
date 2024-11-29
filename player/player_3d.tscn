@@ -24,6 +24,10 @@ shape = SubResource("CapsuleShape3D_hnhtc")
 unique_name_in_owner = true
 transform = Transform3D(-1, -2.99003e-08, 8.21505e-08, 0, 0.939693, 0.34202, -8.74228e-08, 0.34202, -0.939693, 0, 2, 0)
 script = ExtResource("3_vi4hj")
+mouse_sensitivity = null
+stick_sensitivity = null
+camera_upper_bound_degrees = null
+camera_lower_bound_degrees = null
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
 shape = SubResource("SphereShape3D_cyg0j")
