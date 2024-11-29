@@ -40,6 +40,7 @@ func idle():
 
 func move():
 	state_machine.travel("Move")
+	# TODO Adjust animation speed by movement speed
 
 func fall():
 	state_machine.travel("Fall")

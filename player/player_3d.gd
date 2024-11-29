@@ -14,7 +14,10 @@ var _last_movement_direction := Vector3.BACK
 
 func _physics_process(delta: float) -> void:
    _move_character_body(delta)
+
+   # Animation steps
    _angle_character_body(delta)
+   _update_animation_state()
 
 
 ## Handle character movement input.
@@ -62,3 +65,12 @@ func _angle_character_body(delta: float) -> void:
          target_angle,
          rotation_speed * _last_movement_direction.length() * delta
    )
+
+
+func _update_animation_state() -> void:
+   var ground_speed := velocity.length()
+
+   if ground_speed > 0.0:
+      _character_model.move()
+   else:
+      _character_model.idle()
