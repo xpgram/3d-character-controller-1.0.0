@@ -4,6 +4,7 @@ extends CharacterBody3D
 @export_group("Movement")
 @export var move_speed := 8.0
 @export var acceleration := 30.0
+@export var stopping_speed := 2.0
 @export var rotation_speed := 15.0
 @export var jump_impulse := 12.0
 @export var min_jump_impulse := 4.0
@@ -61,8 +62,15 @@ func _handle_movement_input(delta: float) -> void:
    # Normalize the camera-angled movement vector onto the ground plane.
    move_direction = move_direction.normalized() * curved_input.length()
 
+   # Calculate new velocity for this frame.
    var lateral_velocity := Vector3(velocity.x, 0, velocity.z)
    var new_velocity = lateral_velocity.move_toward(move_direction * move_speed, acceleration * delta)
+
+   var user_input_is_none := is_zero_approx(move_direction.length())
+   var velocity_in_dime_stop_range := new_velocity.length() < stopping_speed
+
+   if user_input_is_none and velocity_in_dime_stop_range:
+      new_velocity = Vector3.ZERO
 
    # Move the character
    velocity.x = new_velocity.x
