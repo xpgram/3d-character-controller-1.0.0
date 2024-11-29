@@ -100,9 +100,15 @@ func _rotate_character_body(delta: float) -> void:
 
 ## Update animation state to reflect new input values.
 func _update_animation_state() -> void:
+   var is_starting_jump := Input.is_action_just_pressed("jump") and velocity.y > 0
+   var is_falling := not is_on_floor() and velocity.y < 0
    var ground_speed := velocity.length()
 
-   if ground_speed > 0.0:
+   if is_starting_jump:
+      _character_model.jump()
+   elif is_falling:
+      _character_model.fall()
+   elif is_on_floor() and ground_speed > 0.0:
       _character_model.move()
-   else:
+   elif is_on_floor():
       _character_model.idle()
