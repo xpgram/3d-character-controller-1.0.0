@@ -92,6 +92,9 @@ func _handle_jump_input() -> void:
    if is_ending_jump:
       velocity.y = min_jump_impulse
 
+   if is_on_ceiling():
+      velocity.y = 0.0
+
 
 # TODO Accept an argument instead of depending on script-globals?
 ## Rotates the character body into the direction of travel.
