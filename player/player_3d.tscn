@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bw2yt2kjem3le"]
+[gd_scene load_steps=6 format=3 uid="uid://bw2yt2kjem3le"]
 
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
 [ext_resource type="Script" path="res://player/player_3d.gd" id="1_ojpvi"]
+[ext_resource type="Script" path="res://player/camera_pivot.gd" id="3_vi4hj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hnhtc"]
 radius = 0.3
@@ -22,6 +23,7 @@ shape = SubResource("CapsuleShape3D_hnhtc")
 [node name="CameraPivot" type="Node3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(-1, -2.99003e-08, 8.21505e-08, 0, 0.939693, 0.34202, -8.74228e-08, 0.34202, -0.939693, 0, 2, 0)
+script = ExtResource("3_vi4hj")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
 shape = SubResource("SphereShape3D_cyg0j")
