@@ -12,7 +12,7 @@ config_version=5
 
 config/name="M2. Get to Know 3D (Interactive Tours)"
 run/main_scene="res://game.tscn"
-config/features=PackedStringArray("4.3", "Mobile")
+config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.png"
 
 [autoload]
@@ -24,8 +24,6 @@ Events="*res://autoload/events.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/initial_screen=1
-window/size/window_width_override=2560
-window/size/window_height_override=1440
 window/stretch/mode="canvas_items"
 
 [editor_plugins]

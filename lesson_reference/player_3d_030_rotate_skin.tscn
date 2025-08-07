@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://d350cxfijnjcb"]
 
-[ext_resource type="Script" path="res://lesson_reference/player_3d_030_rotate_skin.gd" id="1_pimtu"]
+[ext_resource type="Script" uid="uid://bssw5xacqdug7" path="res://lesson_reference/player_3d_030_rotate_skin.gd" id="1_pimtu"]
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="2_ge58n"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8x2xm"]

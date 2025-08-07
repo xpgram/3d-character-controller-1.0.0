@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://1r7y5wu2j2n1"]
 
-[ext_resource type="Script" path="res://lesson_reference/player_3d_020_ground_movement.gd" id="1_m1f6h"]
+[ext_resource type="Script" uid="uid://0maod1raovoa" path="res://lesson_reference/player_3d_020_ground_movement.gd" id="1_m1f6h"]
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="2_fi37v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8x2xm"]

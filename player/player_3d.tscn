@@ -1,8 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://bw2yt2kjem3le"]
+[gd_scene load_steps=12 format=3 uid="uid://bw2yt2kjem3le"]
 
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
-[ext_resource type="Script" path="res://player/player_3d.gd" id="1_ojpvi"]
-[ext_resource type="Script" path="res://player/camera_pivot.gd" id="3_vi4hj"]
+[ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/player_3d.gd" id="1_ojpvi"]
+[ext_resource type="Script" uid="uid://bd3668e73sp4" path="res://player/camera_pivot.gd" id="3_vi4hj"]
+[ext_resource type="Script" uid="uid://c7s1pyjdhoxp" path="res://player/states/state_machine.gd" id="4_nrofp"]
+[ext_resource type="Script" uid="uid://bsayiwoajyx28" path="res://player/states/idle.gd" id="5_jeexd"]
+[ext_resource type="Script" uid="uid://jprpiy4abxb5" path="res://player/states/physics_properties.gd" id="5_pytv8"]
+[ext_resource type="Script" uid="uid://bjgugxuq887su" path="res://player/states/move.gd" id="6_cdrrj"]
+[ext_resource type="Script" uid="uid://bgb1jnjeyoymo" path="res://player/states/jump.gd" id="7_pytv8"]
+[ext_resource type="Script" uid="uid://6gp48jrchmdk" path="res://player/states/fall.gd" id="8_cdrrj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hnhtc"]
 radius = 0.3
@@ -37,3 +43,59 @@ margin = 2.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
 unique_name_in_owner = true
+
+[node name="Controllers" type="Node" parent="."]
+
+[node name="StateMachine" type="Node" parent="Controllers" node_paths=PackedStringArray("starting_state")]
+script = ExtResource("4_nrofp")
+starting_state = NodePath("States/Idle")
+
+[node name="PhysicsProperties" type="Node" parent="Controllers/StateMachine"]
+unique_name_in_owner = true
+script = ExtResource("5_pytv8")
+
+[node name="States" type="Node" parent="Controllers/StateMachine"]
+
+[node name="Idle" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_move", "state_jump", "state_fall")]
+script = ExtResource("5_jeexd")
+state_move = NodePath("../Move")
+state_jump = NodePath("../Jump")
+state_fall = NodePath("../Fall")
+
+[node name="Move" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_jump", "state_fall")]
+script = ExtResource("6_cdrrj")
+state_idle = NodePath("../Idle")
+state_jump = NodePath("../Jump")
+state_fall = NodePath("../Fall")
+
+[node name="Jump" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_move", "state_fall")]
+script = ExtResource("7_pytv8")
+state_idle = NodePath("../Idle")
+state_move = NodePath("../Move")
+state_fall = NodePath("../Fall")
+
+[node name="Fall" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_move")]
+script = ExtResource("8_cdrrj")
+state_idle = NodePath("../Idle")
+state_move = NodePath("../Move")
+
+[node name="States_NotAdded" type="Node" parent="Controllers/StateMachine"]
+
+[node name="WallSlide" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+
+[node name="FloorSlide" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+
+[node name="Crouch" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+
+[node name="GameUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DebugOutput_PlayerState" type="Label" parent="GameUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "DebugOutput_PlayerState"

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dajcr60pwdgpr"]
 
-[ext_resource type="Script" path="res://lesson_reference/player_3d_010_camera.gd" id="1_gt3lk"]
+[ext_resource type="Script" uid="uid://du1whl2qy6bnv" path="res://lesson_reference/player_3d_010_camera.gd" id="1_gt3lk"]
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="2_xofsp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8x2xm"]
