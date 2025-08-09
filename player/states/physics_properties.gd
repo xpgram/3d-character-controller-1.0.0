@@ -1,3 +1,4 @@
+class_name PhysicsProperties
 extends Node
 
 @export_group("Movement Properties", "prop_move_")
