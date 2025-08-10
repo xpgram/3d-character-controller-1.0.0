@@ -1,8 +1,8 @@
 [gd_scene load_steps=12 format=3 uid="uid://bw2yt2kjem3le"]
 
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
-[ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/player_3d.gd" id="1_ojpvi"]
-[ext_resource type="Script" uid="uid://bd3668e73sp4" path="res://player/camera_pivot.gd" id="3_vi4hj"]
+[ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/scripts/player_3d.gd" id="1_ojpvi"]
+[ext_resource type="Script" uid="uid://bd3668e73sp4" path="res://player/scripts/camera_pivot.gd" id="3_vi4hj"]
 [ext_resource type="Script" uid="uid://c7s1pyjdhoxp" path="res://system/scripts/state_machine.gd" id="4_nrofp"]
 [ext_resource type="Script" uid="uid://bsayiwoajyx28" path="res://player/scripts/states/idle.gd" id="5_jeexd"]
 [ext_resource type="Script" uid="uid://jprpiy4abxb5" path="res://player/scripts/physics_properties.gd" id="5_pytv8"]
