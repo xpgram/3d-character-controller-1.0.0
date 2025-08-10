@@ -12,12 +12,17 @@ signal change_state(new_state: State)
 @onready var ui_player_state_label := %DebugOutput_PlayerState
 
 
-var parent: Player
+# TODO Name 'subject' or something; use a template type instead of CharacterBody.
+var parent: CharacterBody3D
 
 
 func get_state_name() -> String:
    # TODO This also isn't generic.
    return "Player state: " + name
+
+
+func init(parent: CharacterBody3D) -> void:
+   self.parent = parent
 
 
 ## Handle the State startup process.

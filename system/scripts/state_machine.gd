@@ -15,14 +15,15 @@ var next_state: State
 func init(machine_name: String, parent: CharacterBody3D) -> void:
    state_machine_name = machine_name
 
-   var children = states_container.get_children()
+   # Collect all State objects and initialize them.
+   var state_nodes: Array[State] = (states_container
+      .get_children()
+      .filter(func(child): return child is State)
+   )
 
-   # TODO Not working
-   # var state_nodes = children.filter(func(child): typeof(child) == typeof(State))
-
-   for state_mode: State in children:
-      state_mode.parent = parent # TODO Change 'parent' to something else.
-      state_mode.change_state.connect(request_state_change)
+   for state_node in state_nodes:
+      state_node.init(parent) # TODO Change 'parent' to something else.
+      state_node.change_state.connect(request_state_change)
 
    next_state = starting_state
    change_state_to_next()
