@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
 [ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/player_3d.gd" id="1_ojpvi"]
 [ext_resource type="Script" uid="uid://bd3668e73sp4" path="res://player/camera_pivot.gd" id="3_vi4hj"]
-[ext_resource type="Script" uid="uid://c7s1pyjdhoxp" path="res://player/states/state_machine.gd" id="4_nrofp"]
+[ext_resource type="Script" uid="uid://c7s1pyjdhoxp" path="res://system/scripts/state_machine.gd" id="4_nrofp"]
 [ext_resource type="Script" uid="uid://bsayiwoajyx28" path="res://player/states/idle.gd" id="5_jeexd"]
 [ext_resource type="Script" uid="uid://jprpiy4abxb5" path="res://player/states/physics_properties.gd" id="5_pytv8"]
 [ext_resource type="Script" uid="uid://bjgugxuq887su" path="res://player/states/move.gd" id="6_cdrrj"]
@@ -83,6 +83,10 @@ state_jump = NodePath("../Jump")
 [node name="FloorSlide" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
 
 [node name="Crouch" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+
+[node name="Landed" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+
+[node name="LandedHard" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
 
 [node name="GameUI" type="Control" parent="."]
 layout_mode = 3
