@@ -70,10 +70,11 @@ state_idle = NodePath("../Idle")
 state_move = NodePath("../Move")
 state_fall = NodePath("../Fall")
 
-[node name="Fall" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_move")]
+[node name="Fall" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_move", "state_jump")]
 script = ExtResource("8_cdrrj")
 state_idle = NodePath("../Idle")
 state_move = NodePath("../Move")
+state_jump = NodePath("../Jump")
 
 [node name="States_NotAdded" type="Node" parent="Controllers/StateMachine"]
 

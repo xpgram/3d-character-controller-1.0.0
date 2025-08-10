@@ -13,13 +13,34 @@ const PlayerMovement = preload("res://player/behaviors/movement.gd")
 @export_group('Transition-to States', 'state_')
 @export var state_idle: State
 @export var state_move: State
+@export var state_jump: State
 
 
 # TODO What if this doesn't exist?
 @onready var _camera: Camera3D = %Camera3D
 
 
+var coyote_timer := Timer.new()
 var _last_movement_direction := Vector3.BACK
+
+
+func _ready() -> void:
+   coyote_timer.one_shot = true
+   coyote_timer.wait_time = physics_properties.prop_move_coyote_time
+   coyote_timer.connect('timeout', _on_coyote_timer_timeout)
+   add_child(coyote_timer)
+
+
+func on_enter() -> void:
+   coyote_timer.start()
+
+
+func process_input(event: InputEvent) -> State:
+   # TODO Fall state allows double jump. How should we keep track of jumps done so far?
+   if event.is_action_pressed('jump') and coyote_timer.time_left > 0:
+      return state_jump
+
+   return null
 
 
 func process_physics(delta: float) -> State:
@@ -74,3 +95,16 @@ func _rotate_character_body(delta: float) -> void:
          target_angle,
          physics_properties.prop_move_rotation_speed * _last_movement_direction.length() * delta
    )
+
+
+func _on_coyote_timer_timeout() -> void:
+   pass
+   # TODO Add falling animation
+
+
+# func _on_long_fall_timer_timeout() -> void:
+#    pass
+#    # TODO Add really long fall animation + set up fall damage?
+#    #   How do we handle fall damage?
+#    #   Ohh, we'd prolly want to transition to a special land_crush state anyway, so
+#    #   this'll be down stream of process_physics.
