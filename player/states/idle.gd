@@ -6,8 +6,7 @@ extends State
 @export var state_fall: State
 
 
-func enter() -> void:
-   super()
+func on_enter() -> void:
    parent.velocity.x = 0
    parent.velocity.z = 0
 

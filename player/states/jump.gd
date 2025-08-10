@@ -15,8 +15,7 @@ const PlayerMovement = preload("res://player/behaviors/movement.gd")
 var _last_movement_direction := Vector3.BACK
 
 
-func enter() -> void:
-   super()
+func on_enter() -> void:
    parent.velocity.y = physics_properties.prop_move_jump_impulse
 
 

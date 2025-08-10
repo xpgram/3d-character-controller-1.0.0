@@ -15,12 +15,25 @@ func get_state_name() -> String:
    return "Player state: " + name
 
 
+## Handle the State startup process.
 func enter() -> void:
    ui_player_state_label.text = get_state_name()
-   # parent.animations.play(animation_name)
+   # TODO parent.animations.play(animation_name)
+   on_enter()
 
 
+## Handle the State exit process.
 func exit() -> void:
+   on_exit()
+
+
+## State behavior to perform during the startup process.
+func on_enter() -> void:
+   pass
+
+
+## State behavior to perform during the shutdown process.
+func on_exit() -> void:
    pass
 
 
