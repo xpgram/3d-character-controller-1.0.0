@@ -30,22 +30,20 @@ static func apply_vector_input_to_character_body(
    var current_velocity := Vector3(character_body.velocity.x, 0, character_body.velocity.z)
    var new_velocity = current_velocity.move_toward(
       movement_vector * physics_properties.prop_move_speed,
-      # TODO Does this acceleration implementation actually work? Why would it?
-      #   If it does, move_acceleration also controls stopping speed, doesn't it?
-      physics_properties.prop_move_acceleration * delta
+      delta * physics_properties.prop_move_acceleration,
    )
+   
+   # Snap velocity to "not moving" at low speeds.
+   var vector_input_is_none := is_zero_approx(movement_vector.length())
+   var velocity_in_dime_stop_range := (new_velocity.length() < physics_properties.prop_move_speed_dimestop_range)
 
-   # Stop moving when input is absent.
-   var user_input_is_none := is_zero_approx(movement_vector.length())
-   var velocity_in_dime_stop_range := (new_velocity.length() < physics_properties.prop_move_stopping_speed)
-
-   if user_input_is_none and velocity_in_dime_stop_range:
+   if vector_input_is_none and velocity_in_dime_stop_range:
       new_velocity = Vector3.ZERO
 
    # Apply velocity to character body.
    character_body.velocity.x = new_velocity.x
    character_body.velocity.z = new_velocity.z
 
-   # Report the vector used for movement.
+   # Report the vector used for desired movement.
    return movement_vector
 
