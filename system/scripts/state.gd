@@ -13,8 +13,8 @@ signal change_state(new_state: State)
 @onready var ui_player_state_label := %DebugOutput_PlayerState
 
 
-# TODO Name 'subject' or something; use a template type instead of CharacterBody.
-var parent: CharacterBody3D
+# TODO Use a template type instead of CharacterBody.
+var subject: CharacterBody3D
 
 
 func get_state_name() -> String:
@@ -22,14 +22,15 @@ func get_state_name() -> String:
    return "Player state: " + name
 
 
-func init(parent: CharacterBody3D) -> void:
-   self.parent = parent
+@warning_ignore('shadowed_variable')
+func init(subject: CharacterBody3D) -> void:
+   self.subject = subject
 
 
 ## Handle the State startup process.
 func enter() -> void:
    ui_player_state_label.text = get_state_name()
-   # TODO parent.animations.play(animation_name)
+   # TODO subject.animations.play(animation_name)
    on_enter()
 
 

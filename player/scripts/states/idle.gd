@@ -7,12 +7,12 @@ extends State
 
 
 func on_enter() -> void:
-   parent.velocity.x = 0
-   parent.velocity.z = 0
+   subject.velocity.x = 0
+   subject.velocity.z = 0
 
 
 func process_input(_event: InputEvent) -> void:
-   if Input.is_action_just_pressed('jump') and parent.is_on_floor():
+   if Input.is_action_just_pressed('jump') and subject.is_on_floor():
       change_state.emit(state_jump)
 
    if (
@@ -25,8 +25,8 @@ func process_input(_event: InputEvent) -> void:
 
 
 func process_physics(delta: float) -> void:
-   parent.velocity.y -= physics_properties.prop_physics_gravity * delta
-   parent.move_and_slide()
+   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
+   subject.move_and_slide()
 
-   if !parent.is_on_floor():
+   if !subject.is_on_floor():
       change_state.emit(state_fall)

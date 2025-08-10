@@ -16,21 +16,21 @@ var _last_movement_direction := Vector3.BACK
 
 
 func on_enter() -> void:
-   parent.velocity.y = physics_properties.prop_move_jump_impulse
+   subject.velocity.y = physics_properties.prop_move_jump_impulse
 
 
 func process_physics(delta: float) -> void:
    # TODO This is duplicated among all States? Why?
-   parent.velocity.y -= physics_properties.prop_physics_gravity * delta
+   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 	
-   if parent.velocity.y < 0:
+   if subject.velocity.y < 0:
       change_state.emit(state_fall)
       return
 
-   var is_ending_jump: float = (Input.is_action_just_released('jump') and (parent.velocity.y > physics_properties.prop_move_min_jump_impulse))
+   var is_ending_jump: float = (Input.is_action_just_released('jump') and (subject.velocity.y > physics_properties.prop_move_min_jump_impulse))
 
    if is_ending_jump:
-      parent.velocity.y = physics_properties.prop_move_min_jump_impulse
+      subject.velocity.y = physics_properties.prop_move_min_jump_impulse
 
    var raw_input = Input.get_vector(
       'move_left',
@@ -45,7 +45,7 @@ func process_physics(delta: float) -> void:
    var movement_direction = PlayerMovement.apply_vector_input_to_character_body(
       delta,
       raw_input,
-      parent,
+      subject,
       _camera,
       physics_properties,
    )
@@ -53,9 +53,9 @@ func process_physics(delta: float) -> void:
       _last_movement_direction = movement_direction
 
    _rotate_character_body(delta)
-   parent.move_and_slide()
+   subject.move_and_slide()
 	
-   if parent.is_on_floor():
+   if subject.is_on_floor():
       if raw_input != Vector2.ZERO:
          change_state.emit(state_move)
          return # TODO Simplify these?
@@ -63,9 +63,9 @@ func process_physics(delta: float) -> void:
          change_state.emit(state_idle)
          return
 
-   if parent.is_on_ceiling():
+   if subject.is_on_ceiling():
       # TODO Does state_fall have any responsibility to make sure Player is actually moving down?
-      parent.velocity.y = 0
+      subject.velocity.y = 0
       change_state.emit(state_fall)
 
 
@@ -75,8 +75,8 @@ func _rotate_character_body(delta: float) -> void:
    var target_angle := Vector3.BACK.signed_angle_to(_last_movement_direction, Vector3.UP)
 
    # Smoothly rotate to the direction of travel.
-   parent._character_model.rotation.y = lerp_angle(
-         parent._character_model.rotation.y,
+   subject._character_model.rotation.y = lerp_angle(
+         subject._character_model.rotation.y,
          target_angle,
          physics_properties.prop_move_rotation_speed * _last_movement_direction.length() * delta
    )

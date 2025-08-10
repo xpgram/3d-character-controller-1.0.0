@@ -42,10 +42,10 @@ func process_input(event: InputEvent) -> void:
 
 
 func process_physics(delta: float) -> void:
-   parent.velocity.y -= physics_properties.prop_physics_gravity * delta
+   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 
-   parent.velocity.y = clampf(
-      parent.velocity.y,
+   subject.velocity.y = clampf(
+      subject.velocity.y,
       -physics_properties.prop_physics_terminal_velocity,
       physics_properties.prop_physics_terminal_velocity
    )
@@ -63,7 +63,7 @@ func process_physics(delta: float) -> void:
    var movement_direction = PlayerMovement.apply_vector_input_to_character_body(
       delta,
       raw_input,
-      parent,
+      subject,
       _camera,
       physics_properties,
    )
@@ -71,9 +71,9 @@ func process_physics(delta: float) -> void:
       _last_movement_direction = movement_direction
 
    _rotate_character_body(delta)
-   parent.move_and_slide()
+   subject.move_and_slide()
 
-   if parent.is_on_floor():
+   if subject.is_on_floor():
       if raw_input.is_zero_approx():
          change_state.emit(state_idle)
       else:
@@ -86,8 +86,8 @@ func _rotate_character_body(delta: float) -> void:
    var target_angle := Vector3.BACK.signed_angle_to(_last_movement_direction, Vector3.UP)
 
    # Smoothly rotate to the direction of travel.
-   parent._character_model.rotation.y = lerp_angle(
-         parent._character_model.rotation.y,
+   subject._character_model.rotation.y = lerp_angle(
+         subject._character_model.rotation.y,
          target_angle,
          physics_properties.prop_move_rotation_speed * _last_movement_direction.length() * delta
    )
