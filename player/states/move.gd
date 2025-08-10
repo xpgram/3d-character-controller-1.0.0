@@ -1,6 +1,6 @@
 extends State
 
-const PlayerMovement = preload("res://player/behaviors/movement.gd")
+const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 @export_group('Transition-to States', 'state_')
 @export var state_idle: State

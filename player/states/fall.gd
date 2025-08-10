@@ -6,7 +6,7 @@ extends State
 #   - Falling animation not applied until timer fully elapsed
 
 
-const PlayerMovement = preload("res://player/behaviors/movement.gd")
+const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 
 # TODO Use preload() calls and such instead of nodes.
