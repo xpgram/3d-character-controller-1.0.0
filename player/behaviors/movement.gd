@@ -1,14 +1,19 @@
 
-static func move_entity_by_stick_input(
+
+## Modifies the given character_body's velocity according to directional input described
+## by a [Vector2] over the ground plane. Vector input length is capped to 1. The camera's
+## orientation determines the "forward" direction of the vector_input.
+static func apply_vector_input_to_character_body(
    delta: float,
-   stick_input: Vector2,
-   character: CharacterBody3D, # TODO Only Player objects? I think CharacterBody3D is what I mean.
+   vector_input: Vector2,
+   character_body: CharacterBody3D,
    camera: Camera3D, # TODO Make optional: Accept camera orientation vector, provide default.
-   physics_properties: PhysicsProperties,
+   physics_properties: PhysicsProperties, # TODO Make optional? There should be some default properties, I guess.
 ) -> Vector3:
+
    # This step squares the "strength" of the input vector, allowing finer control near the
    # lower end of the range.
-   var curved_input: Vector2 = stick_input * stick_input.length()
+   var curved_input: Vector2 = vector_input * vector_input.length()
    
    var forward_vector := camera.global_basis.z
    var rightward_vector := camera.global_basis.x
@@ -23,7 +28,7 @@ static func move_entity_by_stick_input(
    move_direction = move_direction.normalized() * curved_input.length()
 
    # Calculate new velocity for this frame.
-   var lateral_velocity := Vector3(character.velocity.x, 0, character.velocity.z)
+   var lateral_velocity := Vector3(character_body.velocity.x, 0, character_body.velocity.z)
    var new_velocity = lateral_velocity.move_toward(move_direction * physics_properties.prop_move_speed, physics_properties.prop_move_acceleration * delta)
 
    var user_input_is_none := is_zero_approx(move_direction.length())
@@ -33,8 +38,8 @@ static func move_entity_by_stick_input(
       new_velocity = Vector3.ZERO
 
    # Move the character
-   character.velocity.x = new_velocity.x
-   character.velocity.z = new_velocity.z
+   character_body.velocity.x = new_velocity.x
+   character_body.velocity.z = new_velocity.z
 
    # Store the last input direction
    if move_direction.length() > 0:
@@ -63,3 +68,4 @@ static func move_entity_by_stick_input(
    # character.apply_stick_input_to_velocity(...)
    # character.spin_to_direction()
    # character.move_and_slide()
+

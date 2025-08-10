@@ -47,7 +47,7 @@ func process_input(_event: InputEvent) -> State:
 
 
 func _handle_movement_input(delta: float, raw_input: Vector2) -> void:
-   var moved_direction := PlayerMovement.move_entity_by_stick_input(
+   var moved_direction := PlayerMovement.apply_vector_input_to_character_body(
       delta,
       raw_input,
       parent,
