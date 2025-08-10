@@ -16,15 +16,9 @@ static func apply_vector_input_to_character_body(
    var curved_input: Vector2 = vector_input * vector_input.length()
    curved_input = curved_input.limit_length(1.0)
    
-   # Forward vector, normalized to ground plane.
-   var forward_vector := camera.global_basis.z
-   forward_vector.y = 0   
-   forward_vector = forward_vector.normalized()
-
-   # Rightward vector, normalized to ground plane.
-   var rightward_vector := camera.global_basis.x
-   rightward_vector.y = 0
-   rightward_vector = rightward_vector.normalized()
+   # Camera vectors, normalized to ground plane.
+   var forward_vector := camera.global_basis.z.slide(Vector3.UP).normalized()
+   var rightward_vector := camera.global_basis.x.slide(Vector3.UP).normalized()
    
    # Determined direction to move the character body.
    var movement_vector := (
