@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/player_3d.gd" id="1_ojpvi"]
 [ext_resource type="Script" uid="uid://bd3668e73sp4" path="res://player/camera_pivot.gd" id="3_vi4hj"]
 [ext_resource type="Script" uid="uid://c7s1pyjdhoxp" path="res://system/scripts/state_machine.gd" id="4_nrofp"]
-[ext_resource type="Script" uid="uid://bsayiwoajyx28" path="res://player/states/idle.gd" id="5_jeexd"]
+[ext_resource type="Script" uid="uid://bsayiwoajyx28" path="res://player/scripts/states/idle.gd" id="5_jeexd"]
 [ext_resource type="Script" uid="uid://jprpiy4abxb5" path="res://player/scripts/physics_properties.gd" id="5_pytv8"]
-[ext_resource type="Script" uid="uid://bjgugxuq887su" path="res://player/states/move.gd" id="6_cdrrj"]
-[ext_resource type="Script" uid="uid://bgb1jnjeyoymo" path="res://player/states/jump.gd" id="7_pytv8"]
-[ext_resource type="Script" uid="uid://6gp48jrchmdk" path="res://player/states/fall.gd" id="8_cdrrj"]
+[ext_resource type="Script" uid="uid://bjgugxuq887su" path="res://player/scripts/states/move.gd" id="6_cdrrj"]
+[ext_resource type="Script" uid="uid://bgb1jnjeyoymo" path="res://player/scripts/states/jump.gd" id="7_pytv8"]
+[ext_resource type="Script" uid="uid://6gp48jrchmdk" path="res://player/scripts/states/fall.gd" id="8_cdrrj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hnhtc"]
 radius = 0.3
