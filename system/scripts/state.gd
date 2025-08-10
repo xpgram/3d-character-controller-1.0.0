@@ -4,6 +4,7 @@ extends Node
 @export var animation_name: String
 
 
+# TODO These are not generic.
 @onready var physics_properties := %PhysicsProperties
 @onready var ui_player_state_label := %DebugOutput_PlayerState
 
@@ -12,6 +13,7 @@ var parent: Player
 
 
 func get_state_name() -> String:
+   # TODO This also isn't generic.
    return "Player state: " + name
 
 
