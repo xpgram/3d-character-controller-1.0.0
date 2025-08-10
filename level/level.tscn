@@ -169,10 +169,10 @@ use_collision = true
 size = Vector3(5, 1, 8)
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -9.5, -31)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, -9.5, -40)
 material_override = ExtResource("7_njuj4")
 use_collision = true
-size = Vector3(10, 19, 22)
+size = Vector3(70, 19, 50)
 
 [node name="Cactus_Tall_3" parent="." instance=ExtResource("3_b7ara")]
 transform = Transform3D(-0.363066, -0.101082, 3.01856, -0.727051, 2.95381, 0.0114629, -2.93144, -0.720079, -0.376708, -16.8351, 6.30984, -22.6841)
@@ -192,6 +192,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, -5.5, -20)
 material_override = ExtResource("7_njuj4")
 use_collision = true
 size = Vector3(6, 27, 8)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 6, -34)
+material_override = ExtResource("7_njuj4")
+use_collision = true
+size = Vector3(6, 12, 8)
 
 [node name="CSGPolygon3D9" type="CSGPolygon3D" parent="CSGCombiner3D"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -9, 6, -22)
