@@ -1,5 +1,11 @@
 extends State
 
+# TODO Implement coyote time:
+#   - on_enter(): start a timer
+#   - Jump from Fall state allowed if timer not fully elapsed
+#   - Falling animation not applied until timer fully elapsed
+
+
 @export_group('Transition-to States', 'state_')
 @export var state_idle: State
 @export var state_move: State
@@ -12,7 +18,7 @@ var _last_movement_direction := Vector3.BACK
 
 func process_physics(delta: float) -> State:
    parent.velocity.y -= physics_properties.prop_physics_gravity * delta
-   
+
    parent.velocity.y = clampf(
       parent.velocity.y,
       -physics_properties.prop_physics_terminal_velocity,

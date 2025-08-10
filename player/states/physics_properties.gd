@@ -9,6 +9,7 @@ extends Node
 @export var prop_move_rotation_speed: float = 20.0
 @export var prop_move_jump_impulse: float = 16.0
 @export var prop_move_min_jump_impulse: float = 8.0
+@export var prop_move_fall_coyote_time_ms: int = 250
 
 @export_group("Physics Properties", "prop_physics_")
 @export var prop_physics_gravity: float = 40.0
