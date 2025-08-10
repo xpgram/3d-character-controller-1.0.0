@@ -16,7 +16,8 @@ func init(machine_name: String, subject: CharacterBody3D) -> void:
    state_machine_name = machine_name
 
    # Collect all State objects and initialize them.
-   var state_nodes: Array[State] = (states_container
+   var state_nodes: Array[State]
+   state_nodes.assign(states_container
       .get_children()
       .filter(func(child): return child is State)
    )

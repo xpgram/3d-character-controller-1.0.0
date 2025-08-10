@@ -76,17 +76,15 @@ state_idle = NodePath("../Idle")
 state_move = NodePath("../Move")
 state_jump = NodePath("../Jump")
 
-[node name="States_NotAdded" type="Node" parent="Controllers/StateMachine"]
+[node name="WallSlide" type="Node" parent="Controllers/StateMachine/States"]
 
-[node name="WallSlide" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+[node name="FloorSlide" type="Node" parent="Controllers/StateMachine/States"]
 
-[node name="FloorSlide" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+[node name="Crouch" type="Node" parent="Controllers/StateMachine/States"]
 
-[node name="Crouch" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+[node name="Landed" type="Node" parent="Controllers/StateMachine/States"]
 
-[node name="Landed" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
-
-[node name="LandedHard" type="Node" parent="Controllers/StateMachine/States_NotAdded"]
+[node name="LandedHard" type="Node" parent="Controllers/StateMachine/States"]
 
 [node name="GameUI" type="Control" parent="."]
 layout_mode = 3
