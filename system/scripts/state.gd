@@ -1,6 +1,9 @@
 class_name State
 extends Node
 
+signal change_state(new_state: State)
+
+
 @export var animation_name: String
 
 
@@ -39,13 +42,13 @@ func on_exit() -> void:
    pass
 
 
-func process_input(_event: InputEvent) -> State:
-   return null
+func process_input(_event: InputEvent) -> void:
+   pass
 
 
-func process_frame(_delta: float) -> State:
-   return null
+func process_frame(_delta: float) -> void:
+   pass
 
 
-func process_physics(_delta: float) -> State:
-   return null
+func process_physics(_delta: float) -> void:
+   pass

@@ -20,7 +20,7 @@ extends CharacterBody3D
 
 
 func _ready() -> void:
-   _state_machine.init(self)
+   _state_machine.init("Player Controller", self)
 
 
 func _physics_process(delta: float) -> void:

@@ -11,26 +11,22 @@ func on_enter() -> void:
    parent.velocity.z = 0
 
 
-func process_input(_event: InputEvent) -> State:
+func process_input(_event: InputEvent) -> void:
    if Input.is_action_just_pressed('jump') and parent.is_on_floor():
-      return state_jump
+      change_state.emit(state_jump)
 
    if (
-      Input.is_action_just_pressed('move_up') or 
+      Input.is_action_just_pressed('move_up') or
       Input.is_action_just_pressed('move_down') or
       Input.is_action_just_pressed('move_left') or
       Input.is_action_just_pressed('move_right')
    ):
-      return state_move
-
-   return null
+      change_state.emit(state_move)
 
 
-func process_physics(delta: float) -> State:
+func process_physics(delta: float) -> void:
    parent.velocity.y -= physics_properties.prop_physics_gravity * delta
    parent.move_and_slide()
 
    if !parent.is_on_floor():
-      return state_fall
-   
-   return null
+      change_state.emit(state_fall)

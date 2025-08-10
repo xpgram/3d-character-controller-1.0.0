@@ -35,15 +35,13 @@ func on_enter() -> void:
    coyote_timer.start()
 
 
-func process_input(event: InputEvent) -> State:
+func process_input(event: InputEvent) -> void:
    # TODO Fall state allows double jump. How should we keep track of jumps done so far?
    if event.is_action_pressed('jump') and coyote_timer.time_left > 0:
-      return state_jump
-
-   return null
+      change_state.emit(state_jump)
 
 
-func process_physics(delta: float) -> State:
+func process_physics(delta: float) -> void:
    parent.velocity.y -= physics_properties.prop_physics_gravity * delta
 
    parent.velocity.y = clampf(
@@ -77,11 +75,9 @@ func process_physics(delta: float) -> State:
 
    if parent.is_on_floor():
       if raw_input.is_zero_approx():
-         return state_idle
+         change_state.emit(state_idle)
       else:
-         return state_move
-
-   return null
+         change_state.emit(state_move)
 
 
 # TODO Accept an argument instead of depending on script-globals?

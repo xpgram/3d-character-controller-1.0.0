@@ -15,7 +15,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 var _last_movement_direction := Vector3.BACK
 
 
-func process_physics(delta: float) -> State:
+func process_physics(delta: float) -> void:
    parent.velocity.y -= physics_properties.prop_physics_gravity * delta
 
    var raw_input = Input.get_vector(
@@ -27,26 +27,9 @@ func process_physics(delta: float) -> State:
    )
 
    if raw_input == Vector2.ZERO:
-      return state_idle
+      change_state.emit(state_idle)
+      return
 
-   _handle_movement_input(delta, raw_input)
-   _rotate_character_body(delta)
-   parent.move_and_slide()
-
-   if !parent.is_on_floor():
-      return state_fall
-
-   return null
-
-
-func process_input(_event: InputEvent) -> State:
-   if Input.is_action_just_pressed('jump') and parent.is_on_floor():
-      return state_jump
-   
-   return null
-
-
-func _handle_movement_input(delta: float, raw_input: Vector2) -> void:
    var moved_direction := PlayerMovement.apply_vector_input_to_character_body(
       delta,
       raw_input,
@@ -57,6 +40,17 @@ func _handle_movement_input(delta: float, raw_input: Vector2) -> void:
 
    if moved_direction != Vector3.ZERO:
       _last_movement_direction = moved_direction
+
+   _rotate_character_body(delta)
+   parent.move_and_slide()
+
+   if !parent.is_on_floor():
+      change_state.emit(state_fall)
+
+
+func process_input(_event: InputEvent) -> void:
+   if Input.is_action_just_pressed('jump') and parent.is_on_floor():
+      change_state.emit(state_jump)
 
 
 # TODO Accept an argument instead of depending on script-globals?

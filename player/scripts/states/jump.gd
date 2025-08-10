@@ -19,12 +19,13 @@ func on_enter() -> void:
    parent.velocity.y = physics_properties.prop_move_jump_impulse
 
 
-func process_physics(delta: float) -> State:
+func process_physics(delta: float) -> void:
    # TODO This is duplicated among all States? Why?
    parent.velocity.y -= physics_properties.prop_physics_gravity * delta
 	
    if parent.velocity.y < 0:
-      return state_fall
+      change_state.emit(state_fall)
+      return
 
    var is_ending_jump: float = (Input.is_action_just_released('jump') and (parent.velocity.y > physics_properties.prop_move_min_jump_impulse))
 
@@ -56,16 +57,16 @@ func process_physics(delta: float) -> State:
 	
    if parent.is_on_floor():
       if raw_input != Vector2.ZERO:
-         return state_move
+         change_state.emit(state_move)
+         return # TODO Simplify these?
       else:
-         return state_idle
+         change_state.emit(state_idle)
+         return
 
    if parent.is_on_ceiling():
       # TODO Does state_fall have any responsibility to make sure Player is actually moving down?
       parent.velocity.y = 0
-      return state_fall
-	
-   return null
+      change_state.emit(state_fall)
 
 
 # TODO Accept an argument instead of depending on script-globals?
