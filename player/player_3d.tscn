@@ -80,10 +80,9 @@ state_move = NodePath("../Move")
 state_jump = NodePath("../Jump")
 state_wall_slide = NodePath("../WallSlide")
 
-[node name="WallSlide" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_move", "state_jump", "state_fall")]
+[node name="WallSlide" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_landed", "state_jump", "state_fall")]
 script = ExtResource("10_r3m6x")
-state_idle = NodePath("../Idle")
-state_move = NodePath("../Move")
+state_landed = NodePath("../Landed")
 state_jump = NodePath("../Jump")
 state_fall = NodePath("../Fall")
 
@@ -91,8 +90,10 @@ state_fall = NodePath("../Fall")
 
 [node name="Crouch" type="Node" parent="Controllers/StateMachine/States"]
 
-[node name="Landed" type="Node" parent="Controllers/StateMachine/States"]
+[node name="Landed" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_move")]
 script = ExtResource("11_hvouw")
+state_idle = NodePath("../Idle")
+state_move = NodePath("../Move")
 
 [node name="LandedHard" type="Node" parent="Controllers/StateMachine/States"]
 

@@ -18,8 +18,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 
 @export_group('Transition-to States', 'state_')
-@export var state_idle: State
-@export var state_move: State
+@export var state_landed: State
 @export var state_jump: State
 @export var state_fall: State
 
@@ -141,8 +140,7 @@ func process_physics(delta: float) -> void:
 
 
    if subject.is_on_floor():
-      # TODO Instead of implementing Move, just save this for Landed.
-      change_state.emit(state_idle)
+      change_state.emit(state_landed)
 
    if not subject.is_on_wall():
       change_state.emit(state_fall)
