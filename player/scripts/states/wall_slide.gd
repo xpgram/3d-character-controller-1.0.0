@@ -27,6 +27,8 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 @onready var camera: Camera3D = %Camera3D
 
 
+var tween: Tween
+
 ## The maximum time the player can slide for.
 var slide_timer: Timer = Timer.new()
 
@@ -49,12 +51,28 @@ func _ready() -> void:
 func on_enter() -> void:
    slide_timer.start()
 
-   # TODO These hard 0's are restrictive... Hm.
-   #   Probably no way to do this without matching the wall's velocity.
-   subject.velocity.x = 0
-   subject.velocity.z = 0
+   # Cut jump velocity immediately
    if subject.velocity.y > physics_properties.prop_move_min_jump_impulse:
       subject.velocity.y = physics_properties.prop_move_min_jump_impulse
+
+   # Tween the ground plane velocities to 0.
+   # TODO I feel like a tween isn't the right answer. I'll have to look this up, though.
+   var tween_time := 1.0 / 3.0
+
+   tween = create_tween()
+   tween.set_loops(1)
+   tween.set_parallel()
+
+   # TODO These hard 0's are restrictive... Hm.
+   #   Probably no way to do this without matching the wall's velocity.
+   tween.tween_property(subject, 'velocity:x', 0, tween_time)
+   tween.tween_property(subject, 'velocity:z', 0, tween_time)
+
+   tween.play()
+
+
+func on_exit() -> void:
+   tween.kill()
 
 
 func process_input(event: InputEvent) -> void:
@@ -94,8 +112,16 @@ func process_input(event: InputEvent) -> void:
 
 
 func process_physics(delta: float) -> void:
-   var friction_modifier := 1.0 / physics_properties.prop_move_wall_slide_friction
-   subject.velocity.y -= physics_properties.prop_physics_gravity * delta * friction_modifier
+   if not tween.finished:
+      subject.move_and_slide()
+      return
+
+   # TODO How to apply friction?
+   #   gravity needs to be stronger when above 0, and weaker when below it.
+   #   Is clampf()ing our velocity enough?
+   var friction_modifier := physics_properties.prop_move_wall_slide_friction
+
+   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 
    subject.velocity.y = clampf(
       subject.velocity.y,
