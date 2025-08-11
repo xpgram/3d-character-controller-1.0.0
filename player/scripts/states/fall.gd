@@ -14,6 +14,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 @export var state_idle: State
 @export var state_move: State
 @export var state_jump: State
+@export var state_wall_slide: State
 
 
 # TODO What if this doesn't exist?
@@ -44,6 +45,7 @@ func process_input(event: InputEvent) -> void:
 func process_physics(delta: float) -> void:
    subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 
+   # TODO This clampf only occurs when in Fall state.
    subject.velocity.y = clampf(
       subject.velocity.y,
       -physics_properties.prop_physics_terminal_velocity,
@@ -78,6 +80,8 @@ func process_physics(delta: float) -> void:
          change_state.emit(state_idle)
       else:
          change_state.emit(state_move)
+   elif subject.is_on_wall():
+      change_state.emit(state_wall_slide)
 
 
 # TODO Accept an argument instead of depending on script-globals?

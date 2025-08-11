@@ -9,8 +9,8 @@ signal change_state(new_state: State)
 
 
 # TODO These are not generic.
-@onready var physics_properties := %PhysicsProperties
-@onready var ui_player_state_label := %DebugOutput_PlayerState
+@onready var physics_properties: PhysicsProperties = %PhysicsProperties
+@onready var ui_player_state_label: Label = %DebugOutput_PlayerState
 
 
 # TODO Use a template type instead of CharacterBody.

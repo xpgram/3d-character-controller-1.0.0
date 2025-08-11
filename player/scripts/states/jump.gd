@@ -7,6 +7,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 @export var state_idle: State
 @export var state_move: State
 @export var state_fall: State
+@export var state_wall_slide: State
 
 
 @onready var _camera: Camera3D = %Camera3D
@@ -62,6 +63,9 @@ func process_physics(delta: float) -> void:
       else:
          change_state.emit(state_idle)
          return
+   elif subject.is_on_wall():
+      change_state.emit(state_wall_slide)
+      return # TODO Any issue with is_on_ceiling() here?
 
    if subject.is_on_ceiling():
       # TODO Does state_fall have any responsibility to make sure Player is actually moving down?
