@@ -11,8 +11,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 # TODO Use preload() calls and such instead of nodes.
 @export_group('Transition-to States', 'state_')
-@export var state_idle: State
-@export var state_move: State
+@export var state_landed: State
 @export var state_jump: State
 @export var state_wall_slide: State
 
@@ -76,10 +75,7 @@ func process_physics(delta: float) -> void:
    subject.move_and_slide()
 
    if subject.is_on_floor():
-      if raw_input.is_zero_approx():
-         change_state.emit(state_idle)
-      else:
-         change_state.emit(state_move)
+      change_state.emit(state_landed)
    elif subject.is_on_wall():
       change_state.emit(state_wall_slide)
 

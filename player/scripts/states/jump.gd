@@ -4,8 +4,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 
 @export_group('Transition-to States', 'state_')
-@export var state_idle: State
-@export var state_move: State
+@export var state_landed: State
 @export var state_fall: State
 @export var state_wall_slide: State
 
@@ -57,12 +56,8 @@ func process_physics(delta: float) -> void:
    subject.move_and_slide()
 	
    if subject.is_on_floor():
-      if raw_input != Vector2.ZERO:
-         change_state.emit(state_move)
-         return # TODO Simplify these?
-      else:
-         change_state.emit(state_idle)
-         return
+      change_state.emit(state_landed)
+      return
    elif subject.is_on_wall():
       change_state.emit(state_wall_slide)
       return # TODO Any issue with is_on_ceiling() here?
