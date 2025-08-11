@@ -110,6 +110,9 @@ func process_physics(delta: float) -> void:
       # TODO Instead of implementing Move, just save this for Landed.
       change_state.emit(state_idle)
 
+   if not subject.is_on_wall():
+      change_state.emit(state_fall)
+
 
 func _on_slide_timeout() -> void:
    # TODO Add some small lateral push from the wall?
