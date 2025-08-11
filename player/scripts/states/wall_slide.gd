@@ -49,10 +49,19 @@ func _ready() -> void:
 func on_enter() -> void:
    slide_timer.start()
 
+   # TODO These hard 0's are restrictive... Hm.
+   #   Probably no way to do this without matching the wall's velocity.
+   subject.velocity.x = 0
+   subject.velocity.z = 0
+   if subject.velocity.y > physics_properties.prop_move_min_jump_impulse:
+      subject.velocity.y = physics_properties.prop_move_min_jump_impulse
+
 
 func process_input(event: InputEvent) -> void:
-   # TODO Get wall's normal, save as .xz
-   var wall_normal := Vector2(1, 0)
+   # TODO I don't move_and_slide() into the wall after entering this state, so
+   #   this function call may have issues.
+   var wall_normal := subject.get_wall_normal()
+   var jump_vector := Vector2(wall_normal.x, wall_normal.z).normalized()
 
    var input_vector = Input.get_vector(
       'move_left',
@@ -67,14 +76,14 @@ func process_input(event: InputEvent) -> void:
    # Implement wall jumps.
    if event.is_action_pressed('jump'):
       # Apply a push away from the wall to the subject's velocity.
-      var wall_push_vector := wall_normal * physics_properties.prop_move_wall_jump_horizontal_impulse
+      var wall_push_vector := jump_vector * physics_properties.prop_move_wall_jump_horizontal_impulse
       subject.velocity.x += wall_push_vector.x
       subject.velocity.z += wall_push_vector.y
 
       change_state.emit(state_jump)
 
    # TODO What happens when the input vector is (0,0)?
-   var angle_to_wall_normal: float = abs(input_vector.angle_to(wall_normal))
+   var angle_to_wall_normal: float = abs(input_vector.angle_to(jump_vector))
    var pull_away_angle_limit: float = PI / 2
 
    # Implement pull away to disengage from the wall slide.
@@ -93,6 +102,8 @@ func process_physics(delta: float) -> void:
       -physics_properties.prop_move_wall_slide_max_velocity,
       physics_properties.prop_move_wall_slide_max_velocity,
    )
+
+   subject.move_and_slide()
 
 
    if subject.is_on_floor():
