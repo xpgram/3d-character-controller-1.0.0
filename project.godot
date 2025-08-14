@@ -93,6 +93,11 @@ look_down={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="Level_Geometry"
+3d_physics/layer_2="Invisible_Barriers"
+
 [rendering]
 
 anti_aliasing/quality/msaa_3d=2

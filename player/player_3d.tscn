@@ -20,6 +20,7 @@ height = 1.65
 radius = 0.125
 
 [node name="Player3D" type="CharacterBody3D"]
+collision_mask = 3
 script = ExtResource("1_ojpvi")
 
 [node name="SophiaSkin" parent="." instance=ExtResource("1_kpcx0")]
@@ -36,7 +37,7 @@ script = ExtResource("3_vi4hj")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
 shape = SubResource("SphereShape3D_cyg0j")
-spring_length = 6.0
+spring_length = 10.0
 margin = 2.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]

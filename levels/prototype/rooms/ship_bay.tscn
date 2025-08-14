@@ -10,50 +10,59 @@ albedo_color = Color(0, 0, 0, 0)
 
 [node name="ShipBay" type="Node3D"]
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+[node name="Geometry" type="CSGCombiner3D" parent="."]
 material_override = ExtResource("1_qgra8")
 use_collision = true
+collision_mask = 0
 
-[node name="Floor" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Floor" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 material_override = ExtResource("1_qgra8")
 size = Vector3(32, 1, 10)
 
-[node name="Wall_Left" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Wall_Left" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 7, -0.5)
 material_override = ExtResource("1_qgra8")
 size = Vector3(1, 6, 9)
 
-[node name="Wall_Left1" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Wall_Left1" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.5, -3.5)
 material_override = ExtResource("1_qgra8")
 size = Vector3(1, 3, 3)
 
-[node name="Wall_Left2" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Wall_Left2" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.5, 2.5)
 material_override = ExtResource("1_qgra8")
 size = Vector3(1, 3, 3)
 
-[node name="Wall_Back" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Wall_Back" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 4.5)
 material_override = ExtResource("1_qgra8")
 size = Vector3(32, 9, 1)
 
-[node name="Wall_Right" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Wall_Right" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 5.5, -0.5)
 material_override = ExtResource("1_qgra8")
 size = Vector3(1, 9, 9)
 
-[node name="Wall_FrontPanel" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5.5)
+[node name="Invis_Panels" type="CSGCombiner3D" parent="."]
 visible = false
+use_collision = true
+collision_layer = 2
+collision_mask = 0
+
+[node name="Wall_FrontPanel" type="CSGBox3D" parent="Invis_Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5.5)
 material_override = SubResource("StandardMaterial3D_qgra8")
 use_collision = true
+collision_layer = 32768
+collision_mask = 0
 size = Vector3(32, 10, 1)
 
-[node name="Wall_TopPanel" type="CSGBox3D" parent="."]
+[node name="Wall_TopPanel" type="CSGBox3D" parent="Invis_Panels"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, -0.5)
-visible = false
 material_override = SubResource("StandardMaterial3D_qgra8")
 use_collision = true
+collision_layer = 32768
+collision_mask = 0
 size = Vector3(32, 1, 11)
