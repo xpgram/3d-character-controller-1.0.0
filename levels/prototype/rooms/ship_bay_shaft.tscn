@@ -58,9 +58,9 @@ material_override = ExtResource("1_jtal7")
 size = Vector3(6, 3, 7)
 
 [node name="Wall_LeftBlock3" type="CSGBox3D" parent="Geometry/Wall_Left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 5.5, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 5.5, -4)
 material_override = ExtResource("1_jtal7")
-size = Vector3(4, 1, 2)
+size = Vector3(6, 1, 2)
 
 [node name="Wall_Left3" type="CSGBox3D" parent="Geometry/Wall_Left"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 14.5, -3.5)
