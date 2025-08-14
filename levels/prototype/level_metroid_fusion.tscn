@@ -79,7 +79,7 @@ volumetric_fog_emission = Color(0.843137, 0.737255, 0.329412, 1)
 environment = SubResource("Environment_go3oa")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.327016, 0.941731, -0.0787648, 0.688764, 0.294578, 0.662441, 0.647044, 0.162378, -0.744962, -47.2295, 26.8832, -28.0205)
+transform = Transform3D(-0.34202, 0.939693, -7.57104e-08, 0.813798, 0.296198, 0.5, 0.469846, 0.17101, -0.866026, -47.2295, 26.8832, -28.0205)
 light_energy = 0.53
 shadow_enabled = true
 directional_shadow_max_distance = 40.0
