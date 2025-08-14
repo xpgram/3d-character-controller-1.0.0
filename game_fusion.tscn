@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=3 uid="uid://bvc1xx2q0t45o"]
+
+[ext_resource type="Script" uid="uid://bcxwagdd6v36k" path="res://game.gd" id="1_51kip"]
+[ext_resource type="PackedScene" uid="uid://ctrh2j33hfbgy" path="res://global_state/global_state.tscn" id="2_3uc2i"]
+[ext_resource type="PackedScene" uid="uid://bxg6oejpaitdt" path="res://level/interactable/flag/flag_reached_screen.tscn" id="3_n6cjs"]
+[ext_resource type="PackedScene" uid="uid://db51xtuloclwg" path="res://levels/prototype/level_metroid_fusion.tscn" id="4_51kip"]
+[ext_resource type="PackedScene" uid="uid://bw2yt2kjem3le" path="res://player/player_3d.tscn" id="5_ascb7"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_51kip")
+
+[node name="GlobalState" parent="." instance=ExtResource("2_3uc2i")]
+
+[node name="FlagReachedScreen" parent="." instance=ExtResource("3_n6cjs")]
+
+[node name="Level_MetroidFusion" parent="." instance=ExtResource("4_51kip")]
+
+[node name="Player3D" parent="." instance=ExtResource("5_ascb7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.98639, 1, -1.05582)

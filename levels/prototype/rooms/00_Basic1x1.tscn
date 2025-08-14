@@ -1,0 +1,84 @@
+[gd_scene load_steps=3 format=3 uid="uid://cuquc3uomkh0q"]
+
+[ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_q46lm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgra8"]
+transparency = 2
+alpha_scissor_threshold = 1.0
+alpha_antialiasing_mode = 0
+albedo_color = Color(0, 0, 0, 0)
+
+[node name="Room_Size1" type="Node3D"]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+material_override = ExtResource("1_q46lm")
+use_collision = true
+
+[node name="Floor" type="CSGCombiner3D" parent="CSGCombiner3D"]
+
+[node name="Box" type="CSGBox3D" parent="CSGCombiner3D/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(16, 1, 9)
+
+[node name="Wall_Back" type="CSGCombiner3D" parent="CSGCombiner3D"]
+
+[node name="Wall" type="CSGBox3D" parent="CSGCombiner3D/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 4.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(16, 10, 1)
+
+[node name="Ceiling" type="CSGCombiner3D" parent="CSGCombiner3D"]
+
+[node name="Box" type="CSGBox3D" parent="CSGCombiner3D/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -0.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(16, 1, 9)
+
+[node name="Wall_Left" type="CSGCombiner3D" parent="CSGCombiner3D"]
+
+[node name="Wall" type="CSGBox3D" parent="CSGCombiner3D/Wall_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 6.5, -0.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(1, 5, 9)
+
+[node name="Wall1" type="CSGBox3D" parent="CSGCombiner3D/Wall_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2.5, -3.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(1, 3, 3)
+
+[node name="Wall2" type="CSGBox3D" parent="CSGCombiner3D/Wall_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2.5, 2.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(1, 3, 3)
+
+[node name="Wall_Right" type="CSGCombiner3D" parent="CSGCombiner3D"]
+
+[node name="Wall" type="CSGBox3D" parent="CSGCombiner3D/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 6.5, -0.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(1, 5, 9)
+
+[node name="Wall1" type="CSGBox3D" parent="CSGCombiner3D/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 2.5, -3.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(1, 3, 3)
+
+[node name="Wall2" type="CSGBox3D" parent="CSGCombiner3D/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 2.5, 2.5)
+material_override = ExtResource("1_q46lm")
+size = Vector3(1, 3, 3)
+
+[node name="Wall_FrontPanel" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5.5)
+visible = false
+material_override = SubResource("StandardMaterial3D_qgra8")
+use_collision = true
+size = Vector3(16, 10, 1)
+
+[node name="Wall_TopPanel" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, -0.5)
+visible = false
+material_override = SubResource("StandardMaterial3D_qgra8")
+use_collision = true
+size = Vector3(16, 1, 11)
