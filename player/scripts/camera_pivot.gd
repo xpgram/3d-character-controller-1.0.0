@@ -1,5 +1,15 @@
 extends Node3D
 
+# TODO Remove SpringArm
+# TODO Remove camera as child of Player: Add Player to subject field instead.
+# TODO Add some kind of "camera plane" this thing can slide around on.
+# TODO Add camera lag: lerp to position and snap when close enough.
+# TODO Lerp its facing orientation, too.
+# TODO Every room has player detection of some kind. I dunno yet.
+# TODO On detection, it becomes the state controller of the camera.
+#   These scripts determine how the camera will follow the player around.
+# TODO The Ship Bay Shaft has a unique camera script that tells it to follow vertically.
+
 @export_group("Camera")
 @export_range(0.0, 1.0) var mouse_sensitivity := 0.15
 @export_range(0.0, 1,0) var stick_sensitivity := 0.25
