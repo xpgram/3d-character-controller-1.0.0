@@ -13,8 +13,8 @@ extends Node3D
 ## How quickly the camera's rotation races to face the position of its subject.
 @export var rotation_lerp_rate: float = 24.0
 ## How quickly the camera's pivot rotation races to match its ideal orientation.
-@export var pivot_lerp_rate: float = 6.0
-@export var pivot_hor_max: float = 8.0
+@export var pivot_lerp_rate: float = 4.0
+@export var pivot_hor_max: float = 6.0
 @export var pivot_ver_max: float = 6.0
 
 # TODO I should pop these settings into a singleton node.
