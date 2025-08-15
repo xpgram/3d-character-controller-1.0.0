@@ -17,7 +17,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 
 # TODO What if this doesn't exist?
-@onready var _camera: Camera3D = %Camera3D
+# @onready var _camera: Camera3D = %Camera3D
 
 
 var coyote_timer := Timer.new()
@@ -65,7 +65,7 @@ func process_physics(delta: float) -> void:
       delta,
       raw_input,
       subject,
-      _camera,
+      camera,
       physics_properties,
    )
    if movement_direction != Vector3.ZERO:

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://iv8wc0503jgf"]
+
+[ext_resource type="Script" uid="uid://bd3668e73sp4" path="res://player/scripts/camera_pivot.gd" id="1_mvt2r"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cyg0j"]
+radius = 0.125
+
+[node name="CameraPivot" type="Node3D"]
+transform = Transform3D(-1, -2.99003e-08, 8.21505e-08, 0, 0.939693, 0.34202, -8.74228e-08, 0.34202, -0.939693, 0, 0, 0)
+script = ExtResource("1_mvt2r")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+shape = SubResource("SphereShape3D_cyg0j")
+spring_length = 10.0
+margin = 2.0
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+unique_name_in_owner = true

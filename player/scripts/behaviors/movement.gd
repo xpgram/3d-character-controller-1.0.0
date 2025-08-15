@@ -15,11 +15,11 @@ static func apply_vector_input_to_character_body(
    # lower end of the range.
    var curved_input: Vector2 = vector_input * vector_input.length()
    curved_input = curved_input.limit_length(1.0)
-   
+
    # Camera vectors, normalized to ground plane.
    var forward_vector := camera.global_basis.z.slide(Vector3.UP).normalized()
    var rightward_vector := camera.global_basis.x.slide(Vector3.UP).normalized()
-   
+
    # Determined direction to move the character body.
    var movement_vector := (
       forward_vector * curved_input.y
@@ -32,7 +32,7 @@ static func apply_vector_input_to_character_body(
       movement_vector * physics_properties.prop_move_speed,
       delta * physics_properties.prop_move_acceleration,
    )
-   
+
    # Snap velocity to "not moving" at low speeds.
    var vector_input_is_none := is_zero_approx(movement_vector.length())
    var velocity_in_dime_stop_range := (new_velocity.length() < physics_properties.prop_move_speed_dimestop_range)
@@ -46,4 +46,3 @@ static func apply_vector_input_to_character_body(
 
    # Report the vector used for desired movement.
    return movement_vector
-

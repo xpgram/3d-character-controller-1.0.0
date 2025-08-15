@@ -9,7 +9,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 
 # TODO Technically, this node shouldn't know about the camera node.
-@onready var _camera: Camera3D = %Camera3D
+# @onready var _camera: Camera3D = %Camera3D
 
 
 var _last_movement_direction := Vector3.BACK
@@ -34,7 +34,7 @@ func process_physics(delta: float) -> void:
       delta,
       raw_input,
       subject,
-      _camera,
+      camera,
       physics_properties,
    )
 

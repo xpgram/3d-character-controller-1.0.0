@@ -9,7 +9,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 @export var state_wall_slide: State
 
 
-@onready var _camera: Camera3D = %Camera3D
+# @onready var _camera: Camera3D = %Camera3D
 
 
 var _last_movement_direction := Vector3.BACK
@@ -46,7 +46,7 @@ func process_physics(delta: float) -> void:
       delta,
       raw_input,
       subject,
-      _camera,
+      camera,
       physics_properties,
    )
    if movement_direction != Vector3.ZERO:

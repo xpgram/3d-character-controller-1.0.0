@@ -14,13 +14,14 @@ extends CharacterBody3D
 
 # var _gravity := -30.0
 
-@onready var _camera: Camera3D = %Camera3D
+@export var camera: Camera3D
+
 @onready var _character_model: SophiaSkin = %SophiaSkin
 @onready var _state_machine = $Controllers/StateMachine
 
 
 func _ready() -> void:
-   _state_machine.init("Player Controller", self)
+   _state_machine.init("Player Controller", self, camera)
 
 
 func _physics_process(delta: float) -> void:

@@ -15,6 +15,8 @@ signal change_state(new_state: State)
 
 # TODO Use a template type instead of CharacterBody.
 var subject: CharacterBody3D
+# TODO Um. Do something about this one too. I dunno.
+var camera: Camera3D
 
 
 func get_state_name() -> String:
@@ -23,8 +25,9 @@ func get_state_name() -> String:
 
 
 @warning_ignore('shadowed_variable')
-func init(subject: CharacterBody3D) -> void:
+func init(subject: CharacterBody3D, camera: Camera3D) -> void:
    self.subject = subject
+   self.camera = camera
 
 
 ## Handle the State startup process.

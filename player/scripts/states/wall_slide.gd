@@ -23,7 +23,7 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 @export var state_fall: State
 
 
-@onready var camera: Camera3D = %Camera3D
+# @onready var camera: Camera3D = %Camera3D
 
 
 var tween: Tween

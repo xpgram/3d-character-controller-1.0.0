@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bvc1xx2q0t45o"]
+[gd_scene load_steps=7 format=3 uid="uid://bvc1xx2q0t45o"]
 
 [ext_resource type="Script" uid="uid://bcxwagdd6v36k" path="res://game.gd" id="1_51kip"]
 [ext_resource type="PackedScene" uid="uid://ctrh2j33hfbgy" path="res://global_state/global_state.tscn" id="2_3uc2i"]
 [ext_resource type="PackedScene" uid="uid://bxg6oejpaitdt" path="res://level/interactable/flag/flag_reached_screen.tscn" id="3_n6cjs"]
 [ext_resource type="PackedScene" uid="uid://db51xtuloclwg" path="res://levels/prototype/level_metroid_fusion.tscn" id="4_51kip"]
 [ext_resource type="PackedScene" uid="uid://bw2yt2kjem3le" path="res://player/player_3d.tscn" id="5_ascb7"]
+[ext_resource type="Script" uid="uid://dble35geeo1ca" path="res://player/scripts/camera/camera.gd" id="6_3uc2i"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_51kip")
@@ -15,5 +16,20 @@ script = ExtResource("1_51kip")
 
 [node name="Level_MetroidFusion" parent="." instance=ExtResource("4_51kip")]
 
-[node name="Player3D" parent="." instance=ExtResource("5_ascb7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.98639, 1, -1.05582)
+[node name="Player3D" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_ascb7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
+camera = NodePath("../Camera/CameraPivot/Camera3D")
+
+[node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("subject")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
+script = ExtResource("6_3uc2i")
+subject = NodePath("../Player3D")
+
+[node name="CameraPivot" type="Node3D" parent="Camera"]
+unique_name_in_owner = true
+transform = Transform3D(-1, 2.99003e-08, -8.21505e-08, 0, 0.939693, 0.34202, 8.74228e-08, 0.34202, -0.939693, 0, 1, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Camera/CameraPivot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16)
+fov = 40.0

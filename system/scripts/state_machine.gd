@@ -12,7 +12,7 @@ var next_state: State
 
 # TODO Do state_machines always have a CharacterBody3D-like subject?
 #   I'd prefer a template type, but I don't know if that's even an option in gdscript.
-func init(machine_name: String, subject: CharacterBody3D) -> void:
+func init(machine_name: String, subject: CharacterBody3D, camera: Camera3D) -> void:
    state_machine_name = machine_name
 
    # Collect all State objects and initialize them.
@@ -23,7 +23,7 @@ func init(machine_name: String, subject: CharacterBody3D) -> void:
    )
 
    for state_node in state_nodes:
-      state_node.init(subject)
+      state_node.init(subject, camera)
       state_node.change_state.connect(request_state_change)
 
    next_state = starting_state

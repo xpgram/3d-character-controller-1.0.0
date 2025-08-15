@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://bw2yt2kjem3le"]
+[gd_scene load_steps=12 format=3 uid="uid://bw2yt2kjem3le"]
 
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
 [ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/scripts/player_3d.gd" id="1_ojpvi"]
-[ext_resource type="Script" uid="uid://bd3668e73sp4" path="res://player/scripts/camera_pivot.gd" id="3_vi4hj"]
 [ext_resource type="Script" uid="uid://c7s1pyjdhoxp" path="res://system/scripts/state_machine.gd" id="4_nrofp"]
 [ext_resource type="Script" uid="uid://bsayiwoajyx28" path="res://player/scripts/states/idle.gd" id="5_jeexd"]
 [ext_resource type="Script" uid="uid://jprpiy4abxb5" path="res://player/scripts/physics_properties.gd" id="5_pytv8"]
@@ -16,9 +15,6 @@
 radius = 0.3
 height = 1.65
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_cyg0j"]
-radius = 0.125
-
 [node name="Player3D" type="CharacterBody3D"]
 collision_mask = 3
 script = ExtResource("1_ojpvi")
@@ -29,19 +25,6 @@ unique_name_in_owner = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.825, 0)
 shape = SubResource("CapsuleShape3D_hnhtc")
-
-[node name="CameraPivot" type="Node3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(-1, -2.99003e-08, 8.21505e-08, 0, 0.939693, 0.34202, -8.74228e-08, 0.34202, -0.939693, 0, 2, 0)
-script = ExtResource("3_vi4hj")
-
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
-shape = SubResource("SphereShape3D_cyg0j")
-spring_length = 10.0
-margin = 2.0
-
-[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
-unique_name_in_owner = true
 
 [node name="Controllers" type="Node" parent="."]
 
