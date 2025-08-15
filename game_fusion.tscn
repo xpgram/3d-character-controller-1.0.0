@@ -18,18 +18,21 @@ script = ExtResource("1_51kip")
 
 [node name="Player3D" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_ascb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
-camera = NodePath("../Camera/CameraPivot/Camera3D")
+camera = NodePath("../Camera/NaturalPivot/CameraPivot/Camera3D")
 
 [node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("subject")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8, 1, -1)
 script = ExtResource("6_3uc2i")
 subject = NodePath("../Player3D")
 
-[node name="CameraPivot" type="Node3D" parent="Camera"]
-unique_name_in_owner = true
-transform = Transform3D(-1, 2.99003e-08, -8.21505e-08, 0, 0.939693, 0.34202, 8.74228e-08, 0.34202, -0.939693, 0, 1, 0)
+[node name="NaturalPivot" type="Node3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 1, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Camera/CameraPivot"]
+[node name="CameraPivot" type="Node3D" parent="Camera/NaturalPivot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Camera/NaturalPivot/CameraPivot"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16)
 fov = 40.0
