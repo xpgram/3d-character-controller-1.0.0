@@ -30,7 +30,6 @@ transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0,
 
 [node name="CameraPivot" type="Node3D" parent="Camera/NaturalPivot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Camera/NaturalPivot/CameraPivot"]
 unique_name_in_owner = true
