@@ -14,6 +14,14 @@ static func apply_vector_input_to_character_body(
    # This step squares the "strength" of the input vector, allowing finer control near the
    # lower end of the range.
    var curved_input: Vector2 = vector_input * vector_input.length()
+
+   # This step adds x/y banding to the response curve, favoring the cardinal directions
+   # while retaining the same "input strength" as was derived in the previous step.
+   var curved_input_length: float = curved_input.length()
+   curved_input.x = sign(curved_input.x) * curved_input.x ** 2
+   curved_input.y = sign(curved_input.y) * curved_input.y ** 2
+   curved_input = curved_input.normalized() * curved_input_length
+
    curved_input = curved_input.limit_length(1.0)
 
    # Camera vectors, normalized to ground plane.
