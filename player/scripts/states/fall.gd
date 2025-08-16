@@ -76,7 +76,7 @@ func process_physics(delta: float) -> void:
 
    if subject.is_on_floor():
       change_state.emit(state_landed)
-   elif subject.is_on_wall():
+   elif PlayerMovement.get_wall_slide_candidate(raw_input, subject, camera, physics_properties):
       change_state.emit(state_wall_slide)
 
 

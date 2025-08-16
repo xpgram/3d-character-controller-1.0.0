@@ -50,11 +50,10 @@ state_idle = NodePath("../Idle")
 state_jump = NodePath("../Jump")
 state_fall = NodePath("../Fall")
 
-[node name="Jump" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_landed", "state_fall", "state_wall_slide")]
+[node name="Jump" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_landed", "state_fall")]
 script = ExtResource("7_pytv8")
 state_landed = NodePath("../Landed")
 state_fall = NodePath("../Fall")
-state_wall_slide = NodePath("../WallSlide")
 
 [node name="Fall" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_landed", "state_jump", "state_wall_slide")]
 script = ExtResource("8_cdrrj")
