@@ -18,9 +18,9 @@ collision_mask = 0
 [node name="Floor" type="CSGCombiner3D" parent="Geometry"]
 
 [node name="Box" type="CSGBox3D" parent="Geometry/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -0.5)
 material_override = ExtResource("1_7o25e")
-size = Vector3(16, 1, 9)
+size = Vector3(16, 3, 9)
 
 [node name="Wall_Back" type="CSGCombiner3D" parent="Geometry"]
 
