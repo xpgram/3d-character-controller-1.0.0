@@ -58,22 +58,23 @@ func on_enter() -> void:
    # TODO I feel like a tween isn't the right answer. I'll have to look this up, though.
    #   I need something more like an elastic number. It's fine as it's smaller, but it
    #   rebounds with built potential energy as it reaches farther and farther away.
-   var tween_time := 1.0 / 3.0
+   var tween_time := 1.0 / 2.0 # TODO Describe in a properties node.
 
    tween = create_tween()
    tween.set_loops(1)
    tween.set_ease(Tween.EASE_OUT)
 
-   # TODO These values are hard: what if the wall were moving?
-   var wall_slide_speed := 4.0 # TODO This should be a hard value in physics_properties
-   var ideal_ground_velocity := Vector2(
-      clampf(subject.velocity.x, -wall_slide_speed, wall_slide_speed),
-      clampf(subject.velocity.z, -wall_slide_speed, wall_slide_speed),
-   )
+   # TODO These values are hard limits. What if the wall were moving?
+   var wall_slide_lateral_speed := 0.0 # TODO This should be in physics_properties
+   # TODO Remove if we don't need this.
+   # var ideal_ground_velocity := Vector2(
+   #    clampf(subject.velocity.x, -wall_slide_lateral_speed, wall_slide_lateral_speed),
+   #    clampf(subject.velocity.z, -wall_slide_lateral_speed, wall_slide_lateral_speed),
+   # )
 
    tween.set_parallel()
-   tween.tween_property(subject, 'velocity:x', ideal_ground_velocity.x, tween_time)
-   tween.tween_property(subject, 'velocity:z', ideal_ground_velocity.y, tween_time)
+   tween.tween_property(subject, 'velocity:x', wall_slide_lateral_speed, tween_time)
+   tween.tween_property(subject, 'velocity:z', wall_slide_lateral_speed, tween_time)
 
    tween.play()
 
