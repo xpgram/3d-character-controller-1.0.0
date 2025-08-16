@@ -9,6 +9,7 @@ extends State
 func on_enter() -> void:
    subject.velocity.x = 0
    subject.velocity.z = 0
+   player_model.idle()
 
 
 func process_input(_event: InputEvent) -> void:

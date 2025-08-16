@@ -9,6 +9,8 @@ signal change_state(new_state: State)
 
 
 # TODO These are not generic.
+#   Should PlayerState extend this one? Like, are these references useful to have?
+@onready var player_model: SophiaSkin = %SophiaSkin
 @onready var physics_properties: PhysicsProperties = %PhysicsProperties
 @onready var ui_player_state_label: Label = %DebugOutput_PlayerState
 

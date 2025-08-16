@@ -15,6 +15,10 @@ const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 var _last_movement_direction := Vector3.BACK
 
 
+func on_enter() -> void:
+   player_model.move()
+
+
 func process_physics(delta: float) -> void:
    subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 

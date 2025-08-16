@@ -32,6 +32,21 @@ func _ready() -> void:
 
 
 func on_enter() -> void:
+   # This step helps transition to the 'wall slide' animation faster.
+   # TODO Is there an easier way of doing this? Can we interrupt the 'fall' state transition to insert a new one?
+   var raw_input = Input.get_vector(
+      'move_left',
+      'move_right',
+      'move_up',
+      'move_down',
+      0.4
+   )
+   if PlayerMovement.get_wall_slide_candidate(raw_input, subject, camera, physics_properties):
+      change_state.emit(state_wall_slide)
+      return
+
+   # Fall state initialization.
+   player_model.fall()
    coyote_timer.start()
 
 

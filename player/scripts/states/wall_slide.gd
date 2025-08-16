@@ -48,6 +48,13 @@ func _ready() -> void:
 
 
 func on_enter() -> void:
+   # Animate player wall slide
+   player_model.wall_slide()
+   var wall_normal := subject.get_wall_normal()
+   var wall_normal_2D = Vector2(wall_normal.x, wall_normal.z)
+   var y_rotation_matching_wall := -Vector2.UP.angle_to(wall_normal_2D)
+   player_model.rotation.y = y_rotation_matching_wall
+
    slide_timer.start()
 
    # Cut jump velocity immediately
