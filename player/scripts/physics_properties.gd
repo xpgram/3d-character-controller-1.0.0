@@ -13,7 +13,7 @@ extends Node
 
 # TODO What category should these be in?
 @export var prop_move_wall_slide_friction: float = 2.0
-@export var prop_move_wall_slide_max_velocity: float = 10.0
+@export var prop_move_wall_slide_max_velocity: float = 7.5
 @export var prop_move_wall_slide_max_time: float = 10.0
 @export var prop_move_wall_slide_pull_away_time: float = 0.5
 

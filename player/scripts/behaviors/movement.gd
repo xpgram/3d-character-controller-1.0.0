@@ -106,7 +106,7 @@ static func get_wall_slide_candidate(
    var negative_wall_normal := -character_body.get_wall_normal()
    var angle_to_wall_normal := applied_input_vector.signed_angle_to(negative_wall_normal, Vector3.UP)
 
-   if abs(angle_to_wall_normal) > PI / 12: # TODO Get max angle from physics properties or other
+   if abs(angle_to_wall_normal) > PI / 3: # TODO Get max angle from physics properties or other
       return false
 
    return true
