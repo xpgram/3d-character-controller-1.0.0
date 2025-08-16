@@ -54,3 +54,21 @@ static func apply_vector_input_to_character_body(
 
    # Report the vector used for desired movement.
    return movement_vector
+
+
+static func get_wall_slide_candidate(
+   vector_input: Vector2,
+   character_body: CharacterBody3D,
+   camera: Camera3D,
+   physics_properties: PhysicsProperties,
+) -> Node3D:
+   # TODO Shouldn't this return the wall collided with?
+
+   # TODO Wall-slide precheck steps:
+   # - If collided walls are 2+, then return false.
+   # - If 1 collided wall was not first collided with on this frame, return false.
+   # - If collided wall's negative normal is pointed 15° away from stick input on the
+   #     ground plane, return false. (i.e. do not wall slide unless movement stick is
+   #     "pressing into" the wall.)
+
+   return null
