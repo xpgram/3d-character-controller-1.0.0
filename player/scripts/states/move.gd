@@ -68,3 +68,6 @@ func _rotate_character_body(delta: float) -> void:
          target_angle,
          physics_properties.prop_move_rotation_speed * _last_movement_direction.length() * delta
    )
+
+   # TODO Add tilt
+   # player_model._set_run_tilt(0.0)
