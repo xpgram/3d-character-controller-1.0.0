@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bw2yt2kjem3le"]
+[gd_scene load_steps=14 format=3 uid="uid://bw2yt2kjem3le"]
 
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
 [ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/scripts/player_3d.gd" id="1_ojpvi"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://6aflfgaf6eha" path="res://player/scripts/states/crouch.gd" id="10_hvouw"]
 [ext_resource type="Script" uid="uid://cjml6mdf14ahl" path="res://player/scripts/states/wall_slide.gd" id="10_r3m6x"]
 [ext_resource type="Script" uid="uid://dhdhysldiivb4" path="res://player/scripts/states/landed.gd" id="11_hvouw"]
+[ext_resource type="Script" uid="uid://7edevwtyim4y" path="res://player/scripts/states/crouch_move.gd" id="11_s1hf0"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hnhtc"]
 radius = 0.3
@@ -46,11 +47,12 @@ state_crouch = NodePath("../Crouch")
 state_jump = NodePath("../Jump")
 state_fall = NodePath("../Fall")
 
-[node name="Move" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_jump", "state_fall")]
+[node name="Move" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_jump", "state_fall", "state_crouch_move")]
 script = ExtResource("6_cdrrj")
 state_idle = NodePath("../Idle")
 state_jump = NodePath("../Jump")
 state_fall = NodePath("../Fall")
+state_crouch_move = NodePath("../Crouch_Move")
 
 [node name="Jump" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_landed", "state_fall")]
 script = ExtResource("7_pytv8")
@@ -71,9 +73,17 @@ state_fall = NodePath("../Fall")
 
 [node name="FloorSlide" type="Node" parent="Controllers/StateMachine/States"]
 
-[node name="Crouch" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_jump", "state_fall")]
+[node name="Crouch" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_crouch_move", "state_jump", "state_fall")]
 script = ExtResource("10_hvouw")
 state_idle = NodePath("../Idle")
+state_crouch_move = NodePath("../Crouch_Move")
+state_jump = NodePath("../Jump")
+state_fall = NodePath("../Fall")
+
+[node name="Crouch_Move" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_crouch_idle", "state_move", "state_jump", "state_fall")]
+script = ExtResource("11_s1hf0")
+state_crouch_idle = NodePath("../Crouch")
+state_move = NodePath("../Move")
 state_jump = NodePath("../Jump")
 state_fall = NodePath("../Fall")
 
@@ -83,6 +93,14 @@ state_idle = NodePath("../Idle")
 state_move = NodePath("../Move")
 
 [node name="LandedHard" type="Node" parent="Controllers/StateMachine/States"]
+
+[node name="Juncture_On_Ground" type="Node" parent="Controllers/StateMachine/States"]
+
+[node name="Juncture_In_Air" type="Node" parent="Controllers/StateMachine/States"]
+
+[node name="Juncture_Standing_Posture" type="Node" parent="Controllers/StateMachine/States"]
+
+[node name="Juncture_Crouching_Posture" type="Node" parent="Controllers/StateMachine/States"]
 
 [node name="GameUI" type="Control" parent="."]
 layout_mode = 3

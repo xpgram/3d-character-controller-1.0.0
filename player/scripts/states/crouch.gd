@@ -18,6 +18,10 @@ func process_input(_event: InputEvent) -> void:
       change_state.emit(state_idle)
       return
 
+   if Input.is_action_just_pressed('jump') and subject.is_on_floor():
+      change_state.emit(state_jump)
+      return
+
    if (
       Input.is_action_just_pressed('move_up') or
       Input.is_action_just_pressed('move_down') or

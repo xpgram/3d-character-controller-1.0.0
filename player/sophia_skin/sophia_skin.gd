@@ -56,6 +56,10 @@ func crouch():
 	state_machine.travel("Idle")
 	_make_half_size()
 
+func crawl():
+	state_machine.travel("Move")
+	_make_half_size()
+
 func edge_grab():
 	state_machine.travel("EdgeGrab")
 	_make_full_size()
@@ -67,7 +71,7 @@ func wall_slide():
 # TODO Quick and dirty crouching.
 #   These functions aren't necessary with an actual "Crouch" animation.
 func _make_half_size():
-	scale.y = 0.5
+	scale.y = 0.65
 
 func _make_full_size():
 	scale.y = 1.0

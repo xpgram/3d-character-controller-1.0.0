@@ -3,21 +3,20 @@ extends State
 const PlayerMovement = preload("uid://bc4pn1ojhofxm")
 
 @export_group('Transition-to States', 'state_')
-@export var state_idle: State
+@export var state_crouch_idle: State
+@export var state_move: State
 @export var state_jump: State
-@export var state_fall: State 
-@export var state_crouch_move: State 
+@export var state_fall: State
 
 
-# TODO Technically, this node shouldn't know about the camera node.
-# @onready var _camera: Camera3D = %Camera3D
-
-
+# TODO Instantiate to PlayerBody or something.
+#   If all I want is the possibility for couch-coop, then something like that should be
+#   fine, right? Why am I reimplementing this var every single script that can move.
 var _last_movement_direction := Vector3.BACK
 
 
 func on_enter() -> void:
-   player_model.move()
+   player_model.crawl()
 
 
 func process_physics(delta: float) -> void:
@@ -32,11 +31,7 @@ func process_physics(delta: float) -> void:
    )
 
    if raw_input == Vector2.ZERO:
-      change_state.emit(state_idle)
-      return
-
-   if Input.is_action_just_pressed('crouch') and subject.is_on_floor():
-      change_state.emit(state_crouch_move)
+      change_state.emit(state_crouch_idle)
       return
 
    var moved_direction := PlayerMovement.apply_vector_input_to_character_body(
@@ -58,6 +53,10 @@ func process_physics(delta: float) -> void:
 
 
 func process_input(_event: InputEvent) -> void:
+   if Input.is_action_just_released('crouch') and subject.is_on_floor():
+      change_state.emit(state_move)
+      return
+
    if Input.is_action_just_pressed('jump') and subject.is_on_floor():
       change_state.emit(state_jump)
 
@@ -65,6 +64,7 @@ func process_input(_event: InputEvent) -> void:
 # TODO Accept an argument instead of depending on script-globals?
 ## Rotates the character body into the direction of travel.
 func _rotate_character_body(delta: float) -> void:
+   # TODO Whyyy is "forward" Vector3.BACK??
    var target_angle := Vector3.BACK.signed_angle_to(_last_movement_direction, Vector3.UP)
 
    # Smoothly rotate to the direction of travel.
@@ -73,6 +73,3 @@ func _rotate_character_body(delta: float) -> void:
          target_angle,
          physics_properties.prop_move_rotation_speed * _last_movement_direction.length() * delta
    )
-
-   # TODO Add tilt
-   # player_model._set_run_tilt(0.0)
