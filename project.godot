@@ -97,6 +97,7 @@ look_down={
 
 3d_physics/layer_1="Level_Geometry"
 3d_physics/layer_2="Invisible_Barriers"
+3d_physics/layer_3="Camera_Regions"
 
 [rendering]
 
