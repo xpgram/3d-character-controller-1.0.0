@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bw2yt2kjem3le"]
+[gd_scene load_steps=13 format=3 uid="uid://bw2yt2kjem3le"]
 
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
 [ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/scripts/player_3d.gd" id="1_ojpvi"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bjgugxuq887su" path="res://player/scripts/states/move.gd" id="6_cdrrj"]
 [ext_resource type="Script" uid="uid://bgb1jnjeyoymo" path="res://player/scripts/states/jump.gd" id="7_pytv8"]
 [ext_resource type="Script" uid="uid://6gp48jrchmdk" path="res://player/scripts/states/fall.gd" id="8_cdrrj"]
+[ext_resource type="Script" uid="uid://6aflfgaf6eha" path="res://player/scripts/states/crouch.gd" id="10_hvouw"]
 [ext_resource type="Script" uid="uid://cjml6mdf14ahl" path="res://player/scripts/states/wall_slide.gd" id="10_r3m6x"]
 [ext_resource type="Script" uid="uid://dhdhysldiivb4" path="res://player/scripts/states/landed.gd" id="11_hvouw"]
 
@@ -38,9 +39,10 @@ script = ExtResource("5_pytv8")
 
 [node name="States" type="Node" parent="Controllers/StateMachine"]
 
-[node name="Idle" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_move", "state_jump", "state_fall")]
+[node name="Idle" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_move", "state_crouch", "state_jump", "state_fall")]
 script = ExtResource("5_jeexd")
 state_move = NodePath("../Move")
+state_crouch = NodePath("../Crouch")
 state_jump = NodePath("../Jump")
 state_fall = NodePath("../Fall")
 
@@ -69,7 +71,11 @@ state_fall = NodePath("../Fall")
 
 [node name="FloorSlide" type="Node" parent="Controllers/StateMachine/States"]
 
-[node name="Crouch" type="Node" parent="Controllers/StateMachine/States"]
+[node name="Crouch" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_jump", "state_fall")]
+script = ExtResource("10_hvouw")
+state_idle = NodePath("../Idle")
+state_jump = NodePath("../Jump")
+state_fall = NodePath("../Fall")
 
 [node name="Landed" type="Node" parent="Controllers/StateMachine/States" node_paths=PackedStringArray("state_idle", "state_move")]
 script = ExtResource("11_hvouw")

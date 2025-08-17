@@ -1,8 +1,8 @@
 extends State
 
 @export_group('Transition-to States', 'state_')
-@export var state_move: State
-@export var state_crouch: State
+@export var state_idle: State
+@export var state_crouch_move: State
 @export var state_jump: State
 @export var state_fall: State
 
@@ -10,16 +10,12 @@ extends State
 func on_enter() -> void:
    subject.velocity.x = 0
    subject.velocity.z = 0
-   player_model.idle()
+   player_model.crouch()
 
 
 func process_input(_event: InputEvent) -> void:
-   if Input.is_action_just_pressed('crouch') and subject.is_on_floor():
-      change_state.emit(state_crouch)
-      return
-
-   if Input.is_action_just_pressed('jump') and subject.is_on_floor():
-      change_state.emit(state_jump)
+   if Input.is_action_just_released('crouch') and subject.is_on_floor():
+      change_state.emit(state_idle)
       return
 
    if (
@@ -28,7 +24,7 @@ func process_input(_event: InputEvent) -> void:
       Input.is_action_just_pressed('move_left') or
       Input.is_action_just_pressed('move_right')
    ):
-      change_state.emit(state_move)
+      change_state.emit(state_crouch_move)
 
 
 func process_physics(delta: float) -> void:

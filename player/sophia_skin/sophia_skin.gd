@@ -37,19 +37,37 @@ func _set_run_tilt(value : float):
 
 func idle():
 	state_machine.travel("Idle")
+	_make_full_size()
 
 func move():
 	state_machine.travel("Move")
 	# TODO Adjust animation speed by movement speed
+	_make_full_size()
 
 func fall():
 	state_machine.travel("Fall")
+	_make_full_size()
 
 func jump():
 	state_machine.travel("Jump")
+	_make_full_size()
+
+func crouch():
+	state_machine.travel("Idle")
+	_make_half_size()
 
 func edge_grab():
 	state_machine.travel("EdgeGrab")
+	_make_full_size()
 
 func wall_slide():
 	state_machine.travel("WallSlide")
+	_make_full_size()
+
+# TODO Quick and dirty crouching.
+#   These functions aren't necessary with an actual "Crouch" animation.
+func _make_half_size():
+	scale.y = 0.5
+
+func _make_full_size():
+	scale.y = 1.0
