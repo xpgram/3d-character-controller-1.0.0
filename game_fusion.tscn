@@ -18,7 +18,7 @@ script = ExtResource("1_51kip")
 
 [node name="Player3D" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_ascb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
-camera = NodePath("../Camera/NaturalPivot/CameraPivot/Camera3D")
+camera = NodePath("../Camera/NaturalPivot/CameraPivot/CameraArm/Camera3D")
 
 [node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("subject")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8, 1, -1)
@@ -31,7 +31,19 @@ transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0,
 [node name="CameraPivot" type="Node3D" parent="Camera/NaturalPivot"]
 unique_name_in_owner = true
 
-[node name="Camera3D" type="Camera3D" parent="Camera/NaturalPivot/CameraPivot"]
+[node name="CameraArm" type="Node3D" parent="Camera/NaturalPivot/CameraPivot"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16)
+
+[node name="Camera3D" type="Camera3D" parent="Camera/NaturalPivot/CameraPivot/CameraArm"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 0, 1, 0, 0, 0)
 fov = 40.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera/NaturalPivot/CameraPivot/CameraArm"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 0, 1, 0, 0, 0)
+light_energy = 1.5
+light_bake_mode = 0
+spot_range = 64.0
+spot_attenuation = 0.2
+spot_angle_attenuation = 2.0
