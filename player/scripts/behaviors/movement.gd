@@ -1,4 +1,6 @@
 
+# TODO Move this to input.gd
+# TODO Add input.gd::get_camera_input_vector(), get_movement_input_vector()
 static func get_curved_input_vector(input_vector: Vector2) -> Vector2:
    # This step squares the "strength" of the input vector, allowing finer control near the
    # lower end of the range.
