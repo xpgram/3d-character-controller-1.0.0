@@ -18,32 +18,30 @@ script = ExtResource("1_51kip")
 
 [node name="Player3D" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_ascb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
-camera = NodePath("../Camera/NaturalPivot/CameraPivot/NaturalPivot/CameraArm/Camera3D")
+camera = NodePath("../Camera/RotationalPivot/CameraArmSocket/CameraArm/Camera3D")
 
 [node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("subject")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8, 1, -1)
 script = ExtResource("6_3uc2i")
 subject = NodePath("../Player3D")
 
-[node name="NaturalPivot" type="Node3D" parent="Camera"]
+[node name="RotationalPivot" type="Node3D" parent="Camera"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
-[node name="CameraPivot" type="Node3D" parent="Camera/NaturalPivot"]
-unique_name_in_owner = true
-
-[node name="NaturalPivot" type="Node3D" parent="Camera/NaturalPivot/CameraPivot"]
+[node name="CameraArmSocket" type="Node3D" parent="Camera/RotationalPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 2, 0)
 
-[node name="CameraArm" type="Node3D" parent="Camera/NaturalPivot/CameraPivot/NaturalPivot"]
+[node name="CameraArm" type="Node3D" parent="Camera/RotationalPivot/CameraArmSocket"]
 unique_name_in_owner = true
-transform = Transform3D(1, -3.55271e-15, 7.10543e-15, 0, 1, -1.49012e-08, 0, 1.49012e-08, 1, -4.76837e-07, -2.38419e-07, 16)
+transform = Transform3D(1, 0, 0, 0, 1, -1.49012e-08, 0, 1.49012e-08, 1, -4.76837e-07, -2.38419e-07, 16)
 
-[node name="Camera3D" type="Camera3D" parent="Camera/NaturalPivot/CameraPivot/NaturalPivot/CameraArm"]
+[node name="Camera3D" type="Camera3D" parent="Camera/RotationalPivot/CameraArmSocket/CameraArm"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 0, 1, 0, 0, 0)
 fov = 40.0
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Camera/NaturalPivot/CameraPivot/NaturalPivot/CameraArm"]
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera/RotationalPivot/CameraArmSocket/CameraArm"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, -2.98023e-08, 0, 0, 1, 0, 0, 0)
 light_energy = 100.0
