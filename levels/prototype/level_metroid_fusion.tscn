@@ -34,23 +34,26 @@ noise = SubResource("FastNoiseLite_c13e8")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2sioe"]
 shader = ExtResource("1_53b5n")
-shader_parameter/top_color = Color(0.288469, 0.182916, 1, 1)
-shader_parameter/bottom_color = Color(1, 0.46805, 0, 1)
+shader_parameter/top_color = Color(0.02, 0.02, 0.1, 1)
+shader_parameter/bottom_color = Color(0.0333333, 0, 0.1, 1)
 shader_parameter/gradient_curve = SubResource("CurveTexture_moxc7")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_83fre")
 shader_parameter/moon_texture = ExtResource("2_gpa0p")
-shader_parameter/moon_direction = Vector3(-1.095, 0.68, 1)
-shader_parameter/moon_size = 0.045
+shader_parameter/moon_direction = Vector3(0, 30, 1)
+shader_parameter/moon_size = 0.15
 
 [sub_resource type="Sky" id="Sky_0h0bb"]
 sky_material = SubResource("ShaderMaterial_2sioe")
 
 [sub_resource type="Environment" id="Environment_go3oa"]
 background_mode = 2
+background_color = Color(0.16, 0.14, 0.2, 1)
 sky = SubResource("Sky_0h0bb")
+sky_rotation = Vector3(1.5708, 0, 0)
 ambient_light_source = 3
 ambient_light_color = Color(0.74902, 0.742654, 0.615273, 1)
 ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.25
 tonemap_mode = 2
 tonemap_exposure = 1.05
 tonemap_white = 0.95
@@ -65,14 +68,17 @@ glow_hdr_threshold = 0.26
 glow_hdr_scale = 0.0
 glow_hdr_luminance_cap = 18.75
 glow_map_strength = 1.0
-fog_light_color = Color(0.843137, 0.737255, 0.329412, 1)
-fog_density = 0.0
-fog_aerial_perspective = 1.0
+fog_light_color = Color(0.7, 0.7, 0.7, 1)
+fog_light_energy = 0.1
+fog_density = 0.1
 fog_sky_affect = 0.0
 fog_height_density = 0.1
 volumetric_fog_density = 0.01
-volumetric_fog_albedo = Color(0.843137, 0.737255, 0.329412, 1)
-volumetric_fog_emission = Color(0.843137, 0.737255, 0.329412, 1)
+volumetric_fog_albedo = Color(0.4, 0.4, 0.4, 1)
+volumetric_fog_emission = Color(0.5, 0.5, 0.5, 1)
+adjustment_enabled = true
+adjustment_brightness = 1.2
+adjustment_contrast = 0.85
 
 [node name="Level_MetroidFusion" type="Node3D"]
 
