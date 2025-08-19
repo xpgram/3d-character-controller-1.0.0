@@ -23,9 +23,9 @@ extends Node3D
 ## How far the camera arm extends from the rig's coordinates.
 @export var camera_distance: float = 16.0
 ## How far in degrees the camera arm will rotate horizontally when tilt-looking.
-@export var pivot_hor_max: float = 8.0 # TODO Degrees
+@export var tilt_hor_max_degrees: float = 15.0
 ## How far in degrees the camera arm will rotate vertically when tilt-looking.
-@export var pivot_ver_max: float = 8.0
+@export var tilt_ver_max_degrees: float = 15.0
 ## How far the camera zooms in when the player is tilt-looking.
 @export var camera_tilt_zoom_distance: float = 4.0
 
@@ -100,9 +100,8 @@ func _process_camera_arm_rotation(delta: float) -> void:
    curved_stick_input = curved_stick_input.limit_length(1.0)
 
    var ideal_pivot_rotation := Vector3(
-      # TODO Magic numbers.
-      -curved_stick_input.y * PI * pivot_ver_max / 100.0,
-      -curved_stick_input.x * PI * pivot_hor_max / 100.0,
+      -curved_stick_input.y * PI * tilt_ver_max_degrees / 180.0,
+      -curved_stick_input.x * PI * tilt_hor_max_degrees / 180.0,
       0,
    )
    
