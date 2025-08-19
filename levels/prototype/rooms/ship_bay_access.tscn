@@ -82,3 +82,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, -0.5)
 material_override = SubResource("StandardMaterial3D_qgra8")
 use_collision = true
 size = Vector3(32, 1, 11)
+
+[node name="Lights" type="Node3D" parent="."]
