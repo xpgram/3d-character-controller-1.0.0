@@ -14,8 +14,8 @@ extends Node3D
 @export var rotation_lerp_rate: float = 24.0
 ## How quickly the camera's pivot rotation races to match its ideal orientation.
 @export var pivot_lerp_rate: float = 4.0
-@export var pivot_hor_max: float = 6.0
-@export var pivot_ver_max: float = 6.0
+@export var pivot_hor_max: float = 10.0
+@export var pivot_ver_max: float = 10.0
 
 # TODO I should pop these settings into a singleton node.
 @export_group('Control Settings')
@@ -31,8 +31,10 @@ extends Node3D
 var ideal_position := Vector3()
 var ideal_rotation := Vector3()
 
-@onready var _camera_pivot: Node3D = %CameraPivot
+@onready var _rotational_pivot: Node3D = %RotationalPivot
+@onready var _camera_arm: Node3D = %CameraArm
 @onready var _camera: Camera3D = %Camera3D
+@onready var _spotlight: SpotLight3D = %SpotLight3D
 
 
 func _physics_process(delta: float) -> void:
@@ -56,9 +58,9 @@ func _physics_process(delta: float) -> void:
    # TODO Why 0.5? 180/360? This works, but why is it working?
    ideal_rotation.x = -Vector3.BACK.signed_angle_to(subject_yz_plane, Vector3.RIGHT) + 0.45
 
-    # Lerp camera to ideal rotation.
-   _camera.rotation.y = lerp(_camera.rotation.y, ideal_rotation.y, rotation_lerp_rate * delta)
-   _camera.rotation.x = lerp(_camera.rotation.x, ideal_rotation.x, rotation_lerp_rate * delta)
+   # Lerp camera to ideal rotation.
+   # _camera.rotation.y = lerp(_camera.rotation.y, ideal_rotation.y, rotation_lerp_rate * delta)
+   # _camera.rotation.x = lerp(_camera.rotation.x, ideal_rotation.x, rotation_lerp_rate * delta)
 
    # Allow stick input to affect camera.
    # TODO This section is affected by the incorrect math of the camera point-to-target
@@ -77,5 +79,5 @@ func _physics_process(delta: float) -> void:
       -curved_stick_input.x * PI * pivot_hor_max / 100.0,
       0,
    )
-   _camera_pivot.rotation.y = lerp(_camera_pivot.rotation.y, ideal_pivot_rotation.y, pivot_lerp_rate * delta)
-   _camera_pivot.rotation.x = lerp(_camera_pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
+   _rotational_pivot.rotation.y = lerp(_rotational_pivot.rotation.y, ideal_pivot_rotation.y, pivot_lerp_rate * delta)
+   _rotational_pivot.rotation.x = lerp(_rotational_pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
