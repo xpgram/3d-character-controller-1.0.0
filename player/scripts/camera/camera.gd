@@ -105,8 +105,8 @@ func _process_camera_arm_rotation(delta: float) -> void:
       0,
    )
    
-   _pivot.rotation.y = lerp(_pivot.rotation.y, ideal_pivot_rotation.y, pivot_lerp_rate * delta)
-   _pivot.rotation.x = lerp(_pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
+   _pivot.rotation.y = lerp_angle(_pivot.rotation.y, ideal_pivot_rotation.y, pivot_lerp_rate * delta)
+   _pivot.rotation.x = lerp_angle(_pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
 
    var arm_retraction_length := curved_stick_input.length() * camera_tilt_zoom_distance
    _camera_arm.position.z = lerp(_camera_arm.position.z, camera_distance - arm_retraction_length, pivot_lerp_rate * delta)
@@ -125,8 +125,21 @@ func _point_camera_head_at_subject(delta: float) -> void:
    var ideal_rotation := Vector3(
       Vector3.BACK.signed_angle_to(subject_yz_plane, Vector3.LEFT),
       Vector3.BACK.signed_angle_to(subject_xz_plane, Vector3.UP),
+      # Vector3.FORWARD.signed_angle_to(subject_xz_plane, Vector3.UP), # Needed when global rotating for some reason.
       0.0,
    )
 
-   _camera_head.rotation.y = lerp(_camera_head.rotation.y, ideal_rotation.y, rotation_lerp_rate * delta)
-   _camera_head.rotation.x = lerp(_camera_head.rotation.x, ideal_rotation.x, rotation_lerp_rate * delta)
+   # FIXME Global rotating while a downward tilt is in effect can fuss with the z-rotation.
+   # global_rotation is meant to help with the double-rotation otherwise seen when the
+   # camera arm rotates and the camera head _also_ rotates the same amount. The solution
+   # here is to subtract the arm's rotation from the head's ideal rotation, but this feels
+   # unsustainable. What if I had a second pivot arm? I dunno why I would, but still.
+   # 
+   # I actually like the double-rotation effect anyway. I would like to keep it.
+   # I'd like to have better control of it, though.
+
+   _camera_head.rotation.y = lerp_angle(_camera_head.rotation.y, ideal_rotation.y, rotation_lerp_rate * delta)
+   _camera_head.rotation.x = lerp_angle(_camera_head.rotation.x, ideal_rotation.x, rotation_lerp_rate * delta)
+
+   # TODO Bandaid for silly camera-arm confusion when global rotating.
+   # _camera_head.global_rotation.z = 0.0
