@@ -39,7 +39,7 @@ shader_parameter/bottom_color = Color(0.0333333, 0, 0.1, 1)
 shader_parameter/gradient_curve = SubResource("CurveTexture_moxc7")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_83fre")
 shader_parameter/moon_texture = ExtResource("2_gpa0p")
-shader_parameter/moon_direction = Vector3(0, 30, 1)
+shader_parameter/moon_direction = Vector3(0, 10, 1)
 shader_parameter/moon_size = 0.15
 
 [sub_resource type="Sky" id="Sky_0h0bb"]
