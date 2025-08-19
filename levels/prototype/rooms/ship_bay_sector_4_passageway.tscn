@@ -1,0 +1,125 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqsgv1wmxkhol"]
+
+[ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_cwcs2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgra8"]
+transparency = 2
+alpha_scissor_threshold = 1.0
+alpha_antialiasing_mode = 0
+albedo_color = Color(0, 0, 0, 0)
+
+[node name="ShipBay_Sector4Passageway" type="Node3D"]
+
+[node name="Geometry" type="CSGCombiner3D" parent="."]
+material_override = ExtResource("1_cwcs2")
+use_collision = true
+collision_mask = 0
+
+[node name="Floor" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Box" type="CSGBox3D" parent="Geometry/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(32, 1, 9)
+
+[node name="Wall_Back" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Wall" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 5, 4.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(26, 10, 1)
+
+[node name="Wall2" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 5, 4.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(4, 10, 1)
+
+[node name="Wall3" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 8.5, 4.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(2, 3, 1)
+
+[node name="Wall4" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 2.5, 4.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(2, 5, 1)
+
+[node name="Wall5" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2.5, 3)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(10, 5, 2)
+
+[node name="Wall6" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 8.5, 3)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(10, 1, 2)
+
+[node name="Wall7" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 8, 1.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(10, 2, 1)
+
+[node name="Wall8" type="CSGBox3D" parent="Geometry/Wall_Back"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 5.5, 1.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(10, 1, 1)
+
+[node name="Ceiling" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Box" type="CSGBox3D" parent="Geometry/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -0.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(32, 1, 9)
+
+[node name="Wall_Left" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Wall" type="CSGBox3D" parent="Geometry/Wall_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 6.5, -0.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(1, 5, 9)
+
+[node name="Wall1" type="CSGBox3D" parent="Geometry/Wall_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.5, -3.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(1, 3, 3)
+
+[node name="Wall2" type="CSGBox3D" parent="Geometry/Wall_Left"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.5, 2.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(1, 3, 3)
+
+[node name="Wall_Right" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Wall" type="CSGBox3D" parent="Geometry/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 6.5, -0.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(1, 5, 9)
+
+[node name="Wall1" type="CSGBox3D" parent="Geometry/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 2.5, -3.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(1, 3, 3)
+
+[node name="Wall2" type="CSGBox3D" parent="Geometry/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 2.5, 2.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(1, 3, 3)
+
+[node name="Platforms" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Box" type="CSGBox3D" parent="Geometry/Platforms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -0.5)
+material_override = ExtResource("1_cwcs2")
+size = Vector3(4, 1, 2)
+
+[node name="Invis_Panels" type="CSGCombiner3D" parent="."]
+visible = false
+use_collision = true
+collision_layer = 2
+collision_mask = 0
+
+[node name="Wall_FrontPanel" type="CSGBox3D" parent="Invis_Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5.5)
+material_override = SubResource("StandardMaterial3D_qgra8")
+use_collision = true
+size = Vector3(32, 10, 1)
