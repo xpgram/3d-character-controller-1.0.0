@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmfw244mblro2"]
+
+[ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_qb5vp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgra8"]
+transparency = 2
+alpha_scissor_threshold = 1.0
+alpha_antialiasing_mode = 0
+albedo_color = Color(0, 0, 0, 0)
+
+[node name="ShipBay_Wraparound" type="Node3D"]
+
+[node name="Geometry" type="CSGCombiner3D" parent="."]
+material_override = ExtResource("1_qb5vp")
+use_collision = true
+collision_mask = 0
+
+[node name="Floor" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Box" type="CSGBox3D" parent="Geometry/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 1.5, 1.5)
+material_override = ExtResource("1_qb5vp")
+size = Vector3(3, 3, 13)
+
+[node name="Wall_Right" type="CSGCombiner3D" parent="Geometry"]
+
+[node name="Wall" type="CSGBox3D" parent="Geometry/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 7.5, 1.5)
+material_override = ExtResource("1_qb5vp")
+size = Vector3(3, 5, 13)
+
+[node name="Wall2" type="CSGBox3D" parent="Geometry/Wall_Right"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 4, 1.5)
+material_override = ExtResource("1_qb5vp")
+size = Vector3(1, 2, 9)
+
+[node name="Invis_Panels" type="CSGCombiner3D" parent="."]
+visible = false
+use_collision = true
+collision_layer = 2
+collision_mask = 0
+
+[node name="Wall_FrontPanel" type="CSGBox3D" parent="Invis_Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 5, -5.5)
+material_override = SubResource("StandardMaterial3D_qgra8")
+use_collision = true
+size = Vector3(3, 10, 1)
+
+[node name="Wall_TopPanel" type="CSGBox3D" parent="Invis_Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 5, 1.5)
+material_override = SubResource("StandardMaterial3D_qgra8")
+use_collision = true
+size = Vector3(1, 10, 15)
+
+[node name="Wall_BackPanel" type="CSGBox3D" parent="Invis_Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 5, 8.5)
+material_override = SubResource("StandardMaterial3D_qgra8")
+use_collision = true
+size = Vector3(3, 10, 1)

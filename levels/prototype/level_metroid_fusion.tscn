@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://db51xtuloclwg"]
+[gd_scene load_steps=18 format=3 uid="uid://db51xtuloclwg"]
 
 [ext_resource type="Shader" uid="uid://cdlt3ujrpad32" path="res://level/sky_with_stars.tres" id="1_53b5n"]
 [ext_resource type="Texture2D" uid="uid://ca3jtautvrj1u" path="res://level/moon.png" id="2_gpa0p"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://bgnvstmvwp0s8" path="res://levels/prototype/rooms/ship_bay_shaft.tscn" id="5_c13e8"]
 [ext_resource type="PackedScene" uid="uid://doqvq55vi2apr" path="res://levels/prototype/rooms/MainDeck_ShipBayAccess.tscn" id="6_2sioe"]
 [ext_resource type="PackedScene" uid="uid://bik0kdii2g4kl" path="res://levels/prototype/rooms/MainDeck_SouthHall.tscn" id="7_afe30"]
+[ext_resource type="PackedScene" uid="uid://cmfw244mblro2" path="res://levels/prototype/rooms/ship_bay_wraparound.tscn" id="8_c13e8"]
+[ext_resource type="PackedScene" uid="uid://jked3u40a4d3" path="res://levels/prototype/rooms/ship_bay_shaft_maintenance.tscn" id="9_2sioe"]
 
 [sub_resource type="Curve" id="Curve_gvgno"]
 _data = [Vector2(0.331719, 0.0391753), 0.0, 0.0, 0, 0, Vector2(0.697336, 1), 0.51276, 0.0, 0, 0]
@@ -95,8 +97,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0)
 [node name="ShipBay_Shaft" parent="Level_Rooms" instance=ExtResource("5_c13e8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 0, 0)
 
+[node name="ShipBay_Wraparound" parent="Level_Rooms" instance=ExtResource("8_c13e8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72, 0, 0)
+
 [node name="MainDeck_ShipBayAccess" parent="Level_Rooms" instance=ExtResource("6_2sioe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 30, 0)
 
 [node name="MainDeck_SouthHall" parent="Level_Rooms" instance=ExtResource("7_afe30")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 104, 29, 0)
+
+[node name="ShipBay_ShaftMaintenance" parent="Level_Rooms" instance=ExtResource("9_2sioe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 0, 10)
