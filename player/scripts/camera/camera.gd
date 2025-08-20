@@ -5,6 +5,15 @@ extends Node3D
 #   I may want to separate those objects from this type's implementation, and simply ask
 #   that these objects be children of a CameraRig3D node in order for it to work.
 #   Kind of like when CSGCombiners give warnings when they contain no CSGMeshes.
+#
+# CameraRig3D
+#   Camera3D         : If not present, give an editor warning.
+#   Spotlight3D      : (Optional)
+#   AudioListener    : (Optional)
+#   Random Node3D    : (Optional)
+#
+# @tool is used to place the CameraRig's children in the CameraHead node so they may be
+# positioned appropriately.
 
 @export_group('Camera')
 @export var subject: Node3D
