@@ -18,35 +18,39 @@ script = ExtResource("1_51kip")
 
 [node name="Player3D" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_ascb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
-camera = NodePath("../Camera/Pivot/CameraArm/CameraHead/Camera3D")
+camera = NodePath("../CameraRig3D/Pivot/CameraArm/CameraHead/Camera3D")
 
-[node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("subject")]
+[node name="CameraRig3D" type="Node3D" parent="." node_paths=PackedStringArray("subject")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8, 5, 0)
 script = ExtResource("6_3uc2i")
 subject = NodePath("../Player3D")
 
-[node name="Pivot" type="Node3D" parent="Camera"]
+[node name="FocalPoint" type="Node3D" parent="CameraRig3D"]
+unique_name_in_owner = true
+editor_description = "Describes where the Camera Head is pointing. This is also the focus point Depth of Field is adjusted to."
+
+[node name="Pivot" type="Node3D" parent="CameraRig3D"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 0, 0)
 
-[node name="CameraArm" type="Node3D" parent="Camera/Pivot"]
+[node name="CameraArm" type="Node3D" parent="CameraRig3D/Pivot"]
 unique_name_in_owner = true
 transform = Transform3D(1, -1.05879e-22, -7.10543e-15, 0, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, -4.76837e-07, 0, 16)
 
-[node name="CameraHead" type="Node3D" parent="Camera/Pivot/CameraArm"]
+[node name="CameraHead" type="Node3D" parent="CameraRig3D/Pivot/CameraArm"]
 unique_name_in_owner = true
 
-[node name="Camera3D" type="Camera3D" parent="Camera/Pivot/CameraArm/CameraHead"]
+[node name="Camera3D" type="Camera3D" parent="CameraRig3D/Pivot/CameraArm/CameraHead"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, -1.05879e-22, 1, 0, 0, 0, 1, 0, 0, 0)
 fov = 40.0
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Camera/Pivot/CameraArm/CameraHead"]
+[node name="SpotLight3D" type="SpotLight3D" parent="CameraRig3D/Pivot/CameraArm/CameraHead"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, -1.05879e-22, 1, 0, 0, 0, 1, 0, 0, 0)
 light_energy = 100.0
 light_bake_mode = 0
-spot_range = 100.0
+spot_range = 50.0
 spot_attenuation = 1.8
 spot_angle = 50.0
 spot_angle_attenuation = 2.0

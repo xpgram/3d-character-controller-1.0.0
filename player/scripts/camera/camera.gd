@@ -1,3 +1,4 @@
+class_name CameraRig3D
 extends Node3D
 
 @export_group('Camera')
@@ -16,8 +17,8 @@ extends Node3D
 @export var position_lerp_rate_x: float = 24.0
 ## How quickly the camera's position races to match the y-axis position of its subject.
 @export var position_lerp_rate_y: float = 6.0
-## How quickly the camera's rotation races to face the position of its subject.
-@export var rotation_lerp_rate: float = 24.0
+## How quickly the camera's focal point races to match the position of its subject.
+@export var focal_point_lerp_rate: float = 24.0
 ## How quickly the camera's pivot rotation races to match its ideal orientation.
 @export var pivot_lerp_rate: float = 4.0
 ## How far the camera arm extends from the rig's coordinates.
@@ -40,6 +41,8 @@ extends Node3D
 @export var stick_invert_y: bool = false
 @export var stick_invert_x: bool = false
 
+## The point describing where the camera is looking.
+@onready var _focal_point: Node3D = %FocalPoint
 ## The pivot joint used to rotate the camera arm.
 @onready var _pivot: Node3D = %Pivot
 ## The arm that holds the camera head at a distance from the rig's base coordinates.
@@ -59,7 +62,9 @@ func _ready() -> void:
 ## Skips all the animation lerps used in physics processes elsewhere.
 func _teleport_to_position() -> void:
    # IMPLEMENT Run the same functions with lerp(x, new_x, 1.0)?
-   pass
+
+   if subject:
+      _focal_point.global_position.lerp(subject.global_position, 1.0)
 
 
 func _physics_process(delta: float) -> void:
@@ -82,6 +87,7 @@ func _process_camera_rig_position(delta: float) -> void:
    position.y = lerp(position.y, ideal_position.y, position_lerp_rate_y * delta)
 
 
+# TODO This may be (is definitely) mixing too much user control script in with generic CameraRig3D functions. We should refactor.
 ## Rotates the camera arm and adjusts arm length according to user input.
 func _process_camera_arm_rotation(delta: float) -> void:
    # TODO Get this from some utils/input.gd script.
@@ -99,17 +105,42 @@ func _process_camera_arm_rotation(delta: float) -> void:
    curved_stick_input = curved_stick_input.normalized() * curved_input_length
    curved_stick_input = curved_stick_input.limit_length(1.0)
 
+   # Rotate the arm.
    var ideal_pivot_rotation := Vector3(
       -curved_stick_input.y * PI * tilt_ver_max_degrees / 180.0,
       -curved_stick_input.x * PI * tilt_hor_max_degrees / 180.0,
       0,
    )
-   
+
    _pivot.rotation.y = lerp_angle(_pivot.rotation.y, ideal_pivot_rotation.y, pivot_lerp_rate * delta)
    _pivot.rotation.x = lerp_angle(_pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
 
+   # Retract the arm while tilt-looking.
    var arm_retraction_length := curved_stick_input.length() * camera_tilt_zoom_distance
    _camera_arm.position.z = lerp(_camera_arm.position.z, camera_distance - arm_retraction_length, pivot_lerp_rate * delta)
+
+   # Add extra tilt by moving the camera's focal point.
+   # TODO These values lack export settings. Also should probably be in a separate control script: CameraRig is not responsible for this.
+   camera_focal_point_displacement.x = lerp(camera_focal_point_displacement.x, -curved_stick_input.x * 4.0, pivot_lerp_rate * delta)
+   camera_focal_point_displacement.y = lerp(camera_focal_point_displacement.y, -curved_stick_input.y * 2.0 + 2.0, pivot_lerp_rate * delta)
+
+   camera_focal_point_displacement.z = lerp(camera_focal_point_displacement.z, curved_stick_input.length() * (-subject.position.z - (subject.velocity.z * 12.0 * delta)), pivot_lerp_rate * delta)
+   # TODO This line is silly. Effective, but architecturally broken.
+   # This equation:
+   #   [ curved_stick_input.length() * (-subject.position.z - (subject.velocity.z * 12.0 * delta)) ]
+   # is doing a number of different things, all of them awful.
+   # - The CameraRig does not assume its subject is a CharacterBody, so should not assume it has a velocity field.
+   # - It should not know what that CharacterBody's speed value is. (12.0)
+   # - It should not be trying to translate a local-space vector (the displacement) to some other local-space. This is
+   #   unwrapping a wrapped present.
+   # This present unwrapping is imperfectly mixing localities (that is, the subject's and global), which is what causes
+   # that elastic effect when moving along the z-axis with tilt-look engaged. That elasticity is what this equation is
+   # correcting for, and it would be far better to just reduce how much of the subject's z-axis locality is included in
+   # the first place.
+   #
+   # As it is, this is fine for demonstration purposes, I guess.
+   #
+   # Also, this z-axis specificity will not play nicely with the corner-wrapping I want to do later.
 
 
 ## If a subject exists, rotates the camera head such that its visual center is facing the
@@ -118,28 +149,9 @@ func _point_camera_head_at_subject(delta: float) -> void:
    if not subject:
       return
 
-   var vector_to_subject := subject.global_position - _camera_head.global_position + camera_focal_point_displacement
-   var subject_xz_plane := vector_to_subject.slide(Vector3.UP)
-   var subject_yz_plane := vector_to_subject.slide(Vector3.LEFT)
-
-   var ideal_rotation := Vector3(
-      Vector3.BACK.signed_angle_to(subject_yz_plane, Vector3.LEFT),
-      Vector3.BACK.signed_angle_to(subject_xz_plane, Vector3.UP),
-      # Vector3.FORWARD.signed_angle_to(subject_xz_plane, Vector3.UP), # Needed when global rotating for some reason.
-      0.0,
-   )
-
-   # FIXME Global rotating while a downward tilt is in effect can fuss with the z-rotation.
-   # global_rotation is meant to help with the double-rotation otherwise seen when the
-   # camera arm rotates and the camera head _also_ rotates the same amount. The solution
-   # here is to subtract the arm's rotation from the head's ideal rotation, but this feels
-   # unsustainable. What if I had a second pivot arm? I dunno why I would, but still.
-   # 
-   # I actually like the double-rotation effect anyway. I would like to keep it.
-   # I'd like to have better control of it, though.
-
-   _camera_head.rotation.y = lerp_angle(_camera_head.rotation.y, ideal_rotation.y, rotation_lerp_rate * delta)
-   _camera_head.rotation.x = lerp_angle(_camera_head.rotation.x, ideal_rotation.x, rotation_lerp_rate * delta)
-
-   # TODO Bandaid for silly camera-arm confusion when global rotating.
-   # _camera_head.global_rotation.z = 0.0
+   # TODO Decouple focal_point from subject.position: It may actually be unhelpful to describe this rigid target-snapping
+   # here in this CameraRig function. I'd have more control if this function _only_ cared about the focal_point, and the
+   # focal_point was snapped to subject elsewhere, like in a controller script.
+   var ideal_focal_point := subject.global_position + camera_focal_point_displacement
+   _focal_point.global_position = _focal_point.global_position.move_toward(ideal_focal_point, focal_point_lerp_rate * delta)
+   _camera_head.look_at(_focal_point.global_position, Vector3.UP)
