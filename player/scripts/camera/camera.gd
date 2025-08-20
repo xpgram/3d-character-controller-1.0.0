@@ -1,6 +1,11 @@
 class_name CameraRig3D
 extends Node3D
 
+# TODO As a .tscn, it's not possible to configure Spotlight and Camera3D settings.
+#   I may want to separate those objects from this type's implementation, and simply ask
+#   that these objects be children of a CameraRig3D node in order for it to work.
+#   Kind of like when CSGCombiners give warnings when they contain no CSGMeshes.
+
 @export_group('Camera')
 @export var subject: Node3D
 @export var control_script: Node3D # TODO This needs a unique type.
