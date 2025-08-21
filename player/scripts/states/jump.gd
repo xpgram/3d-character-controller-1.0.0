@@ -39,6 +39,11 @@ func post_physics_check() -> void:
    if subject.is_on_floor():
       change_state.emit(state_landed)
 
+   # TODO The post_physics_check() change has proven a bit buggy.
+   #   I haven't tracked down the issue yet, though.
+   #   Anyway, somewhere between Jump, Fall, and WallSlide there is an issue
+   #   with jumping up against a wall terminating the jump early.
+   #   is_on_ceiling() is the only good guess I have.
    elif subject.is_on_ceiling() or subject.velocity.y < 0:
       change_state.emit(state_fall)
 
