@@ -28,9 +28,16 @@ func _ready() -> void:
 
 
 func on_enter() -> void:
+   # Make sure we're actually falling.
+   # TODO What about moving platforms?
+   #   Can this be solved with a separate jump_add_velocity vector to isolate the arc?
+   if subject.velocity.y > 0:
+      subject.velocity.y = 0
+
    # This step helps transition to the 'wall slide' animation faster.
    # TODO Is there an easier way of doing this? Can we interrupt the 'fall' state transition to insert a new one?
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
+
    if MovementUtils.get_wall_slide_candidate(movement_vector, subject, physics_properties):
       change_state.emit(state_wall_slide)
       return
@@ -69,8 +76,13 @@ func process_physics(delta: float) -> void:
 
    _rotate_character_body(delta)
 
+
+func post_physics_check() -> void:
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
+
    if subject.is_on_floor():
       change_state.emit(state_landed)
+
    elif MovementUtils.get_wall_slide_candidate(movement_vector, subject, physics_properties):
       change_state.emit(state_wall_slide)
 

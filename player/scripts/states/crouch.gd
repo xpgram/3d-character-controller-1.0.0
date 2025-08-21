@@ -32,6 +32,6 @@ func process_input(_event: InputEvent) -> void:
       change_state.emit(state_crouch_move)
 
 
-func process_physics(_delta: float) -> void:
+func post_physics_check() -> void:
    if !subject.is_on_floor():
       change_state.emit(state_fall)

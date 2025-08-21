@@ -16,11 +16,6 @@ func on_enter() -> void:
 
 func process_physics(delta: float) -> void:
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
-	
-   if subject.velocity.y < 0:
-      change_state.emit(state_fall)
-      return
-
    var is_ending_jump: float = (Input.is_action_just_released('jump') and (subject.velocity.y > physics_properties.prop_move_min_jump_impulse))
 
    if is_ending_jump:
@@ -38,14 +33,13 @@ func process_physics(delta: float) -> void:
       _last_movement_direction = movement_direction
 
    _rotate_character_body(delta)
-	
+
+
+func post_physics_check() -> void:
    if subject.is_on_floor():
       change_state.emit(state_landed)
-      return
 
-   if subject.is_on_ceiling():
-      # TODO Does state_fall have any responsibility to make sure Player is actually moving down?
-      subject.velocity.y = 0
+   elif subject.is_on_ceiling() or subject.velocity.y < 0:
       change_state.emit(state_fall)
 
 

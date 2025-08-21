@@ -20,11 +20,6 @@ func on_enter() -> void:
 
 func process_physics(delta: float) -> void:
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
-
-   if is_zero_approx(movement_vector.length()):
-      change_state.emit(state_crouch_idle)
-      return
-
    var moved_direction := MovementUtils.apply_vector_input_to_character_body(
       delta,
       movement_vector,
@@ -37,16 +32,22 @@ func process_physics(delta: float) -> void:
 
    _rotate_character_body(delta)
 
+
+func post_physics_check() -> void:
    if !subject.is_on_floor():
       change_state.emit(state_fall)
 
 
 func process_input(_event: InputEvent) -> void:
-   if Input.is_action_just_released('crouch') and subject.is_on_floor():
-      change_state.emit(state_move)
-      return
+   var movement_vector := InputUtils.get_raw_movement_vector()
 
-   if Input.is_action_just_pressed('jump') and subject.is_on_floor():
+   if is_zero_approx(movement_vector.length()):
+      change_state.emit(state_crouch_idle)
+
+   elif Input.is_action_just_released('crouch') and subject.is_on_floor():
+      change_state.emit(state_move)
+
+   elif Input.is_action_just_pressed('jump') and subject.is_on_floor():
       change_state.emit(state_jump)
 
 

@@ -42,6 +42,8 @@ func change_state_to_next() -> void:
          current_state.exit()
 
       current_state = next_state
+      # TODO Add some kind of debug logging thing here.
+      # print(current_state.print_name)
 
       # enter() may emit request_state_change, so must occur after next_state is cleared.
       next_state = null

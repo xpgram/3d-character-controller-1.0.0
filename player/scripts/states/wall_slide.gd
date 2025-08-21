@@ -132,10 +132,12 @@ func process_physics(delta: float) -> void:
       physics_properties.prop_move_wall_slide_max_velocity,
    )
 
+
+func post_physics_check() -> void:
    if subject.is_on_floor():
       change_state.emit(state_landed)
 
-   if not subject.is_on_wall():
+   elif not subject.is_on_wall():
       change_state.emit(state_fall)
 
 

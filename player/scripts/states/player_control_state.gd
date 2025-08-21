@@ -32,6 +32,7 @@ func enter() -> void:
 func process_physics_machine_hook(delta: float) -> void:
    super.process_physics_machine_hook(delta)
    subject.move_and_slide()
+   post_physics_check()
 
 
 func process_world_physics(delta: float) -> void:
@@ -41,3 +42,9 @@ func process_world_physics(delta: float) -> void:
       physics_properties.prop_physics_gravity,
       Vector3.UP,
    )
+
+
+## This is used for checking conditions after physics are applied and the subject
+## has been moved and slid. Useful when changing states on physical conditions.
+func post_physics_check() -> void:
+   pass
