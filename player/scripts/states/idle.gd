@@ -1,6 +1,5 @@
 extends PlayerControlState
 
-const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 @export_group('Transition-to States', 'state_')
 @export var state_move: PlayerControlState
@@ -33,9 +32,6 @@ func process_input(_event: InputEvent) -> void:
       change_state.emit(state_move)
 
 
-func process_physics(delta: float) -> void:
-   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
-   subject.move_and_slide()
-
+func process_physics(_delta: float) -> void:
    if !subject.is_on_floor():
       change_state.emit(state_fall)

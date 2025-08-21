@@ -1,7 +1,5 @@
 extends PlayerControlState
 
-const InputUtils = preload('uid://tl2nnbstems3')
-const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 @export_group('Transition-to States', 'state_')
 @export var state_idle: PlayerControlState
@@ -22,11 +20,6 @@ func on_enter() -> void:
 
 
 func process_physics(delta: float) -> void:
-   var velocity1 := Vector3(subject.velocity)
-   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
-   var velocity2 := Vector3(subject.velocity)
-   print('velocity old %.2f == %.2f new' % [velocity1.y, velocity2.y])
-
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
    
    if movement_vector.is_zero_approx():
@@ -48,7 +41,6 @@ func process_physics(delta: float) -> void:
       _last_movement_direction = moved_direction
 
    _rotate_character_body(delta)
-   subject.move_and_slide()
 
    if !subject.is_on_floor():
       change_state.emit(state_fall)

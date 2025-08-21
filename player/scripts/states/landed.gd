@@ -1,6 +1,5 @@
 extends PlayerControlState
 
-const InputUtils = preload('uid://tl2nnbstems3')
 
 ## This State is a splitter between several ground behaviors which may be triggered
 ## any time a "land" or "ground state reset" may be triggered.

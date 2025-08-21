@@ -55,15 +55,15 @@ func change_state_to_next() -> void:
 
 
 func process_input(event: InputEvent) -> void:
-   current_state.process_input(event)
+   current_state.process_input_machine_hook(event)
    change_state_to_next()
 
 
 func process_frame(delta: float) -> void:
-   current_state.process_frame(delta)
+   current_state.process_frame_machine_hook(delta)
    change_state_to_next()
 
 
 func process_physics(delta: float) -> void:
-   current_state.process_physics(delta)
+   current_state.process_physics_machine_hook(delta)
    change_state_to_next()

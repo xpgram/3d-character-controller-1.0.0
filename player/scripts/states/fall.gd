@@ -5,11 +5,7 @@ extends PlayerControlState
 #   - Jump from Fall state allowed if timer not fully elapsed
 #   - Falling animation not applied until timer fully elapsed
 
-const InputUtils := preload('uid://tl2nnbstems3')
-const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
-
-# TODO Use preload() calls and such instead of nodes.
 @export_group('Transition-to States', 'state_')
 @export var state_landed: PlayerControlState
 @export var state_jump: PlayerControlState
@@ -51,8 +47,6 @@ func process_input(event: InputEvent) -> void:
 
 
 func process_physics(delta: float) -> void:
-   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
-
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 
    # TODO This clampf only occurs when in Fall state.
@@ -74,7 +68,6 @@ func process_physics(delta: float) -> void:
       _last_movement_direction = movement_direction
 
    _rotate_character_body(delta)
-   subject.move_and_slide()
 
    if subject.is_on_floor():
       change_state.emit(state_landed)

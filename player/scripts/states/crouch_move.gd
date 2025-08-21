@@ -1,7 +1,5 @@
 extends PlayerControlState
 
-const InputUtils = preload('uid://tl2nnbstems3')
-const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 @export_group('Transition-to States', 'state_')
 @export var state_crouch_idle: PlayerControlState
@@ -21,8 +19,6 @@ func on_enter() -> void:
 
 
 func process_physics(delta: float) -> void:
-   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
-
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 
    if is_zero_approx(movement_vector.length()):
@@ -40,7 +36,6 @@ func process_physics(delta: float) -> void:
       _last_movement_direction = moved_direction
 
    _rotate_character_body(delta)
-   subject.move_and_slide()
 
    if !subject.is_on_floor():
       change_state.emit(state_fall)

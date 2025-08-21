@@ -14,9 +14,6 @@ extends PlayerControlState
 #     (but disallow a 2nd wall slide... how?)
 # - Player distances from wall: transition to normal fall
 
-const InputUtils = preload('uid://tl2nnbstems3')
-const MovementUtils = preload('uid://bc4pn1ojhofxm')
-
 
 @export_group('Transition-to States', 'state_')
 @export var state_landed: PlayerControlState
@@ -120,7 +117,6 @@ func process_input(event: InputEvent) -> void:
 
 func process_physics(delta: float) -> void:
    if not tween.finished:
-      subject.move_and_slide()
       return
 
    # TODO How to apply friction?
@@ -135,9 +131,6 @@ func process_physics(delta: float) -> void:
       -physics_properties.prop_move_wall_slide_max_velocity,
       physics_properties.prop_move_wall_slide_max_velocity,
    )
-
-   subject.move_and_slide()
-
 
    if subject.is_on_floor():
       change_state.emit(state_landed)
