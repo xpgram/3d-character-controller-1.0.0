@@ -1,5 +1,7 @@
 extends State
 
+const MovementUtils = preload('uid://bc4pn1ojhofxm')
+
 @export_group('Transition-to States', 'state_')
 @export var state_move: State
 @export var state_crouch: State
@@ -32,7 +34,7 @@ func process_input(_event: InputEvent) -> void:
 
 
 func process_physics(delta: float) -> void:
-   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
+   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
    subject.move_and_slide()
 
    if !subject.is_on_floor():

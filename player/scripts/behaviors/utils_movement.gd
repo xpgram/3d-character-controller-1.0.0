@@ -1,4 +1,15 @@
 
+## Applies gravity to a character body's velocity.
+static func apply_gravity(
+   delta: float,
+   character_body: CharacterBody3D,
+   acceleration: float = 9.0,
+   up_vector: Vector3 = Vector3.UP,
+) -> void:
+   var gravity_vector := -up_vector * acceleration * delta
+   character_body.velocity = character_body.velocity + gravity_vector
+
+
 ## Modifies the given character_body's velocity according to directional input described
 ## by a [Vector2] over the ground plane. Vector input length is capped to 1. The camera's
 ## orientation determines the "forward" direction of the vector_input.

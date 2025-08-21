@@ -106,7 +106,7 @@ func _teleport_to_position() -> void:
    # IMPLEMENT Run the same functions with lerp(x, new_x, 1.0)?
 
    if subject:
-      _focal_point.global_position.lerp(subject.global_position, 1.0)
+      _focal_point.global_position = subject.global_position
 
 
 func _physics_process(delta: float) -> void:

@@ -1,7 +1,7 @@
 extends State
 
 const InputUtils = preload('uid://tl2nnbstems3')
-const MovementUtils = preload("uid://bc4pn1ojhofxm")
+const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 @export_group('Transition-to States', 'state_')
 @export var state_crouch_idle: State
@@ -21,7 +21,7 @@ func on_enter() -> void:
 
 
 func process_physics(delta: float) -> void:
-   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
+   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
 
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 

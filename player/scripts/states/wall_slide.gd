@@ -15,7 +15,7 @@ extends State
 # - Player distances from wall: transition to normal fall
 
 const InputUtils = preload('uid://tl2nnbstems3')
-const MovementUtils = preload("uid://bc4pn1ojhofxm")
+const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 
 @export_group('Transition-to States', 'state_')

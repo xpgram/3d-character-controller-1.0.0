@@ -1,7 +1,7 @@
 extends State
 
 const InputUtils := preload('uid://tl2nnbstems3')
-const MovementUtils = preload("uid://bc4pn1ojhofxm")
+const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 
 @export_group('Transition-to States', 'state_')
@@ -21,8 +21,10 @@ func on_enter() -> void:
 
 
 func process_physics(delta: float) -> void:
-   # TODO This is duplicated among all States? Why?
-   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
+   var velocity1 := Vector3(subject.velocity)
+   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
+   var velocity2 := Vector3(subject.velocity)
+   print('velocity old %.2f == %.2f new' % [velocity1.y, velocity2.y])
 
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 	

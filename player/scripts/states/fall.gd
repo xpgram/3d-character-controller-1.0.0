@@ -6,7 +6,7 @@ extends State
 #   - Falling animation not applied until timer fully elapsed
 
 const InputUtils := preload('uid://tl2nnbstems3')
-const MovementUtils = preload("uid://bc4pn1ojhofxm")
+const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 
 # TODO Use preload() calls and such instead of nodes.
@@ -51,7 +51,7 @@ func process_input(event: InputEvent) -> void:
 
 
 func process_physics(delta: float) -> void:
-   subject.velocity.y -= physics_properties.prop_physics_gravity * delta
+   MovementUtils.apply_gravity(delta, subject, physics_properties.prop_physics_gravity)
 
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 
