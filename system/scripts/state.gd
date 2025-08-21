@@ -72,6 +72,16 @@ func process_frame(_delta: float) -> void:
 ## `State -> PlayerState -> PlayerMoveState : implements process_physics()`
 func process_world_physics(_delta: float) -> void:
    pass
+   # TODO The Strategy pattern.
+   #  This might prove more useful? Imagine having a list of configurable effects
+   #  that get added kinda like a tagging system. Then, before the controller's
+   #  physics pass, they all each add their own velocity changes and whatnot just
+   #  like world_physics does now.
+   #  But like, you could collide with a wind-area, and it could temporarily add
+   #  add_force(acceleration, direction) to you until you leave.
+   #  Gravity could just be add_force(30, down) that never leaves.
+   #
+   #  I'm still not sure.
 
 
 ## Equivalent to _process_physics() when slotted into a [StateMachine].
