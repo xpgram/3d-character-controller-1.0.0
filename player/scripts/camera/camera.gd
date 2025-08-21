@@ -1,6 +1,11 @@
 class_name CameraRig3D
 extends Node3D
 
+# TODO This content-slot setup may actually be harder to use.
+#   What if I want the control script to control the spotlight? I have to guarantee it
+#   exists somehow. So, maybe I should treat the CameraRig3D like a more complicated
+#   Camera3D object.
+
 @export_group('Camera')
 @export var subject: Node3D
 @export var control_script: Node3D # TODO This needs a unique type.
