@@ -1,13 +1,13 @@
-extends State
+extends PlayerControlState
 
 const InputUtils = preload('uid://tl2nnbstems3')
 const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 @export_group('Transition-to States', 'state_')
-@export var state_idle: State
-@export var state_jump: State
-@export var state_fall: State 
-@export var state_crouch_move: State 
+@export var state_idle: PlayerControlState
+@export var state_jump: PlayerControlState
+@export var state_fall: PlayerControlState
+@export var state_crouch_move: PlayerControlState
 
 
 # TODO Technically, this node shouldn't know about the camera node.

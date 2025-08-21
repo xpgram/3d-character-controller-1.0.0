@@ -1,4 +1,4 @@
-extends State
+extends PlayerControlState
 # TODO Extend from PlayerState instead of State?
 #   State > PlayerState > Wall_Slide
 #    ^ Includes State structure stuff
@@ -19,9 +19,9 @@ const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 
 @export_group('Transition-to States', 'state_')
-@export var state_landed: State
-@export var state_jump: State
-@export var state_fall: State
+@export var state_landed: PlayerControlState
+@export var state_jump: PlayerControlState
+@export var state_fall: PlayerControlState
 
 
 # @onready var camera: Camera3D = %Camera3D

@@ -1,12 +1,12 @@
-extends State
+extends PlayerControlState
 
 const InputUtils := preload('uid://tl2nnbstems3')
 const MovementUtils = preload('uid://bc4pn1ojhofxm')
 
 
 @export_group('Transition-to States', 'state_')
-@export var state_landed: State
-@export var state_fall: State
+@export var state_landed: PlayerControlState
+@export var state_fall: PlayerControlState
 
 
 # @onready var _camera: Camera3D = %Camera3D

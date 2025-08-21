@@ -1,4 +1,4 @@
-extends State
+extends PlayerControlState
 
 const InputUtils = preload('uid://tl2nnbstems3')
 
@@ -17,8 +17,8 @@ const InputUtils = preload('uid://tl2nnbstems3')
 
 
 @export_group('Transition-to States', 'state_')
-@export var state_idle: State
-@export var state_move: State
+@export var state_idle: PlayerControlState
+@export var state_move: PlayerControlState
 
 
 func on_enter() -> void:
