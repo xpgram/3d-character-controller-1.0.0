@@ -15,7 +15,7 @@ extends Node
 @export var prop_move_wall_slide_friction: float = 2.0
 @export var prop_move_wall_slide_max_velocity: float = 7.5
 @export var prop_move_wall_slide_max_time: float = 10.0
-@export var prop_move_wall_slide_pull_away_time: float = 0.5
+@export var prop_move_wall_slide_pull_away_time: float = 0.15
 
 @export_group("Physics Properties", "prop_physics_")
 @export var prop_physics_gravity: float = 40.0
