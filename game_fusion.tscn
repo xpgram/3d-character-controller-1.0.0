@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bxg6oejpaitdt" path="res://level/interactable/flag/flag_reached_screen.tscn" id="3_n6cjs"]
 [ext_resource type="PackedScene" uid="uid://db51xtuloclwg" path="res://levels/prototype/level_metroid_fusion.tscn" id="4_51kip"]
 [ext_resource type="PackedScene" uid="uid://bw2yt2kjem3le" path="res://player/player_3d.tscn" id="5_ascb7"]
-[ext_resource type="Script" uid="uid://dble35geeo1ca" path="res://player/scripts/camera/camera.gd" id="6_3uc2i"]
+[ext_resource type="PackedScene" uid="uid://say22yjgceb1" path="res://nodes/camera_rig_3d.tscn" id="6_3uc2i"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_51kip")
@@ -18,36 +18,16 @@ script = ExtResource("1_51kip")
 
 [node name="Player3D" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_ascb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
-camera = NodePath("../CameraRig3D/Pivot/CameraArm/CameraHead/Camera3D")
+camera = NodePath("../CameraRig3D/Camera3D")
 
-[node name="CameraRig3D" type="Node3D" parent="." node_paths=PackedStringArray("subject")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -8, 5, 0)
-script = ExtResource("6_3uc2i")
+[node name="CameraRig3D" parent="." node_paths=PackedStringArray("subject") instance=ExtResource("6_3uc2i")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -8, 5, 0)
 subject = NodePath("../Player3D")
 
-[node name="FocalPoint" type="Node3D" parent="CameraRig3D"]
-unique_name_in_owner = true
-editor_description = "Describes where the Camera Head is pointing. This is also the focus point Depth of Field is adjusted to."
-
-[node name="Pivot" type="Node3D" parent="CameraRig3D"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 0, 0)
-
-[node name="CameraArm" type="Node3D" parent="CameraRig3D/Pivot"]
-unique_name_in_owner = true
-transform = Transform3D(1, -1.05879e-22, -7.10543e-15, 0, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, -4.76837e-07, 0, 16)
-
-[node name="CameraHead" type="Node3D" parent="CameraRig3D/Pivot/CameraArm"]
-unique_name_in_owner = true
-
-[node name="Camera3D" type="Camera3D" parent="CameraRig3D/Pivot/CameraArm/CameraHead"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, -1.05879e-22, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Camera3D" type="Camera3D" parent="CameraRig3D"]
 fov = 40.0
 
-[node name="SpotLight3D" type="SpotLight3D" parent="CameraRig3D/Pivot/CameraArm/CameraHead"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, -1.05879e-22, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="SpotLight3D" type="SpotLight3D" parent="CameraRig3D"]
 light_energy = 100.0
 light_bake_mode = 0
 spot_range = 50.0

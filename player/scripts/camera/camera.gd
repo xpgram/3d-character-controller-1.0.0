@@ -1,20 +1,6 @@
 class_name CameraRig3D
 extends Node3D
 
-# TODO As a .tscn, it's not possible to configure Spotlight and Camera3D settings.
-#   I may want to separate those objects from this type's implementation, and simply ask
-#   that these objects be children of a CameraRig3D node in order for it to work.
-#   Kind of like when CSGCombiners give warnings when they contain no CSGMeshes.
-#
-# CameraRig3D
-#   Camera3D         : If not present, give an editor warning.
-#   Spotlight3D      : (Optional)
-#   AudioListener    : (Optional)
-#   Random Node3D    : (Optional)
-#
-# @tool is used to place the CameraRig's children in the CameraHead node so they may be
-# positioned appropriately.
-
 @export_group('Camera')
 @export var subject: Node3D
 @export var control_script: Node3D # TODO This needs a unique type.
@@ -63,14 +49,49 @@ extends Node3D
 @onready var _camera_arm: Node3D = %CameraArm
 ## A pivot joint used to rotate the camera's lense and related accessories.
 @onready var _camera_head: Node3D = %CameraHead
+
+# TODO These are... not directly useable with this new content-slot setup I have.
 ## The camera object that renders the scene.
 @onready var _camera_lense: Camera3D = %Camera3D
 ## The camera's head-mounted light.
 @onready var _camera_spotlight: SpotLight3D = %SpotLight3D
 
 
+func _get_configuration_warnings() -> PackedStringArray:
+   # FIXME This doesn't work without @tool, but _physics_process was causing me problems.
+   var warnings: PackedStringArray = []
+
+   var children := get_children()
+   if not children.any(func (child): return child is Camera3D):
+      warnings.append('The CameraRig3D has no Camera3D to mount.')
+
+   return warnings
+
+
 func _ready() -> void:
+   _move_children_to_camera_head_mount()
    _teleport_to_position()
+
+
+## Reparents [Camera3D] and camera accessories from the [CameraRig3D] root node
+## to the CameraHead content slot.
+func _move_children_to_camera_head_mount() -> void:
+   # TODO Godot does not currently support content slots like you might see in React or
+   # Svelte, but there is an open pull request to expose certain hidden child nodes, so it
+   # may be in the future.
+
+   var children := get_children()
+
+   # Exclude children packed into the .tscn.
+   children = children.filter(func (child):
+      if child in [_focal_point, _pivot]:
+         return false
+      return true
+   )
+
+   for child in children:
+      child.get_parent().remove_child(child)
+      _camera_head.add_child(child)
 
 
 ## Skips all the animation lerps used in physics processes elsewhere.
