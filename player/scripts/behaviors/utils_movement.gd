@@ -1,17 +1,13 @@
-const InputUtils := preload('uid://tl2nnbstems3')
-
 
 ## Modifies the given character_body's velocity according to directional input described
 ## by a [Vector2] over the ground plane. Vector input length is capped to 1. The camera's
 ## orientation determines the "forward" direction of the vector_input.
 static func apply_vector_input_to_character_body(
    delta: float,
+   movement_vector: Vector3,
    character_body: CharacterBody3D,
-   camera: Camera3D, # TODO Make optional: Accept camera orientation vector, provide default.
    physics_properties: PhysicsProperties, # TODO If character_body has component, use, else preload a default set of values.
 ) -> Vector3:
-   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
-
    # Calculate new velocity for this frame.
    var current_velocity := Vector3(character_body.velocity.x, 0, character_body.velocity.z)
    var new_velocity = current_velocity.move_toward(
@@ -37,8 +33,8 @@ static func apply_vector_input_to_character_body(
 
 
 static func get_wall_slide_candidate(
+   movement_vector: Vector3,
    character_body: CharacterBody3D,
-   camera: Camera3D,
    physics_properties: PhysicsProperties,
 ) -> bool:
    # TODO Shouldn't this return the wall collided with? How do I do that?
@@ -58,7 +54,6 @@ static func get_wall_slide_candidate(
    #   e.g., invisible barriers should not be wall-jump enabled.
 
    # If "push strength" of input vector is too low, return false.
-   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
    if movement_vector.length() < 0.4: # TODO Get min input strength from physics properties or other
       return false
 

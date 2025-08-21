@@ -5,7 +5,7 @@ extends State
 #   - Jump from Fall state allowed if timer not fully elapsed
 #   - Falling animation not applied until timer fully elapsed
 
-
+const InputUtils := preload('uid://tl2nnbstems3')
 const MovementUtils = preload("uid://bc4pn1ojhofxm")
 
 
@@ -34,7 +34,8 @@ func _ready() -> void:
 func on_enter() -> void:
    # This step helps transition to the 'wall slide' animation faster.
    # TODO Is there an easier way of doing this? Can we interrupt the 'fall' state transition to insert a new one?
-   if MovementUtils.get_wall_slide_candidate(subject, camera, physics_properties):
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
+   if MovementUtils.get_wall_slide_candidate(movement_vector, subject, physics_properties):
       change_state.emit(state_wall_slide)
       return
 
@@ -52,6 +53,8 @@ func process_input(event: InputEvent) -> void:
 func process_physics(delta: float) -> void:
    subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
+
    # TODO This clampf only occurs when in Fall state.
    subject.velocity.y = clampf(
       subject.velocity.y,
@@ -63,8 +66,8 @@ func process_physics(delta: float) -> void:
    #   conditional beneath this call.
    var movement_direction = MovementUtils.apply_vector_input_to_character_body(
       delta,
+      movement_vector,
       subject,
-      camera,
       physics_properties,
    )
    if movement_direction != Vector3.ZERO:
@@ -75,7 +78,7 @@ func process_physics(delta: float) -> void:
 
    if subject.is_on_floor():
       change_state.emit(state_landed)
-   elif MovementUtils.get_wall_slide_candidate(subject, camera, physics_properties):
+   elif MovementUtils.get_wall_slide_candidate(movement_vector, subject, physics_properties):
       change_state.emit(state_wall_slide)
 
 

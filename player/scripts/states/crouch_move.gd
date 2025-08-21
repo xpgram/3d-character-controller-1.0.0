@@ -23,15 +23,16 @@ func on_enter() -> void:
 func process_physics(delta: float) -> void:
    subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 
-   var movement_vector := InputUtils.get_raw_movement_vector()
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
+
    if is_zero_approx(movement_vector.length()):
       change_state.emit(state_crouch_idle)
       return
 
    var moved_direction := MovementUtils.apply_vector_input_to_character_body(
       delta,
+      movement_vector,
       subject,
-      camera,
       physics_properties,
    )
 

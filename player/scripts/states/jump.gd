@@ -1,5 +1,6 @@
 extends State
 
+const InputUtils := preload('uid://tl2nnbstems3')
 const MovementUtils = preload("uid://bc4pn1ojhofxm")
 
 
@@ -22,6 +23,8 @@ func on_enter() -> void:
 func process_physics(delta: float) -> void:
    # TODO This is duplicated among all States? Why?
    subject.velocity.y -= physics_properties.prop_physics_gravity * delta
+
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 	
    if subject.velocity.y < 0:
       change_state.emit(state_fall)
@@ -36,8 +39,8 @@ func process_physics(delta: float) -> void:
    #   conditional beneath this call.
    var movement_direction = MovementUtils.apply_vector_input_to_character_body(
       delta,
+      movement_vector,
       subject,
-      camera,
       physics_properties,
    )
    if movement_direction != Vector3.ZERO:

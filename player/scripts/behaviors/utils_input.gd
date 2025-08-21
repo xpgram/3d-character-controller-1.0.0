@@ -24,7 +24,7 @@ static func apply_orthogonal_banding(vector: Vector2) -> Vector2:
 
    # Retain original length of vector.
    banded_vector = banded_vector.normalized() * vector_length
-   
+
    return banded_vector
 
 
