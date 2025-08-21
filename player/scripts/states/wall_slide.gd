@@ -102,7 +102,7 @@ func process_input(event: InputEvent) -> void:
       subject.velocity.x += wall_push_vector.x
       subject.velocity.z += wall_push_vector.z
 
-      change_state.emit(state_jump)
+      request_state_change(state_jump)
 
    # TODO What happens when the input vector is (0,0)?
    var angle_to_wall_normal: float = abs(movement_vector.angle_to(movement_vector))
@@ -135,17 +135,17 @@ func process_physics(delta: float) -> void:
 
 func post_physics_check() -> void:
    if subject.is_on_floor():
-      change_state.emit(state_landed)
+      request_state_change(state_landed)
 
    elif not subject.is_on_wall():
-      change_state.emit(state_fall)
+      request_state_change(state_fall)
 
 
 func _on_slide_timeout() -> void:
    # TODO Add some small lateral push from the wall?
-   change_state.emit(state_fall)
+   request_state_change(state_fall)
 
 
 func _on_drift_away_timeout() -> void:
    # TODO Add some small lateral push from the wall, or just let fall.stick_move handle it?
-   change_state.emit(state_fall)
+   request_state_change(state_fall)

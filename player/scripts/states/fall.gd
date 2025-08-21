@@ -39,7 +39,7 @@ func on_enter() -> void:
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 
    if MovementUtils.get_wall_slide_candidate(movement_vector, subject, physics_properties):
-      change_state.emit(state_wall_slide)
+      request_state_change(state_wall_slide)
       return
 
    # Fall state initialization.
@@ -50,7 +50,7 @@ func on_enter() -> void:
 func process_input(event: InputEvent) -> void:
    # TODO Fall state allows double jump. How should we keep track of jumps done so far?
    if event.is_action_pressed('jump') and coyote_timer.time_left > 0:
-      change_state.emit(state_jump)
+      request_state_change(state_jump)
 
 
 func process_physics(delta: float) -> void:
@@ -81,10 +81,10 @@ func post_physics_check() -> void:
    var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 
    if subject.is_on_floor():
-      change_state.emit(state_landed)
+      request_state_change(state_landed)
 
    elif MovementUtils.get_wall_slide_candidate(movement_vector, subject, physics_properties):
-      change_state.emit(state_wall_slide)
+      request_state_change(state_wall_slide)
 
 
 # TODO Accept an argument instead of depending on script-globals?

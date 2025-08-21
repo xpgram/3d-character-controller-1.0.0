@@ -3,7 +3,7 @@ extends Node
 
 
 @warning_ignore('UNUSED_SIGNAL')
-signal change_state(new_state: State)
+signal change_state(requester: State, new_state: State)
 
 @onready
 var print_name := name \
@@ -13,6 +13,10 @@ var print_name := name \
 
 func get_state_name() -> String:
    return print_name
+
+
+func request_state_change(new_state: State) -> void:
+   change_state.emit(self, new_state)
 
 
 ## Handle the State startup process.

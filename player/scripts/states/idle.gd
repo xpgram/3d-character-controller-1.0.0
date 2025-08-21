@@ -16,11 +16,11 @@ func on_enter() -> void:
 
 func process_input(_event: InputEvent) -> void:
    if Input.is_action_just_pressed('crouch') and subject.is_on_floor():
-      change_state.emit(state_crouch)
+      request_state_change(state_crouch)
       return
 
    if Input.is_action_just_pressed('jump') and subject.is_on_floor():
-      change_state.emit(state_jump)
+      request_state_change(state_jump)
       return
 
    if (
@@ -29,9 +29,9 @@ func process_input(_event: InputEvent) -> void:
       Input.is_action_just_pressed('move_left') or
       Input.is_action_just_pressed('move_right')
    ):
-      change_state.emit(state_move)
+      request_state_change(state_move)
 
 
 func post_physics_check() -> void:
    if !subject.is_on_floor():
-      change_state.emit(state_fall)
+      request_state_change(state_fall)

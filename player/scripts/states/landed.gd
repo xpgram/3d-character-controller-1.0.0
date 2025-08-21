@@ -24,7 +24,7 @@ func on_enter() -> void:
    var movement_vector := InputUtils.get_raw_movement_vector()
 
    if not movement_vector.is_zero_approx():
-      change_state.emit(state_move)
+      request_state_change(state_move)
       return
 
-   change_state.emit(state_idle)
+   request_state_change(state_idle)

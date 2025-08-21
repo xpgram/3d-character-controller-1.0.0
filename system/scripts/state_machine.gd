@@ -30,7 +30,20 @@ func init(machine_name: String, subject: CharacterBody3D, camera: Camera3D) -> v
    change_state_to_next()
 
 
-func request_state_change(new_state: State) -> void:
+func request_state_change(requester: State, new_state: State) -> void:
+   if requester != current_state:
+      push_warning(
+         'StateMachine %s: InvalidRequest: "%s" requested a state change to "%s", but current state is "%s"' \
+         % [state_machine_name, requester.print_name, new_state.print_name, current_state.print_name]
+      )
+      return
+
+   if next_state:
+      push_warning(
+         'StateMachine %s: OverriddenRequest: next_state "%s" is being overridden with "%s" as requested by "%s"' \
+         % [state_machine_name, next_state.print_name, new_state.print_name, requester.print_name]
+      )
+
    next_state = new_state
 
 

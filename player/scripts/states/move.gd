@@ -31,20 +31,20 @@ func process_physics(delta: float) -> void:
 
 func post_physics_check() -> void:
    if !subject.is_on_floor():
-      change_state.emit(state_fall)
+      request_state_change(state_fall)
 
 
 func process_input(_event: InputEvent) -> void:
    var movement_vector := InputUtils.get_raw_movement_vector()
-   
+
    if movement_vector.is_zero_approx():
-      change_state.emit(state_idle)
+      request_state_change(state_idle)
 
    elif Input.is_action_just_pressed('jump'):
-      change_state.emit(state_jump)
+      request_state_change(state_jump)
 
    elif Input.is_action_just_pressed('crouch'):
-      change_state.emit(state_crouch_move)
+      request_state_change(state_crouch_move)
 
 
 # TODO Accept an argument instead of depending on script-globals?
