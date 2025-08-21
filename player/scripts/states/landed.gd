@@ -22,7 +22,7 @@ const InputUtils = preload('uid://tl2nnbstems3')
 
 
 func on_enter() -> void:
-   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
+   var movement_vector := InputUtils.get_raw_movement_vector()
 
    if not movement_vector.is_zero_approx():
       change_state.emit(state_move)

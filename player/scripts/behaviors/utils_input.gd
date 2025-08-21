@@ -53,18 +53,34 @@ static func apply_basis(
    return reoriented_vector
 
 
-## Returns a [Vector2] representing left-stick input.
-static func get_movement_vector(
-   basis: Basis = Basis.IDENTITY,
-   plane_normal: Vector3 = Vector3.UP,
-) -> Vector3:
-   var vector2 := Input.get_vector(
+## Returns an unprocessed [Vector2] for left-stick input.
+static func get_raw_movement_vector() -> Vector2:
+   return Input.get_vector(
       'move_left',
       'move_right',
       'move_up',
       'move_down',
       STICK_DEADZONE,
    )
+
+
+## Returns an unprocessed [Vector2] for right-stick input.
+static func get_raw_camera_look_vector() -> Vector2:
+   return Input.get_vector(
+      'look_left',
+      'look_right',
+      'look_up',
+      'look_down',
+      STICK_DEADZONE,
+   )
+
+
+## Returns a [Vector2] representing left-stick input.
+static func get_movement_vector(
+   basis: Basis = Basis.IDENTITY,
+   plane_normal: Vector3 = Vector3.UP,
+) -> Vector3:
+   var vector2 := get_raw_movement_vector()
    vector2 = apply_wide_response_curve(vector2)
    vector2 = apply_orthogonal_banding(vector2)
    var vector3 = apply_basis(vector2, basis, plane_normal)
@@ -73,12 +89,6 @@ static func get_movement_vector(
 
 ## Returns a [Vector2] representing right-stick input.
 static func get_camera_look_vector() -> Vector2:
-   var vector := Input.get_vector(
-      'look_left',
-      'look_right',
-      'look_up',
-      'look_down',
-      STICK_DEADZONE,
-   )
+   var vector := get_raw_camera_look_vector()
    vector = apply_wide_response_curve(vector)
    return vector

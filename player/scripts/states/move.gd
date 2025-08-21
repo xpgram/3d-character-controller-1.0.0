@@ -24,8 +24,8 @@ func on_enter() -> void:
 func process_physics(delta: float) -> void:
    subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 
-   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
-   if is_zero_approx(movement_vector.length()):
+   var movement_vector := InputUtils.get_raw_movement_vector()
+   if movement_vector.is_zero_approx():
       change_state.emit(state_idle)
       return
 
