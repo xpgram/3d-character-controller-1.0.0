@@ -6,7 +6,7 @@ extends State
 #   - Falling animation not applied until timer fully elapsed
 
 
-const PlayerMovement = preload("uid://bc4pn1ojhofxm")
+const MovementUtils = preload("uid://bc4pn1ojhofxm")
 
 
 # TODO Use preload() calls and such instead of nodes.
@@ -34,14 +34,7 @@ func _ready() -> void:
 func on_enter() -> void:
    # This step helps transition to the 'wall slide' animation faster.
    # TODO Is there an easier way of doing this? Can we interrupt the 'fall' state transition to insert a new one?
-   var raw_input = Input.get_vector(
-      'move_left',
-      'move_right',
-      'move_up',
-      'move_down',
-      0.4
-   )
-   if PlayerMovement.get_wall_slide_candidate(raw_input, subject, camera, physics_properties):
+   if MovementUtils.get_wall_slide_candidate(subject, camera, physics_properties):
       change_state.emit(state_wall_slide)
       return
 
@@ -66,19 +59,10 @@ func process_physics(delta: float) -> void:
       physics_properties.prop_physics_terminal_velocity
    )
 
-   var raw_input = Input.get_vector(
-      'move_left',
-      'move_right',
-      'move_up',
-      'move_down',
-      0.4
-   )
-
    # TODO This is still fairly obnoxious. I need some better way of handling the
    #   conditional beneath this call.
-   var movement_direction = PlayerMovement.apply_vector_input_to_character_body(
+   var movement_direction = MovementUtils.apply_vector_input_to_character_body(
       delta,
-      raw_input,
       subject,
       camera,
       physics_properties,
@@ -91,7 +75,7 @@ func process_physics(delta: float) -> void:
 
    if subject.is_on_floor():
       change_state.emit(state_landed)
-   elif PlayerMovement.get_wall_slide_candidate(raw_input, subject, camera, physics_properties):
+   elif MovementUtils.get_wall_slide_candidate(subject, camera, physics_properties):
       change_state.emit(state_wall_slide)
 
 

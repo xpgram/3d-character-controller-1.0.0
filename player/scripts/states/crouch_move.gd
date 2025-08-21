@@ -1,6 +1,7 @@
 extends State
 
-const PlayerMovement = preload("uid://bc4pn1ojhofxm")
+const InputUtils = preload('uid://tl2nnbstems3')
+const MovementUtils = preload("uid://bc4pn1ojhofxm")
 
 @export_group('Transition-to States', 'state_')
 @export var state_crouch_idle: State
@@ -22,21 +23,13 @@ func on_enter() -> void:
 func process_physics(delta: float) -> void:
    subject.velocity.y -= physics_properties.prop_physics_gravity * delta
 
-   var raw_input = Input.get_vector(
-      'move_left',
-      'move_right',
-      'move_up',
-      'move_down',
-      0.4
-   )
-
-   if raw_input == Vector2.ZERO:
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
+   if is_zero_approx(movement_vector.length()):
       change_state.emit(state_crouch_idle)
       return
 
-   var moved_direction := PlayerMovement.apply_vector_input_to_character_body(
+   var moved_direction := MovementUtils.apply_vector_input_to_character_body(
       delta,
-      raw_input,
       subject,
       camera,
       physics_properties,

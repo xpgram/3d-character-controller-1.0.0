@@ -14,7 +14,8 @@ extends State
 #     (but disallow a 2nd wall slide... how?)
 # - Player distances from wall: transition to normal fall
 
-const PlayerMovement = preload("uid://bc4pn1ojhofxm")
+const InputUtils = preload('uid://tl2nnbstems3')
+const MovementUtils = preload("uid://bc4pn1ojhofxm")
 
 
 @export_group('Transition-to States', 'state_')
@@ -93,30 +94,21 @@ func on_exit() -> void:
 func process_input(event: InputEvent) -> void:
    # TODO I don't move_and_slide() into the wall after entering this state, so
    #   this function call may have issues.
-   var wall_normal := subject.get_wall_normal()
-   var jump_vector := Vector2(wall_normal.x, wall_normal.z).normalized()
+   var wall_normal := subject.get_wall_normal().slide(Vector3.UP).normalized()
 
-   var input_vector = Input.get_vector(
-      'move_left',
-      'move_right',
-      'move_up',
-      'move_down',
-      0.4, # TODO This code block is frequent. There should be a consistent deadzone.
-   )
-   # TODO Apply camera vector to input_vector
-   #   This is another common method. Probably needs to go into another utils library.
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 
    # Implement wall jumps.
    if event.is_action_pressed('jump'):
       # Apply a push away from the wall to the subject's velocity.
-      var wall_push_vector := jump_vector * physics_properties.prop_move_wall_jump_horizontal_impulse
+      var wall_push_vector := wall_normal * physics_properties.prop_move_wall_jump_horizontal_impulse
       subject.velocity.x += wall_push_vector.x
-      subject.velocity.z += wall_push_vector.y
+      subject.velocity.z += wall_push_vector.z
 
       change_state.emit(state_jump)
 
    # TODO What happens when the input vector is (0,0)?
-   var angle_to_wall_normal: float = abs(input_vector.angle_to(jump_vector))
+   var angle_to_wall_normal: float = abs(movement_vector.angle_to(movement_vector))
    var pull_away_angle_limit: float = PI / 2
 
    # Implement pull away to disengage from the wall slide.

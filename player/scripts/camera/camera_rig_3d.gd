@@ -6,6 +6,8 @@ extends Node3D
 #   exists somehow. So, maybe I should treat the CameraRig3D like a more complicated
 #   Camera3D object.
 
+const InputUtils = preload('uid://tl2nnbstems3')
+
 @export_group('Camera')
 @export var subject: Node3D
 @export var control_script: Node3D # TODO This needs a unique type.
@@ -130,25 +132,12 @@ func _process_camera_rig_position(delta: float) -> void:
 # TODO This may be (is definitely) mixing too much user control script in with generic CameraRig3D functions. We should refactor.
 ## Rotates the camera arm and adjusts arm length according to user input.
 func _process_camera_arm_rotation(delta: float) -> void:
-   # TODO Get this from some utils/input.gd script.
-   var stick_vector = Input.get_vector(
-      'look_left',
-      'look_right',
-      'look_up',
-      'look_down',
-      0.4
-   )
-   var curved_stick_input: Vector2 = stick_vector * stick_vector.length()
-   var curved_input_length: float = curved_stick_input.length()
-   curved_stick_input.x = sign(curved_stick_input.x) * curved_stick_input.x ** 2
-   curved_stick_input.y = sign(curved_stick_input.y) * curved_stick_input.y ** 2
-   curved_stick_input = curved_stick_input.normalized() * curved_input_length
-   curved_stick_input = curved_stick_input.limit_length(1.0)
+   var stick_input := InputUtils.get_camera_look_vector()
 
    # Rotate the arm.
    var ideal_pivot_rotation := Vector3(
-      -curved_stick_input.y * PI * tilt_ver_max_degrees / 180.0,
-      -curved_stick_input.x * PI * tilt_hor_max_degrees / 180.0,
+      -stick_input.y * PI * tilt_ver_max_degrees / 180.0,
+      -stick_input.x * PI * tilt_hor_max_degrees / 180.0,
       0,
    )
 
@@ -156,15 +145,15 @@ func _process_camera_arm_rotation(delta: float) -> void:
    _pivot.rotation.x = lerp_angle(_pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
 
    # Retract the arm while tilt-looking.
-   var arm_retraction_length := curved_stick_input.length() * camera_tilt_zoom_distance
+   var arm_retraction_length := stick_input.length() * camera_tilt_zoom_distance
    _camera_arm.position.z = lerp(_camera_arm.position.z, camera_distance - arm_retraction_length, pivot_lerp_rate * delta)
 
    # Add extra tilt by moving the camera's focal point.
    # TODO These values lack export settings. Also should probably be in a separate control script: CameraRig is not responsible for this.
-   camera_focal_point_displacement.x = lerp(camera_focal_point_displacement.x, -curved_stick_input.x * 4.0, pivot_lerp_rate * delta)
-   camera_focal_point_displacement.y = lerp(camera_focal_point_displacement.y, -curved_stick_input.y * 2.0 + 2.0, pivot_lerp_rate * delta)
+   camera_focal_point_displacement.x = lerp(camera_focal_point_displacement.x, -stick_input.x * 4.0, pivot_lerp_rate * delta)
+   camera_focal_point_displacement.y = lerp(camera_focal_point_displacement.y, -stick_input.y * 2.0 + 2.0, pivot_lerp_rate * delta)
 
-   camera_focal_point_displacement.z = lerp(camera_focal_point_displacement.z, curved_stick_input.length() * (-subject.position.z - (subject.velocity.z * 12.0 * delta)), pivot_lerp_rate * delta)
+   camera_focal_point_displacement.z = lerp(camera_focal_point_displacement.z, stick_input.length() * (-subject.position.z - (subject.velocity.z * 12.0 * delta)), pivot_lerp_rate * delta)
    # TODO This line is silly. Effective, but architecturally broken.
    # This equation:
    #   [ curved_stick_input.length() * (-subject.position.z - (subject.velocity.z * 12.0 * delta)) ]

@@ -1,6 +1,6 @@
 extends State
 
-const PlayerMovement = preload("uid://bc4pn1ojhofxm")
+const MovementUtils = preload("uid://bc4pn1ojhofxm")
 
 
 @export_group('Transition-to States', 'state_')
@@ -32,19 +32,10 @@ func process_physics(delta: float) -> void:
    if is_ending_jump:
       subject.velocity.y = physics_properties.prop_move_min_jump_impulse
 
-   var raw_input = Input.get_vector(
-      'move_left',
-      'move_right',
-      'move_up',
-      'move_down',
-      0.4
-   )
-
    # TODO This is still fairly obnoxious. I need some better way of handling the
    #   conditional beneath this call.
-   var movement_direction = PlayerMovement.apply_vector_input_to_character_body(
+   var movement_direction = MovementUtils.apply_vector_input_to_character_body(
       delta,
-      raw_input,
       subject,
       camera,
       physics_properties,

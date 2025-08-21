@@ -1,5 +1,7 @@
 extends State
 
+const InputUtils = preload('uid://tl2nnbstems3')
+
 ## This State is a splitter between several ground behaviors which may be triggered
 ## any time a "land" or "ground state reset" may be triggered.
 
@@ -20,15 +22,9 @@ extends State
 
 
 func on_enter() -> void:
-   var raw_input = Input.get_vector(
-      'move_left',
-      'move_right',
-      'move_up',
-      'move_down',
-      0.4
-   )
+   var movement_vector := InputUtils.get_movement_vector(camera.global_basis)
 
-   if not raw_input.is_zero_approx():
+   if not movement_vector.is_zero_approx():
       change_state.emit(state_move)
       return
 
