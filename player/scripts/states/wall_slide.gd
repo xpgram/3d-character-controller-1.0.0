@@ -86,6 +86,8 @@ func on_enter() -> void:
 
 func on_exit() -> void:
    tween.kill()
+   slide_timer.stop()
+   pull_away_timer.stop()
 
 
 func process_input(event: InputEvent) -> void:
