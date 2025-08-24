@@ -8,11 +8,16 @@ extends Node3D
 const DEGREES_10 := PI / 18
 
 @export_subgroup('Global Jostle', 'global_')
-@export var global_active := true
-@export var global_amplitude := 1.0       ## The volume of the jostle.
-@export var global_frequency := 1.0       ## The speed of the jostle.
-@export var global_noise_width := 100.0   ## The width of the 1D noise textures used. # FIXME This isn't really implemented.
-@export var global_noise := FastNoiseLite.new()
+@export
+var global_active := true
+@export_range(0, 1, 0.01)
+var global_amplitude := 1.0       ## The volume of the jostle.
+@export
+var global_frequency := 20.0      ## The speed of the jostle.
+@export
+var global_noise_width := 100.0   ## The width of the 1D noise textures used. # FIXME This isn't really implemented.
+@export
+var global_noise := FastNoiseLite.new()
 
 @export_subgroup('Rotation Jostle', 'rotation_')
 @export
@@ -20,7 +25,7 @@ var rotation_active := true
 @export_custom(PROPERTY_HINT_LINK, 'radians, suffix:°')
 var rotation_amplitude := Vector3(DEGREES_10, DEGREES_10, 0.0) ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, '')
-var rotation_frequency := Vector3(20.0, 20.0, 20.0)   ## The amount of 'rumble'. Lower values yield slower movement.
+var rotation_frequency := Vector3(1.0, 1.0, 1.0)   ## The amount of 'rumble'. Lower values yield slower movement. # TODO Actually, this isn't how Hertz work, is it?
 @export_custom(PROPERTY_HINT_LINK, 'suffix:s')
 var rotation_delay := Vector3(0.25, 0.25, 0.25)          ##
 @export
@@ -32,7 +37,7 @@ var position_active := false
 @export_custom(PROPERTY_HINT_LINK, 'suffix:m')
 var position_amplitude := Vector3(2.0, 2.0, 2.0)      ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, '')
-var position_frequency := Vector3(20.0, 20.0, 20.0)   ## The amount of 'rumble'. Lower values yield slower movement.
+var position_frequency := Vector3(1.0, 1.0, 1.0)   ## The amount of 'rumble'. Lower values yield slower movement.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:s')
 var position_delay := Vector3(0.0, 0.0, 0.0)          ##
 @export
@@ -123,15 +128,15 @@ func _get_vector_at_coordinate(
 
    var values := Vector3(
       # get_noise_1d() returns values over a [-1, 1] range.
-      x_noise.get_noise_1d(coord_vector.x * frequency_vector.x),
-      y_noise.get_noise_1d(coord_vector.y * frequency_vector.y),
-      z_noise.get_noise_1d(coord_vector.z * frequency_vector.z),
+      x_noise.get_noise_1d(coord_vector.x * frequency_vector.x * global_frequency),
+      y_noise.get_noise_1d(coord_vector.y * frequency_vector.y * global_frequency),
+      z_noise.get_noise_1d(coord_vector.z * frequency_vector.z * global_frequency),
    )
 
    values.x = sign(values.x) * steadiness_curve.sample(abs(values.x))
    values.y = sign(values.y) * steadiness_curve.sample(abs(values.y))
    values.z = sign(values.z) * steadiness_curve.sample(abs(values.z))
 
-   values = values * amplitude_vector
+   values = values * amplitude_vector * global_amplitude
 
    return values
