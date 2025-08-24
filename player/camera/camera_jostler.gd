@@ -30,7 +30,7 @@ var rotation_steadiness_curve: Curve                  ## The response curve for 
 @export
 var position_active := false
 @export_custom(PROPERTY_HINT_LINK, 'suffix:m')
-var position_amplitude := Vector3(1.0, 1.0, 1.0)      ## How large the jostle movements are in degrees.
+var position_amplitude := Vector3(2.0, 2.0, 2.0)      ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, '')
 var position_frequency := Vector3(20.0, 20.0, 20.0)   ## The amount of 'rumble'. Lower values yield slower movement.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:s')
