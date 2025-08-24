@@ -5,38 +5,38 @@ extends Node3D
 #   that all FPSes do? Wouldn't it be nice to have a list of resources or something that
 #   all return a position/rotation that just add together before being applied?
 # TODO This Jostler could be useful for things other than camera behavior. A washing machine, perhaps?
-const DEGREES_15 := PI / 12
+const DEGREES_10 := PI / 18
 
 @export_subgroup('Global Jostle', 'global_')
 @export var global_active := true
-@export var global_amplitude := 1.0    ## The volume of the jostle.
-@export var global_frequency := 1.0    ## The speed of the jostle.
-@export var global_noise_width := 10.0 ## The width of the 1D noise textures used. # TODO This isn't really implemented.
+@export var global_amplitude := 1.0       ## The volume of the jostle.
+@export var global_frequency := 1.0       ## The speed of the jostle.
+@export var global_noise_width := 100.0   ## The width of the 1D noise textures used. # FIXME This isn't really implemented.
 @export var global_noise := FastNoiseLite.new()
 
 @export_subgroup('Rotation Jostle', 'rotation_')
 @export
 var rotation_active := true
 @export_custom(PROPERTY_HINT_LINK, 'radians, suffix:°')
-var rotation_amplitude := Vector3(DEGREES_15, DEGREES_15, 0.0) ## How large the jostle movements are in degrees.
+var rotation_amplitude := Vector3(DEGREES_10, DEGREES_10, 0.0) ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, '')
-var rotation_frequency := Vector3(4.0, 4.0, 4.0)   ## The amount of 'rumble'. Lower values yield slower movement.
+var rotation_frequency := Vector3(20.0, 20.0, 20.0)   ## The amount of 'rumble'. Lower values yield slower movement.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:s')
-var rotation_delay := Vector3(1.0, 1.0, 1.0)       ## 
+var rotation_delay := Vector3(0.25, 0.25, 0.25)          ##
 @export
-var rotation_steadiness_curve: Curve               ## The response curve for the normalized values.
+var rotation_steadiness_curve: Curve                  ## The response curve for the normalized values.
 
 @export_subgroup('Position Jostle', 'position_')
 @export
 var position_active := false
 @export_custom(PROPERTY_HINT_LINK, 'suffix:m')
-var position_amplitude := Vector3(1.0, 1.0, 1.0)   ## How large the jostle movements are in degrees.
+var position_amplitude := Vector3(1.0, 1.0, 1.0)      ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, '')
-var position_frequency := Vector3(4.0, 4.0, 4.0)   ## The amount of 'rumble'. Lower values yield slower movement.
+var position_frequency := Vector3(20.0, 20.0, 20.0)   ## The amount of 'rumble'. Lower values yield slower movement.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:s')
-var position_delay := Vector3(0.0, 0.0, 0.0)       ## 
+var position_delay := Vector3(0.0, 0.0, 0.0)          ##
 @export
-var position_steadiness_curve: Curve               ## The response curve for the normalized values.
+var position_steadiness_curve: Curve                  ## The response curve for the normalized values.
 
 var x_noise: FastNoiseLite
 var y_noise: FastNoiseLite
@@ -75,7 +75,6 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
    noise_cursor += delta
-
    _jostle_rotation()
    _jostle_position()
 
@@ -116,21 +115,23 @@ func _get_vector_at_coordinate(
    steadiness_curve: Curve,
 ) -> Vector3:
    var coord_vector := Vector3(
+      # FIXME As predicted, this noise_width setting is jerky as hell.
       fmod((x_coordinate - delay_vector.x), global_noise_width),
       fmod((x_coordinate - delay_vector.y), global_noise_width),
       fmod((x_coordinate - delay_vector.z), global_noise_width),
    )
 
    var values := Vector3(
+      # get_noise_1d() returns values over a [-1, 1] range.
       x_noise.get_noise_1d(coord_vector.x * frequency_vector.x),
       y_noise.get_noise_1d(coord_vector.y * frequency_vector.y),
       z_noise.get_noise_1d(coord_vector.z * frequency_vector.z),
    )
 
-   values = values * amplitude_vector
+   values.x = sign(values.x) * steadiness_curve.sample(abs(values.x))
+   values.y = sign(values.y) * steadiness_curve.sample(abs(values.y))
+   values.z = sign(values.z) * steadiness_curve.sample(abs(values.z))
 
-   values.x = steadiness_curve.sample(values.x)
-   values.y = steadiness_curve.sample(values.y)
-   values.z = steadiness_curve.sample(values.z)
+   values = values * amplitude_vector
 
    return values
