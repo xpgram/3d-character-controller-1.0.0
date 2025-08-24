@@ -95,7 +95,12 @@ func _jostle_rotation() -> void:
       rotation_delay,
       rotation_steadiness_curve,
    )
-   rotation = new_rotation_vector
+
+   # Rotational movement "along the x-axis" is actually controlled by the y-axis,
+   # so we must map them to reflect similar motions in position.
+   rotation.x = new_rotation_vector.y
+   rotation.y = -new_rotation_vector.x
+   rotation.z = new_rotation_vector.z
 
 
 func _jostle_position() -> void:
@@ -109,6 +114,7 @@ func _jostle_position() -> void:
       position_delay,
       position_steadiness_curve,
    )
+
    position = new_position_vector
 
 
