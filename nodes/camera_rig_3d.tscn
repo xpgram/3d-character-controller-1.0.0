@@ -1,12 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://say22yjgceb1"]
+[gd_scene load_steps=3 format=3 uid="uid://say22yjgceb1"]
 
 [ext_resource type="Script" uid="uid://dble35geeo1ca" path="res://player/scripts/camera/camera_rig_3d.gd" id="1_p8m6u"]
 [ext_resource type="Script" uid="uid://c2hgvtg5no4js" path="res://player/camera/camera_jostler.gd" id="2_ci7au"]
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_sxowc"]
-noise_type = 0
-fractal_octaves = 3
-fractal_weighted_strength = 0.25
 
 [node name="CameraRig3D" type="Node3D"]
 script = ExtResource("1_p8m6u")
@@ -30,7 +25,6 @@ unique_name_in_owner = true
 editor_description = "Manages movement effects like camera shake through sinusoidal position and rotation displacement. Uses noise generation to make this movement feel natural."
 transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("2_ci7au")
-noise = SubResource("FastNoiseLite_sxowc")
 
 [node name="CameraHead" type="Node3D" parent="Pivot/CameraArm/Jostler"]
 unique_name_in_owner = true
