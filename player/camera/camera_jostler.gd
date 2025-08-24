@@ -5,6 +5,7 @@ extends Node3D
 #   that all FPSes do? Wouldn't it be nice to have a list of resources or something that
 #   all return a position/rotation that just add together before being applied?
 # TODO This Jostler could be useful for things other than camera behavior. A washing machine, perhaps?
+const DEGREES_15 := PI / 12
 
 @export_subgroup('Global Jostle', 'global_')
 @export var global_active := true
@@ -16,23 +17,23 @@ extends Node3D
 @export_subgroup('Rotation Jostle', 'rotation_')
 @export
 var rotation_active := true
-@export_custom(PROPERTY_HINT_LINK, '')
-var rotation_amplitude := Vector3(1.0, 1.0, 0.0)   ## How large the jostle movements are in degrees.
+@export_custom(PROPERTY_HINT_LINK, 'radians, suffix:°')
+var rotation_amplitude := Vector3(DEGREES_15, DEGREES_15, 0.0) ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, '')
 var rotation_frequency := Vector3(4.0, 4.0, 4.0)   ## The amount of 'rumble'. Lower values yield slower movement.
-@export_custom(PROPERTY_HINT_LINK, '')
+@export_custom(PROPERTY_HINT_LINK, 'suffix:s')
 var rotation_delay := Vector3(1.0, 1.0, 1.0)       ## 
 @export
 var rotation_steadiness_curve: Curve               ## The response curve for the normalized values.
 
 @export_subgroup('Position Jostle', 'position_')
 @export
-var position_active := true
-@export_custom(PROPERTY_HINT_LINK, '')
+var position_active := false
+@export_custom(PROPERTY_HINT_LINK, 'suffix:m')
 var position_amplitude := Vector3(1.0, 1.0, 1.0)   ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, '')
 var position_frequency := Vector3(4.0, 4.0, 4.0)   ## The amount of 'rumble'. Lower values yield slower movement.
-@export_custom(PROPERTY_HINT_LINK, '')
+@export_custom(PROPERTY_HINT_LINK, 'suffix:s')
 var position_delay := Vector3(0.0, 0.0, 0.0)       ## 
 @export
 var position_steadiness_curve: Curve               ## The response curve for the normalized values.
