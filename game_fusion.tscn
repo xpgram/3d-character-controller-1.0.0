@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bvc1xx2q0t45o"]
+[gd_scene load_steps=10 format=3 uid="uid://bvc1xx2q0t45o"]
 
 [ext_resource type="Script" uid="uid://bcxwagdd6v36k" path="res://game.gd" id="1_51kip"]
 [ext_resource type="PackedScene" uid="uid://ctrh2j33hfbgy" path="res://global_state/global_state.tscn" id="2_3uc2i"]
@@ -6,6 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://db51xtuloclwg" path="res://levels/prototype/level_metroid_fusion.tscn" id="4_51kip"]
 [ext_resource type="PackedScene" uid="uid://bw2yt2kjem3le" path="res://player/player_3d.tscn" id="5_ascb7"]
 [ext_resource type="PackedScene" uid="uid://say22yjgceb1" path="res://nodes/camera_rig_3d.tscn" id="6_3uc2i"]
+[ext_resource type="Script" uid="uid://c2hgvtg5no4js" path="res://player/camera/camera_jostler.gd" id="7_04gbv"]
+[ext_resource type="Curve" uid="uid://c0inn0bw3thjx" path="res://player/camera/resources/steadiness_curve.tres" id="8_ascb7"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_q051v"]
+fractal_octaves = 3
+fractal_gain = 1.0
 
 [node name="Game" type="Node"]
 script = ExtResource("1_51kip")
@@ -18,16 +24,26 @@ script = ExtResource("1_51kip")
 
 [node name="Player3D" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_ascb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
-camera = NodePath("../CameraRig3D/Camera3D")
+camera = NodePath("../CameraRig3D/Jostler/Camera3D")
 
 [node name="CameraRig3D" parent="." node_paths=PackedStringArray("subject") instance=ExtResource("6_3uc2i")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -8, 5, 0)
 subject = NodePath("../Player3D")
 
-[node name="Camera3D" type="Camera3D" parent="CameraRig3D"]
+[node name="Jostler" type="Node3D" parent="CameraRig3D"]
+unique_name_in_owner = true
+editor_description = "Manages movement effects like camera shake through sinusoidal position and rotation displacement. Uses noise generation to make this movement feel natural."
+transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("7_04gbv")
+global_noise = SubResource("FastNoiseLite_q051v")
+rotation_steadiness_curve = ExtResource("8_ascb7")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig3D/Jostler"]
+transform = Transform3D(1, 9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 fov = 40.0
 
-[node name="SpotLight3D" type="SpotLight3D" parent="CameraRig3D"]
+[node name="SpotLight3D" type="SpotLight3D" parent="CameraRig3D/Jostler"]
+transform = Transform3D(1, 9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 light_energy = 100.0
 light_bake_mode = 0
 spot_range = 50.0

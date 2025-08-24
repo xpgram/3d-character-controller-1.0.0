@@ -1,12 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://say22yjgceb1"]
+[gd_scene load_steps=2 format=3 uid="uid://say22yjgceb1"]
 
 [ext_resource type="Script" uid="uid://dble35geeo1ca" path="res://player/scripts/camera/camera_rig_3d.gd" id="1_p8m6u"]
-[ext_resource type="Script" uid="uid://c2hgvtg5no4js" path="res://player/camera/camera_jostler.gd" id="2_ci7au"]
-[ext_resource type="Curve" uid="uid://c0inn0bw3thjx" path="res://player/camera/resources/steadiness_curve.tres" id="3_sxowc"]
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ci7au"]
-fractal_octaves = 3
-fractal_gain = 1.0
 
 [node name="CameraRig3D" type="Node3D"]
 script = ExtResource("1_p8m6u")
@@ -25,15 +19,7 @@ unique_name_in_owner = true
 editor_description = "Manages distance between the camera head and the pivot. You can create dolly movement by operating the camera arm."
 transform = Transform3D(1, -1.05879e-22, -7.10543e-15, 0, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, -4.76837e-07, 0, 16)
 
-[node name="Jostler" type="Node3D" parent="Pivot/CameraArm"]
-unique_name_in_owner = true
-editor_description = "Manages movement effects like camera shake through sinusoidal position and rotation displacement. Uses noise generation to make this movement feel natural."
-transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-script = ExtResource("2_ci7au")
-global_noise = SubResource("FastNoiseLite_ci7au")
-rotation_steadiness_curve = ExtResource("3_sxowc")
-
-[node name="CameraHead" type="Node3D" parent="Pivot/CameraArm/Jostler"]
+[node name="CameraHead" type="Node3D" parent="Pivot/CameraArm"]
 unique_name_in_owner = true
 editor_description = "Used to rotate the camera mount and its accessories."
 transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
