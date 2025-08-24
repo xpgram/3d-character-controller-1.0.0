@@ -64,12 +64,12 @@ func _ready() -> void:
    # TODO I should preload() a saved LinearCurve resource instead of doing this.
    if not rotation_steadiness_curve:
       rotation_steadiness_curve = Curve.new()
-      rotation_steadiness_curve.add_point(Vector2(0, 0), 0, 0, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
-      rotation_steadiness_curve.add_point(Vector2(1, 1), 0, 0, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
+      rotation_steadiness_curve.add_point(Vector2(0, 0), 1, 1)
+      rotation_steadiness_curve.add_point(Vector2(1, 1), 1, 1)
    if not position_steadiness_curve:
       position_steadiness_curve = Curve.new()
-      position_steadiness_curve.add_point(Vector2(0, 0), 0, 0, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
-      position_steadiness_curve.add_point(Vector2(1, 1), 0, 0, Curve.TANGENT_LINEAR, Curve.TANGENT_LINEAR)
+      position_steadiness_curve.add_point(Vector2(0, 0), 1, 1)
+      position_steadiness_curve.add_point(Vector2(1, 1), 1, 1)
 
 
 func _physics_process(delta: float) -> void:
