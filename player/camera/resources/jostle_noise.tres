@@ -1,0 +1,5 @@
+[gd_resource type="FastNoiseLite" format=3 uid="uid://bbionoodp7ppj"]
+
+[resource]
+fractal_octaves = 3
+fractal_gain = 1.0

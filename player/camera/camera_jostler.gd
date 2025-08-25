@@ -1,3 +1,4 @@
+class_name Jostler
 extends Node3D
 
 # TODO Use Jostler filters instead of different nodes.
@@ -5,6 +6,7 @@ extends Node3D
 #   that all FPSes do? Wouldn't it be nice to have a list of resources or something that
 #   all return a position/rotation that just add together before being applied?
 # TODO This Jostler could be useful for things other than camera behavior. A washing machine, perhaps?
+
 const DEGREES_10 := PI / 18
 const DEGREES_5 := PI / 36
 const CUBE_DIAGONAL_LENGTH := sqrt(3)
