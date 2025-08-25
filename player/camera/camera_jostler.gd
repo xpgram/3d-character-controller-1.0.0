@@ -10,10 +10,21 @@ const DEGREES_5 := PI / 36
 const CUBE_DIAGONAL_LENGTH := sqrt(3)
 
 @export_subgroup('Global Jostle', 'global_')
+
+## Turns the Jostler on and off.
 @export
-var global_active := true
+var global_active := true:
+   set(on):
+      global_active = on
+      if not on:
+         _reset_transformation()
+
+## The 'loudness' of all jostling movements. It is recommended to treat this
+## normalized value as a volume knob for the entire system and describe
+## specific amplitude propertions in each component.
 @export_range(0, 1, 0.01, 'or_greater')
-var global_amplitude := 1.0       ## The volume of the jostle.
+var global_amplitude := 1.0
+
 @export_custom(PROPERTY_HINT_NONE, 'suffix:∝')
 var global_frequency := 20.0      ## The speed of the jostle.
 @export
@@ -22,8 +33,15 @@ var global_noise_width := 100.0   ## The width of the 1D noise textures used. # 
 var global_noise := FastNoiseLite.new()
 
 @export_subgroup('Rotation Jostle', 'rotation_')
+
+## Turns the rotational jostling on and off.
 @export
-var rotation_active := true
+var rotation_active := true:
+   set(on):
+      rotation_active = on
+      if not on:
+         _reset_rotation()
+
 @export_custom(PROPERTY_HINT_LINK, 'radians, suffix:°')
 var rotation_amplitude := Vector3(DEGREES_10, DEGREES_10, DEGREES_5) ## How large the maximum jostle movements are in degrees. # FIXME It bothers me that these are not real degrees. Do some testing.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:∝')
@@ -34,8 +52,15 @@ var rotation_delay := Vector3(0.25, 0.25, 0.25)          ##
 var rotation_steadiness_curve: Curve                  ## The response curve for the normalized values.
 
 @export_subgroup('Position Jostle', 'position_')
+
+## Turns the positional jostling on and off.
 @export
-var position_active := true
+var position_active := true:
+   set(on):
+      position_active = on
+      if not on:
+         _reset_position()
+
 @export_custom(PROPERTY_HINT_LINK, 'suffix:m')
 var position_amplitude := Vector3(1.0, 1.0, 1.0)      ## How large the jostle movements are in degrees.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:∝')
@@ -87,6 +112,22 @@ func _physics_process(delta: float) -> void:
    noise_cursor += delta
    _jostle_rotation()
    _jostle_position()
+
+
+## Reset all jostle components to their default states.
+func _reset_transformation() -> void:
+   _reset_rotation()
+   _reset_position()
+
+
+## Reset rotational jostle to its default state.
+func _reset_rotation() -> void:
+   rotation = Vector3.ZERO
+
+
+## Reset positional jostle to its default state.
+func _reset_position() -> void:
+   position = Vector3.ZERO
 
 
 func _jostle_rotation() -> void:
