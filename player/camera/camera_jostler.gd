@@ -6,13 +6,15 @@ extends Node3D
 #   all return a position/rotation that just add together before being applied?
 # TODO This Jostler could be useful for things other than camera behavior. A washing machine, perhaps?
 const DEGREES_10 := PI / 18
+const DEGREES_5 := PI / 36
+const CUBE_DIAGONAL_LENGTH := sqrt(3)
 
 @export_subgroup('Global Jostle', 'global_')
 @export
 var global_active := true
-@export_range(0, 1, 0.01)
+@export_range(0, 1, 0.01, 'or_greater')
 var global_amplitude := 1.0       ## The volume of the jostle.
-@export
+@export_custom(PROPERTY_HINT_NONE, 'suffix:∝')
 var global_frequency := 20.0      ## The speed of the jostle.
 @export
 var global_noise_width := 100.0   ## The width of the 1D noise textures used. # FIXME This isn't really implemented.
@@ -23,8 +25,8 @@ var global_noise := FastNoiseLite.new()
 @export
 var rotation_active := true
 @export_custom(PROPERTY_HINT_LINK, 'radians, suffix:°')
-var rotation_amplitude := Vector3(DEGREES_10, DEGREES_10, 0.0) ## How large the jostle movements are in degrees.
-@export_custom(PROPERTY_HINT_LINK, '')
+var rotation_amplitude := Vector3(DEGREES_10, DEGREES_10, DEGREES_5) ## How large the maximum jostle movements are in degrees. # FIXME It bothers me that these are not real degrees. Do some testing.
+@export_custom(PROPERTY_HINT_LINK, 'suffix:∝')
 var rotation_frequency := Vector3(1.0, 1.0, 1.0)   ## The amount of 'rumble'. Lower values yield slower movement. # TODO Actually, this isn't how Hertz work, is it?
 @export_custom(PROPERTY_HINT_LINK, 'suffix:s')
 var rotation_delay := Vector3(0.25, 0.25, 0.25)          ##
@@ -33,10 +35,10 @@ var rotation_steadiness_curve: Curve                  ## The response curve for 
 
 @export_subgroup('Position Jostle', 'position_')
 @export
-var position_active := false
+var position_active := true
 @export_custom(PROPERTY_HINT_LINK, 'suffix:m')
-var position_amplitude := Vector3(2.0, 2.0, 2.0)      ## How large the jostle movements are in degrees.
-@export_custom(PROPERTY_HINT_LINK, '')
+var position_amplitude := Vector3(1.0, 1.0, 1.0)      ## How large the jostle movements are in degrees.
+@export_custom(PROPERTY_HINT_LINK, 'suffix:∝')
 var position_frequency := Vector3(1.0, 1.0, 1.0)   ## The amount of 'rumble'. Lower values yield slower movement.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:s')
 var position_delay := Vector3(0.0, 0.0, 0.0)          ##
@@ -49,7 +51,7 @@ var z_noise: FastNoiseLite
 
 var noise_cursor := 0.0
 
-var jostle_position := Vector3()
+var jostle_position := Vector3() # TODO Make private
 var jostle_rotation := Vector3()
 
 
@@ -79,6 +81,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+   if not global_active:
+      return
+
    noise_cursor += delta
    _jostle_rotation()
    _jostle_position()
@@ -88,7 +93,7 @@ func _jostle_rotation() -> void:
    if not rotation_active:
       return
 
-   var new_rotation_vector := _get_vector_at_coordinate(
+   var new_rotation_vector := _get_vector_at_noise_coordinate(
       noise_cursor,
       rotation_amplitude,
       rotation_frequency,
@@ -107,7 +112,7 @@ func _jostle_position() -> void:
    if not position_active:
       return
 
-   var new_position_vector := _get_vector_at_coordinate(
+   var new_position_vector := _get_vector_at_noise_coordinate(
       noise_cursor,
       position_amplitude,
       position_frequency,
@@ -118,7 +123,7 @@ func _jostle_position() -> void:
    position = new_position_vector
 
 
-func _get_vector_at_coordinate(
+func _get_vector_at_noise_coordinate(
    x_coordinate: float,
    amplitude_vector: Vector3,
    frequency_vector: Vector3,
@@ -132,17 +137,20 @@ func _get_vector_at_coordinate(
       fmod((x_coordinate - delay_vector.z), global_noise_width),
    )
 
-   var values := Vector3(
-      # get_noise_1d() returns values over a [-1, 1] range.
+   var noise_vector := Vector3(
+      # Note: get_noise_1d() returns noise_vector over a [-1, 1] range.
       x_noise.get_noise_1d(coord_vector.x * frequency_vector.x * global_frequency),
       y_noise.get_noise_1d(coord_vector.y * frequency_vector.y * global_frequency),
       z_noise.get_noise_1d(coord_vector.z * frequency_vector.z * global_frequency),
    )
 
-   values.x = sign(values.x) * steadiness_curve.sample(abs(values.x))
-   values.y = sign(values.y) * steadiness_curve.sample(abs(values.y))
-   values.z = sign(values.z) * steadiness_curve.sample(abs(values.z))
+   # Apply steadiness curve.
+   var normalized_length = noise_vector.length() / CUBE_DIAGONAL_LENGTH
+   var curved_length = steadiness_curve.sample(normalized_length)
+   noise_vector = noise_vector.normalized() * curved_length
 
-   values = values * amplitude_vector * global_amplitude
+   noise_vector = noise_vector * amplitude_vector * global_amplitude
 
-   return values
+   return noise_vector
+
+# TODO Add a tween on/off (adjusts global amplitude)
