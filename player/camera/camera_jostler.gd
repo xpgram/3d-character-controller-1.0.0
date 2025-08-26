@@ -10,8 +10,7 @@ extends Node3D
 #   Or maybe we should just put the washing machine under a Jostler node? I'm honestly not
 #   sure how else it would work.
 
-const DEGREES_10 := PI / 18
-const DEGREES_5 := PI / 36
+const DEGREES_3 := PI / 60
 const CUBE_DIAGONAL_LENGTH := sqrt(3)
 
 @export_subgroup('Global Jostle', 'global_')
@@ -54,10 +53,10 @@ var rotation_active := true:
       if not on:
          _reset_rotation()
 
-# FIXME It bothers me that these are not real degrees. Do some testing.
 ## The maximum range for rotations on each axis in degrees.
+## Depending on the noise used, it may be rare to see the full amplitude actually expressed.
 @export_custom(PROPERTY_HINT_LINK, 'radians, suffix:°')
-var rotation_amplitude := Vector3(DEGREES_10, DEGREES_10, DEGREES_5)
+var rotation_amplitude := Vector3(DEGREES_3, DEGREES_3, DEGREES_3)
 
 ## The rates for each axis at which noise is "traveled." Higher numbers yield faster jostling.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:∝')
@@ -85,8 +84,9 @@ var position_active := true:
          _reset_position()
 
 ## The maximum range for movement on each axis in meters.
+## Depending on the noise used, it may be rare to see the full amplitude actually expressed.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:m')
-var position_amplitude := Vector3(1.0, 1.0, 1.0)
+var position_amplitude := Vector3(0.25, 0.25, 0.25)
 
 ## The rates for each axis at which noise is "traveled." Higher numbers yield faster jostling.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:∝')
@@ -232,6 +232,7 @@ func _get_vector_at_noise_coordinate(
    # Apply steadiness curve.
    var normalized_length = noise_vector.length() / CUBE_DIAGONAL_LENGTH
    var curved_length = steadiness_curve.sample(normalized_length)
+   curved_length = curved_length * CUBE_DIAGONAL_LENGTH
    noise_vector = noise_vector.normalized() * curved_length
 
    noise_vector = noise_vector * amplitude_vector * global_amplitude

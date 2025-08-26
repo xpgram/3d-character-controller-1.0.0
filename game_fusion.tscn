@@ -32,6 +32,7 @@ script = ExtResource("7_04gbv")
 global_noise_width = 100.0
 global_noise = ExtResource("8_q051v")
 rotation_steadiness_curve = ExtResource("8_ascb7")
+position_active = false
 position_steadiness_curve = ExtResource("8_ascb7")
 metadata/_custom_type_script = "uid://c2hgvtg5no4js"
 
