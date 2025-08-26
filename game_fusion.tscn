@@ -29,7 +29,6 @@ subject = NodePath("../Player3D")
 
 [node name="Jostler" type="Node3D" parent="CameraRig3D"]
 script = ExtResource("7_04gbv")
-global_noise_width = 100.0
 global_noise = ExtResource("8_q051v")
 rotation_steadiness_curve = ExtResource("8_ascb7")
 position_active = false
