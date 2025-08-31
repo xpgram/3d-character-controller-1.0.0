@@ -1,6 +1,11 @@
 class_name CameraRig3D
 extends Node3D
 
+# TODO Turn this into a node type summonable from the node dialog.
+#   That is, save the internals of CameraRig3D as a tscn, and simply instantiate
+#   it here. But question: can I still take advantage of Unique Names and such
+#   using this method?
+
 # TODO This content-slot setup may actually be harder to use.
 #   What if I want the control script to control the spotlight? I have to guarantee it
 #   exists somehow. So, maybe I should treat the CameraRig3D like a more complicated
