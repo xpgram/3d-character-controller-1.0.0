@@ -1,5 +1,5 @@
-class_name CameraRegion
-extends Node
+class_name CameraRegion3D
+extends Area3D
 
 # TODO Build the script passing process:
 #  - Player collides with CameraRegion object (this).

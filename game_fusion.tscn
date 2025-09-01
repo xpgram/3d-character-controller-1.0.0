@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bxg6oejpaitdt" path="res://level/interactable/flag/flag_reached_screen.tscn" id="3_n6cjs"]
 [ext_resource type="PackedScene" uid="uid://db51xtuloclwg" path="res://levels/prototype/level_metroid_fusion.tscn" id="4_51kip"]
 [ext_resource type="PackedScene" uid="uid://bw2yt2kjem3le" path="res://player/player_3d.tscn" id="5_ascb7"]
-[ext_resource type="PackedScene" uid="uid://say22yjgceb1" path="res://nodes/camera_rig_3d.tscn" id="6_3uc2i"]
+[ext_resource type="PackedScene" uid="uid://say22yjgceb1" path="res://nodes/camera/camera_rig_3d.tscn" id="6_3uc2i"]
 [ext_resource type="Script" uid="uid://c2hgvtg5no4js" path="res://player/camera/camera_jostler.gd" id="7_04gbv"]
 [ext_resource type="Curve" uid="uid://c0inn0bw3thjx" path="res://player/camera/resources/steadiness_curve.tres" id="8_ascb7"]
 [ext_resource type="FastNoiseLite" uid="uid://bbionoodp7ppj" path="res://player/camera/resources/jostle_noise.tres" id="8_q051v"]
