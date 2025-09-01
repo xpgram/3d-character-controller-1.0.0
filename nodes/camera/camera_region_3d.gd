@@ -1,3 +1,4 @@
+@tool
 class_name CameraRegion3D
 extends Area3D
 
@@ -18,3 +19,19 @@ extends Area3D
 #  - Special Script that does whatever it wants
 #  - Fade out/in
 #  - Fade out, wait, signal in
+
+## A controller to operate a [CameraRig3D].
+@export var camera_controller: CameraController
+
+
+func _get_configuration_warnings() -> PackedStringArray:
+   var warnings: PackedStringArray = []
+
+   if camera_controller == null:
+      warnings.append('CameraRegion3D has no associated CameraController3D.')
+
+   return warnings
+
+
+func _init() -> void:
+   monitoring = false
