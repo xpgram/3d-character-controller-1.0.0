@@ -63,17 +63,6 @@ const InputUtils = preload('uid://tl2nnbstems3')
 @onready var _camera_head: Node3D = %CameraHead
 
 
-func _get_configuration_warnings() -> PackedStringArray:
-   # FIXME This doesn't work without @tool, but _physics_process was causing me problems.
-   var warnings: PackedStringArray = []
-
-   var children := get_children()
-   if not children.any(func (child): return child is Camera3D):
-      warnings.append('The CameraRig3D has no Camera3D to mount.')
-
-   return warnings
-
-
 func _ready() -> void:
    _move_children_to_camera_head_mount()
    _teleport_to_position()
