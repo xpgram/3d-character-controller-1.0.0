@@ -62,12 +62,6 @@ const InputUtils = preload('uid://tl2nnbstems3')
 ## A pivot joint used to rotate the camera's lense and related accessories.
 @onready var _camera_head: Node3D = %CameraHead
 
-# TODO These are... not directly useable with this new content-slot setup I have.
-## The camera object that renders the scene.
-@onready var _camera_lense: Camera3D = %Camera3D
-## The camera's head-mounted light.
-@onready var _camera_spotlight: SpotLight3D = %SpotLight3D
-
 
 func _get_configuration_warnings() -> PackedStringArray:
    # FIXME This doesn't work without @tool, but _physics_process was causing me problems.
