@@ -2,9 +2,6 @@ class_name HitBox3D
 extends Area3D
 ## Abstract class for HitBox3D-type objects.
 
-## Triggered when this hit box makes contact with another hit box.
-@warning_ignore('UNUSED_SIGNAL')
-signal hit_box_hit(hit_box: HitBox3D)
 
 ## The owning entity of this hit box. Used to determine whether a hit box
 ## collision is with 'self'.
