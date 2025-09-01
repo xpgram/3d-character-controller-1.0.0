@@ -1,6 +1,18 @@
 class_name CameraRegion
 extends Node
 
-# TODO How to add coins to score when colliding with coin, hm?
-#   I need to know how Player->Coin->Delete_Coin works in general before I can
-#   attach custom camera controllers to a colliding Player object.
+# TODO Build the script passing process:
+#  - Player collides with CameraRegion object (this).
+#  - CameraRegion calls Events.camera_controller_enabled.emit(self.controller, transition?)
+#    - Events is a global script describing a collection of signals.
+#    - 'enabled' may be the wrong verbage.
+#  - A wrapping node for CameraRig3D, or some other manager, is connected to
+#    camera_controller_enabled. It listens for new controllers and passes them along to
+#    CameraRig3D, which knows how to use them once it has them.
+
+# TODO Transition styles:
+#  - Lerp
+#    - (By default, I think. More importantly, how do I get it to _not_ lerp?)
+#  - Special Script that does whatever it wants
+#  - Fade out/in
+#  - Fade out, wait, signal in
