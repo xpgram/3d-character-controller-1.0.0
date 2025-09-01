@@ -17,4 +17,4 @@ func _on_area_entered(area: Area3D) -> void:
    # TODO How necessary is this if the Player3D is the one managing this?
    #  This script could emit its own signal that Player3D listens for, which
    #  then passes the controller on to its player camera.
-   Events.camera_region_entered.emit(self, camera_region.controller)
+   Events.camera_region_entered.emit(self, camera_region)
