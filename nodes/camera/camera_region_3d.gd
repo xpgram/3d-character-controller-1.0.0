@@ -9,6 +9,8 @@ extends Area3D
 #  - A wrapping node for CameraRig3D, or some other manager, is connected to
 #    camera_controller_enabled. It listens for new controllers and passes them along to
 #    CameraRig3D, which knows how to use them once it has them.
+#  - CameraRig3D loses 'Subject' as a field, and instead depends on the ControlScript to
+#    move its focal point where the subject is.
 
 # TODO Transition styles:
 #  - Lerp
