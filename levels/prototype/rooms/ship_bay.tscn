@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_qgra8"]
 [ext_resource type="Material" uid="uid://baa4l6yneshkg" path="res://level/camera_regions.tres" id="2_sd1sl"]
-[ext_resource type="Script" uid="uid://dnhmerevxer8u" path="res://system/scripts/camera_controller/camera_region.gd" id="3_v7we5"]
+[ext_resource type="Script" uid="uid://dbspgtoc6xewx" path="res://nodes/camera/camera_region_3d.gd" id="3_v7we5"]
 [ext_resource type="Material" uid="uid://cjkvf5mjf7h2a" path="res://level/invisible_walls.tres" id="4_lh51j"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgra8"]
