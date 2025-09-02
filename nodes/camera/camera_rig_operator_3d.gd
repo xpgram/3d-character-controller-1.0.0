@@ -1,4 +1,4 @@
-class_name CameraRigOperator3D
+class_name CameraRigController3D
 extends Node3D
 ## A controller script to define the behavior of a CameraRig3D.
 

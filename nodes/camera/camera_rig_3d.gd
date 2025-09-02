@@ -59,8 +59,8 @@ const InputUtils = preload('uid://tl2nnbstems3')
 var camera_lense: Camera3D
 ## (NULLABLE) A light attached to the camera, pointed in the same direction.
 var camera_spotlight: SpotLight3D
-## (NULLABLE) An object which yields a [CameraRigOperator3D] when asked.
-var _controller_stack: CameraRigOperatorStack3D
+## (NULLABLE) An object which yields a [CameraRigController3D] when asked.
+var _controller_stack: CameraRigControllerStack3D
 
 ## The point describing where the camera is looking.
 @onready var focal_point: Node3D = %FocalPoint
@@ -97,7 +97,7 @@ func _collect_references() -> void:
          camera_lense = child
       elif child is SpotLight3D:
          camera_spotlight = child
-      elif child is CameraRigOperatorStack3D:
+      elif child is CameraRigControllerStack3D:
          _controller_stack = child
 
 
@@ -144,7 +144,7 @@ func _physics_process(delta: float) -> void:
 ## Positions the camera rig over its subject's coordinates.
 func _process_camera_rig_position(delta: float) -> void:
    if _controller_stack:
-      var controller := _controller_stack.get_current_operator()
+      var controller := _controller_stack.get_controller()
       var new_position = controller.get_camera_position(delta, self)
 
       new_position += camera_position_displacement
