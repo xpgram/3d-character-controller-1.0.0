@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1v3cj0pporg2"]
+[gd_scene load_steps=8 format=3 uid="uid://c1v3cj0pporg2"]
 
 [ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_qgra8"]
 [ext_resource type="Script" uid="uid://b30tnoxjfhwod" path="res://nodes/camera/camera_rig_controller_3d.gd" id="3_lh51j"]
@@ -13,6 +13,13 @@ albedo_color = Color(0, 0, 0, 0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mdn24"]
 size = Vector3(31, 9, 10)
+
+[sub_resource type="Curve3D" id="Curve3D_v7we5"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 24, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="ShipBay" type="Node3D"]
 
@@ -110,6 +117,8 @@ collision_layer = 32768
 collision_mask = 0
 size = Vector3(11, 6, 1)
 
+[node name="Lights" type="Node3D" parent="."]
+
 [node name="CameraRegion3D" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 0
@@ -126,4 +135,6 @@ debug_color = Color(0.7, 0.7, 0, 1)
 script = ExtResource("3_lh51j")
 metadata/_custom_type_script = "uid://b30tnoxjfhwod"
 
-[node name="Lights" type="Node3D" parent="."]
+[node name="Path3D" type="Path3D" parent="CameraRegion3D/CameraRigController3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -12)
+curve = SubResource("Curve3D_v7we5")
