@@ -136,5 +136,9 @@ script = ExtResource("3_lh51j")
 metadata/_custom_type_script = "uid://b30tnoxjfhwod"
 
 [node name="Path3D" type="Path3D" parent="CameraRegion3D/CameraRigController3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -0.5)
 curve = SubResource("Curve3D_v7we5")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="CameraRegion3D/CameraRigController3D/Path3D"]
+transform = Transform3D(-4.3711e-08, 0, -0.999992, 0, 1, 0, 0.999992, 0, -4.3711e-08, 0, 0, 0)
+loop = false
