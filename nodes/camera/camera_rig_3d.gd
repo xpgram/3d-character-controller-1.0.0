@@ -53,19 +53,52 @@ const InputUtils = preload('uid://tl2nnbstems3')
 @export var stick_invert_y: bool = false
 @export var stick_invert_x: bool = false
 
+# TODO I am really considering just making these part of the tscn. Along with the Jostler.
+#  A point in favor of this: I did not want to add (NULLABLE) to the lense or spotlight.
+## (NULLABLE) The camera object that renders the scene.
+var camera_lense: Camera3D
+## (NULLABLE) A light attached to the camera, pointed in the same direction.
+var camera_spotlight: SpotLight3D
+## (NULLABLE) An object which yields a [CameraRigOperator3D] when asked.
+var _controller_stack: CameraRigOperatorStack3D
+
 ## The point describing where the camera is looking.
-@onready var _focal_point: Node3D = %FocalPoint
+@onready var focal_point: Node3D = %FocalPoint
 ## The pivot joint used to rotate the camera arm.
-@onready var _pivot: Node3D = %Pivot
+@onready var pivot: Node3D = %Pivot
 ## The arm that holds the camera head at a distance from the rig's base coordinates.
-@onready var _camera_arm: Node3D = %CameraArm
+@onready var camera_arm: Node3D = %CameraArm
 ## A pivot joint used to rotate the camera's lense and related accessories.
 @onready var _camera_head: Node3D = %CameraHead
 
 
 func _ready() -> void:
+   _collect_references()
    _move_children_to_camera_head_mount()
    _teleport_to_position()
+
+
+## Checks first and second level children for notable Camera Rig components and saves
+## references to them.
+func _collect_references() -> void:
+   # TODO If move_children_to_head_mount() is deprecated, this will be, too.
+
+   var children := get_children()
+   var all_children: Array[Node] = []
+
+   # We only go one layer deep because I'm lazy and I know Jostler is the only obstacle.
+   for child in children:
+      all_children.append(child)
+      if child.get_child_count() > 0:
+         all_children.append_array(child.get_children())
+
+   for child in all_children:
+      if child is Camera3D:
+         camera_lense = child
+      elif child is SpotLight3D:
+         camera_spotlight = child
+      elif child is CameraRigOperatorStack3D:
+         _controller_stack = child
 
 
 ## Reparents [Camera3D] and camera accessories from the [CameraRig3D] root node
@@ -79,7 +112,7 @@ func _move_children_to_camera_head_mount() -> void:
 
    # Exclude children packed into the .tscn.
    children = children.filter(func (child):
-      if child in [_focal_point, _pivot]:
+      if child in [focal_point, pivot]:
          return false
       return true
    )
@@ -94,7 +127,7 @@ func _teleport_to_position() -> void:
    # IMPLEMENT Run the same functions with lerp(x, new_x, 1.0)?
 
    if subject:
-      _focal_point.global_position = subject.global_position
+      focal_point.global_position = subject.global_position
 
 
 func _physics_process(delta: float) -> void:
@@ -110,6 +143,16 @@ func _physics_process(delta: float) -> void:
 #   But I should keep this as default behavior, maybe.
 ## Positions the camera rig over its subject's coordinates.
 func _process_camera_rig_position(delta: float) -> void:
+   if _controller_stack:
+      var controller := _controller_stack.get_current_operator()
+      var new_position = controller.get_camera_position(delta, self)
+
+      new_position += camera_position_displacement
+
+      position.x = lerp(position.x, new_position.x, position_lerp_rate_x * delta)
+      position.y = lerp(position.y, new_position.y, position_lerp_rate_y * delta)
+      return
+
    var ideal_position := subject.position + camera_position_displacement
    ideal_position.z = 0.0
 
@@ -129,12 +172,12 @@ func _process_camera_arm_rotation(delta: float) -> void:
       0,
    )
 
-   _pivot.rotation.y = lerp_angle(_pivot.rotation.y, ideal_pivot_rotation.y, pivot_lerp_rate * delta)
-   _pivot.rotation.x = lerp_angle(_pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
+   pivot.rotation.y = lerp_angle(pivot.rotation.y, ideal_pivot_rotation.y, pivot_lerp_rate * delta)
+   pivot.rotation.x = lerp_angle(pivot.rotation.x, ideal_pivot_rotation.x, pivot_lerp_rate * delta)
 
    # Retract the arm while tilt-looking.
    var arm_retraction_length := stick_input.length() * camera_tilt_zoom_distance
-   _camera_arm.position.z = lerp(_camera_arm.position.z, camera_distance - arm_retraction_length, pivot_lerp_rate * delta)
+   camera_arm.position.z = lerp(camera_arm.position.z, camera_distance - arm_retraction_length, pivot_lerp_rate * delta)
 
    # Add extra tilt by moving the camera's focal point.
    # TODO These values lack export settings. Also should probably be in a separate control script: CameraRig is not responsible for this.
@@ -170,5 +213,5 @@ func _point_camera_head_at_subject(delta: float) -> void:
    # here in this CameraRig function. I'd have more control if this function _only_ cared about the focal_point, and the
    # focal_point was snapped to subject elsewhere, like in a controller script.
    var ideal_focal_point := subject.global_position + camera_focal_point_displacement
-   _focal_point.global_position = _focal_point.global_position.move_toward(ideal_focal_point, focal_point_lerp_rate * delta)
-   _camera_head.look_at(_focal_point.global_position, Vector3.UP)
+   focal_point.global_position = focal_point.global_position.move_toward(ideal_focal_point, focal_point_lerp_rate * delta)
+   _camera_head.look_at(focal_point.global_position, Vector3.UP)
