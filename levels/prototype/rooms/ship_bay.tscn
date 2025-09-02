@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c1v3cj0pporg2"]
+[gd_scene load_steps=7 format=3 uid="uid://c1v3cj0pporg2"]
 
 [ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_qgra8"]
-[ext_resource type="Material" uid="uid://baa4l6yneshkg" path="res://level/camera_regions.tres" id="2_sd1sl"]
+[ext_resource type="Script" uid="uid://b30tnoxjfhwod" path="res://nodes/camera/camera_rig_controller_3d.gd" id="3_lh51j"]
 [ext_resource type="Script" uid="uid://dbspgtoc6xewx" path="res://nodes/camera/camera_region_3d.gd" id="3_v7we5"]
 [ext_resource type="Material" uid="uid://cjkvf5mjf7h2a" path="res://level/invisible_walls.tres" id="4_lh51j"]
 
@@ -10,6 +10,9 @@ transparency = 2
 alpha_scissor_threshold = 1.0
 alpha_antialiasing_mode = 0
 albedo_color = Color(0, 0, 0, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mdn24"]
+size = Vector3(31, 9, 10)
 
 [node name="ShipBay" type="Node3D"]
 
@@ -83,19 +86,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 5.5, -0.5)
 material_override = ExtResource("1_qgra8")
 size = Vector3(1, 9, 9)
 
-[node name="CameraRegion" type="CSGCombiner3D" parent="."]
-visible = false
-material_override = ExtResource("2_sd1sl")
-transparency = 0.2
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-script = ExtResource("3_v7we5")
-
-[node name="Region" type="CSGBox3D" parent="CameraRegion"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -0.5)
-size = Vector3(30, 8, 9)
-
 [node name="Invis_Panels" type="CSGCombiner3D" parent="."]
 visible = false
 material_override = ExtResource("4_lh51j")
@@ -119,5 +109,21 @@ use_collision = true
 collision_layer = 32768
 collision_mask = 0
 size = Vector3(11, 6, 1)
+
+[node name="CameraRegion3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_v7we5")
+metadata/_custom_type_script = "uid://dbspgtoc6xewx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -0.5)
+shape = SubResource("BoxShape3D_mdn24")
+debug_color = Color(0.7, 0.7, 0, 1)
+
+[node name="CameraRigController3D" type="Node3D" parent="CameraRegion3D"]
+script = ExtResource("3_lh51j")
+metadata/_custom_type_script = "uid://b30tnoxjfhwod"
 
 [node name="Lights" type="Node3D" parent="."]
