@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bw2yt2kjem3le"]
+[gd_scene load_steps=16 format=3 uid="uid://bw2yt2kjem3le"]
 
 [ext_resource type="PackedScene" uid="uid://prh35jb6tjtd" path="res://player/sophia_skin/sophia_skin.tscn" id="1_kpcx0"]
 [ext_resource type="Script" uid="uid://cujfe0734jq6d" path="res://player/scripts/player_3d.gd" id="1_ojpvi"]
@@ -12,10 +12,14 @@
 [ext_resource type="Script" uid="uid://cjml6mdf14ahl" path="res://player/scripts/states/wall_slide.gd" id="10_r3m6x"]
 [ext_resource type="Script" uid="uid://dhdhysldiivb4" path="res://player/scripts/states/landed.gd" id="11_hvouw"]
 [ext_resource type="Script" uid="uid://7edevwtyim4y" path="res://player/scripts/states/crouch_move.gd" id="11_s1hf0"]
+[ext_resource type="Script" uid="uid://bfa5l7g1ue8od" path="res://nodes/camera/camera_target_3d.gd" id="13_s1hf0"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hnhtc"]
 radius = 0.3
 height = 1.65
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hpjxj"]
+size = Vector3(0.3, 1.5, 0.3)
 
 [node name="Player3D" type="CharacterBody3D"]
 collision_mask = 3
@@ -120,3 +124,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 visible = false
 omni_range = 10.0
 omni_attenuation = 0.0
+
+[node name="CameraTarget3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+script = ExtResource("13_s1hf0")
+metadata/_custom_type_script = "uid://bfa5l7g1ue8od"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraTarget3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("BoxShape3D_hpjxj")

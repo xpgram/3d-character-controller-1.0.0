@@ -12,6 +12,12 @@ extends Node3D
 #  - Exit transition:
 #     Occurs when a region is exited. This happens separately (and before) enter and
 #     resume transitions occur.
+# TODO Transition styles:
+#  - Lerp
+#    - (By default, I think. More importantly, how do I get it to _not_ lerp?)
+#  - Special Script that does whatever it wants
+#  - Fade out/in
+#  - Fade out, wait, signal in
 
 
 @export var default_rig_controller: CameraRigController3D
