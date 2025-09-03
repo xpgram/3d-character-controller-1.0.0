@@ -113,6 +113,8 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
    camera_rig.position = trackball.global_position
 
    var new_rotation = trackball.global_rotation
+   new_rotation.x = 0.0
+   new_rotation.z = 0.0
    new_rotation.y -= PI / 2
    camera_rig.rotation = new_rotation
 
