@@ -31,8 +31,6 @@ var camera_controller: CameraRigController3D:
          if len(controllers) > 0:
             camera_controller = controllers[0]
       return camera_controller
-   set(controller):
-      pass
 
 
 func _get_configuration_warnings() -> PackedStringArray:

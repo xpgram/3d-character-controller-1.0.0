@@ -17,7 +17,7 @@ extends Node3D
 # These five controls should be enough to get us started. They represent the Rig's _ideal_
 # configuration. Separately, the Rig also has a number of settings, like
 # position_lerp_rate, that control how fast the camera moves to this ideal configuration.
-# 
+#
 # The lerp settings on the Rig should have a toggle, I suppose. There may be times that
 # the lerp may need to be more deliberately controlled by the script, such as lerping a
 # PathFollow3D's travel_progress since it would be altogether easier to control.
@@ -169,12 +169,7 @@ func _physics_process(delta: float) -> void:
 func _process_camera_rig_position(delta: float) -> void:
    if _controller_stack:
       var controller := _controller_stack.get_controller()
-      var new_position = controller.get_camera_position(delta, self)
-
-      new_position += camera_position_displacement
-
-      position.x = lerp(position.x, new_position.x, position_lerp_rate_x * delta)
-      position.y = lerp(position.y, new_position.y, position_lerp_rate_y * delta)
+      controller.operate_rig(delta, self)
       return
 
    var ideal_position := subject.position + camera_position_displacement

@@ -20,7 +20,7 @@ extends Node3D
 #  - Fade out, wait, signal in
 
 
-@export var default_rig_controller: CameraRigController3D
+@export var default_rig_controller: CameraRigController3D = CameraRigController3D.new()
 
 var _controllers: Array[CameraRigController3D] = []
 
@@ -32,10 +32,12 @@ func _init() -> void:
 
 func _on_camera_region_entered(_target: CameraTarget3D, region: CameraRegion3D):
    _controllers.append(region.camera_controller)
+   _resort_controllers()
 
 
 func _on_camera_region_exited(_target: CameraTarget3D, region: CameraRegion3D):
    _controllers.erase(region.camera_controller)
+   _resort_controllers()
 
 
 ## Sorts the stack of controllers by their own priority values. Maintains first-in-last-

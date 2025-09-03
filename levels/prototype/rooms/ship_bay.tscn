@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://c1v3cj0pporg2"]
 
 [ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_qgra8"]
-[ext_resource type="Script" uid="uid://b30tnoxjfhwod" path="res://nodes/camera/camera_rig_controller_3d.gd" id="3_lh51j"]
 [ext_resource type="Script" uid="uid://dbspgtoc6xewx" path="res://nodes/camera/camera_region_3d.gd" id="3_v7we5"]
 [ext_resource type="Material" uid="uid://cjkvf5mjf7h2a" path="res://level/invisible_walls.tres" id="4_lh51j"]
+[ext_resource type="Script" uid="uid://kqwmynse2i8e" path="res://nodes/camera/camera_rig_track_controller_3d.gd" id="4_v7we5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgra8"]
 transparency = 2
@@ -131,14 +131,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -0.5)
 shape = SubResource("BoxShape3D_mdn24")
 debug_color = Color(0.7, 0.7, 0, 1)
 
-[node name="CameraRigController3D" type="Node3D" parent="CameraRegion3D"]
-script = ExtResource("3_lh51j")
-metadata/_custom_type_script = "uid://b30tnoxjfhwod"
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D"]
+script = ExtResource("4_v7we5")
+tipping_distance = null
+metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
-[node name="Path3D" type="Path3D" parent="CameraRegion3D/CameraRigController3D"]
+[node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -0.5)
 curve = SubResource("Curve3D_v7we5")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="CameraRegion3D/CameraRigController3D/Path3D"]
+[node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]
 transform = Transform3D(-4.3711e-08, 0, -0.999992, 0, 1, 0, 0.999992, 0, -4.3711e-08, 0, 0, 0)
 loop = false
