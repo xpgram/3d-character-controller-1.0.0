@@ -1,37 +1,40 @@
 class_name CameraRigTrackController3D
 extends CameraRigController3D
 ## A camera controller script that takes a child [Path3D] and a grandchild [PathFollow3D],
-## and maps a [CameraRig3D]'s position to a point on that Path3D that is closest to the
-## subject being followed.
-##
-## Note: the smaller the bake interval is for the given Path3D, the more work this script
-## does to find the closest point.
-
+## and moves the PathFollow3D along the Path3D to minimize the distance between itself and
+## a [CameraRig3D]'s subject. This "elastic band" system can be thought of as pulling a
+## track ball along a course via a string.
+## 
+## This does mean that curves in the Path3D as it relates to subject position may result
+## in local minima that the track ball may have difficulty getting out of.
 
 
 # TODO Implement the track controller:
-# - Find child Path3D and PathFollow3D
-# - In operate_rig(),
-#   - Take the Rig's subject's position.
-#   - Iterate over all Path3D points, find the one with the least distance to subject.
-#   - Get the normalized value: index / max_index
-#   - Move the PathFollow3D's progress to the normalized value.
-#   - Move the Rig accordingly to where the PathFollow3D is.
-#     - Apply interpolation where appropriate.
-#
-# Optional:
-# If the player can move faster than the camera somehow, they might trick the camera far
-# enough away from its track that they can see stuff they shouldn't. So:
-# - Ask Path3D which point is closest to the subject.
-# - Calculate an ideal camera position.
-#   - Lerp the camera to that ideal position.
-#   - Ask Path3D which point is closest to this new lerped camera position.
-#   - Warp to that Path3D point instead.
-# - Wait, why not just lerp the PathFollow3D's progress value? Or its travel distance,
-#   rather, so the length of the track doesn't affect speed.
-#   - Main reason I can think of is that the camera would be confined to the track's baked
-#     in values. We couldn't smoothly interpolate between them without letting the Rig do
-#     _a little_ lerping.
+# Init:
+#  - Since a place on the Path3D is not known:
+#    - Check all baked-in points for distance to subject.
+#      - (Optional) Check the Path3D bezier points first to narrow down the range.
+#    - Pick the point with the shortest distance and align the camera.
+#      Use a transition, if you like. (Instant warp, lerp, fade out/in, etc.)
+#    - Save the point indice we picked, unless it's easy to figure out.
+# Update step:
+#  - Check the left and right adjacent Path3D points for distance.
+#  - If one is shorter than the current point, continue checking points in that
+#     direction until the distance increases from the last point checked.
+#  - This is your minimum distance to subject, and represents the new ideal camera
+#     position.
+#  - Lerp the track ball from its current point to the desired one.
+#    - travel_distance should be fine here, because I think Path3D allows this number to
+#       represent sub-pixel travel, i.e., I can describe distances between baked points
+#       and it will just pick the nearest one.
+#  - Use this new point to pick a pair of points: one closer to the target, one further
+#     away. This describes the subinterval range.
+#  - Using the Path3D's distance interval, find the remainder of the travel distance.
+#  - Using {remainder / interval}, get a normalized value for progress along the
+#     subinterval range.
+#  - Align the camera with whichever point was picked via lerp.
+#  - And finally, lerp the camera's position along the vector containing the distance
+#     remainder using the calculated subinterval range value.
 
 
 # TODO Make CameraRig3D operable:
