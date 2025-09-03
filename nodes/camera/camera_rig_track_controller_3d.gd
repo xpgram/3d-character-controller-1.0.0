@@ -125,4 +125,6 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
 func _get_camera_rig_subject_local_position(camera_rig: CameraRig3D) -> Vector3:
    var subject_position := camera_rig.subject.global_position if camera_rig.subject \
       else camera_rig.global_position
-   return track.to_local(subject_position)
+   subject_position = track.to_local(subject_position)
+   subject_position += Vector3.UP * 4 # TODO In place of any kind of displacement thing for now.
+   return subject_position
