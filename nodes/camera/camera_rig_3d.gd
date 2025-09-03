@@ -1,6 +1,30 @@
 class_name CameraRig3D
 extends Node3D
 
+# TODO Make CameraRig3D operable:
+# I need to find a good balance for control. Camera controllers shouldn't need to get into
+# the details of how lerping happens, they can just tell CameraRig3D what lerp speed
+# they'd like. However, it'd be nice to just hand them the Rig entirely and say "do what-
+# ever you want."
+#
+# So, proposal: CameraRig3D has a number of handles that describe common motions. E.g.:
+# - rig_position: where the rig itself is located.
+# - rig_rotation: how the rig itself is oriented.
+# - pivot_rotation: controls the arm, and thus the camera's orbit.
+# - arm_length: how far away the camera is from the rig's base.
+# - focal_position: where the camera's point of interest is.
+#
+# These five controls should be enough to get us started. They represent the Rig's _ideal_
+# configuration. Separately, the Rig also has a number of settings, like
+# position_lerp_rate, that control how fast the camera moves to this ideal configuration.
+# 
+# The lerp settings on the Rig should have a toggle, I suppose. There may be times that
+# the lerp may need to be more deliberately controlled by the script, such as lerping a
+# PathFollow3D's travel_progress since it would be altogether easier to control.
+#
+# However... This would necessarily confine the camera's position to the baked-in path
+# values. It would make its movements less smooth. Hm.
+
 # TODO Turn this into a node type summonable from the node dialog.
 #   That is, save the internals of CameraRig3D as a tscn, and simply instantiate
 #   it here. But question: can I still take advantage of Unique Names and such
