@@ -1,12 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://b32uyqva6mhng"]
+[gd_scene load_steps=7 format=3 uid="uid://b32uyqva6mhng"]
 
 [ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_po3td"]
+[ext_resource type="Script" uid="uid://dbspgtoc6xewx" path="res://nodes/camera/camera_region_3d.gd" id="2_h45hm"]
+[ext_resource type="Script" uid="uid://kqwmynse2i8e" path="res://nodes/camera/camera_rig_track_controller_3d.gd" id="3_e7g8y"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgra8"]
 transparency = 2
 alpha_scissor_threshold = 1.0
 alpha_antialiasing_mode = 0
 albedo_color = Color(0, 0, 0, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s7iwf"]
+size = Vector3(31, 9, 10)
+
+[sub_resource type="Curve3D" id="Curve3D_82d1h"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 24, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="ShipBay_Access" type="Node3D"]
 
@@ -84,3 +96,27 @@ use_collision = true
 size = Vector3(32, 1, 11)
 
 [node name="Lights" type="Node3D" parent="."]
+
+[node name="CameraRegion3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_h45hm")
+metadata/_custom_type_script = "uid://dbspgtoc6xewx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -0.5)
+shape = SubResource("BoxShape3D_s7iwf")
+debug_color = Color(0.7, 0.7, 0, 1)
+
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D"]
+script = ExtResource("3_e7g8y")
+metadata/_custom_type_script = "uid://kqwmynse2i8e"
+
+[node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -0.5)
+curve = SubResource("Curve3D_82d1h")
+
+[node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]
+transform = Transform3D(-4.3711e-08, 0, -0.999992, 0, 1, 0, 0.999992, 0, -4.3711e-08, 0, 0, 0)
+loop = false

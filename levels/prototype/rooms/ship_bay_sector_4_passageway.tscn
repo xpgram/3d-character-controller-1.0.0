@@ -1,12 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqsgv1wmxkhol"]
+[gd_scene load_steps=7 format=3 uid="uid://bqsgv1wmxkhol"]
 
 [ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_cwcs2"]
+[ext_resource type="Script" uid="uid://dbspgtoc6xewx" path="res://nodes/camera/camera_region_3d.gd" id="2_tb6nd"]
+[ext_resource type="Script" uid="uid://kqwmynse2i8e" path="res://nodes/camera/camera_rig_track_controller_3d.gd" id="3_8gidk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgra8"]
 transparency = 2
 alpha_scissor_threshold = 1.0
 alpha_antialiasing_mode = 0
 albedo_color = Color(0, 0, 0, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qvg3e"]
+size = Vector3(31, 9, 10)
+
+[sub_resource type="Curve3D" id="Curve3D_wvrj0"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 24, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="ShipBay_Sector4Passageway" type="Node3D"]
 
@@ -123,3 +135,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -5.5)
 material_override = SubResource("StandardMaterial3D_qgra8")
 use_collision = true
 size = Vector3(32, 10, 1)
+
+[node name="CameraRegion3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_tb6nd")
+metadata/_custom_type_script = "uid://dbspgtoc6xewx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -0.5)
+shape = SubResource("BoxShape3D_qvg3e")
+debug_color = Color(0.7, 0.7, 0, 1)
+
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D"]
+script = ExtResource("3_8gidk")
+metadata/_custom_type_script = "uid://kqwmynse2i8e"
+
+[node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, -0.5)
+curve = SubResource("Curve3D_wvrj0")
+
+[node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]
+transform = Transform3D(-4.3711e-08, 0, -0.999992, 0, 1, 0, 0.999992, 0, -4.3711e-08, 0, 0, 0)
+loop = false
