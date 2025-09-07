@@ -157,4 +157,5 @@ curve = SubResource("Curve3D_wmrdh")
 
 [node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]
 transform = Transform3D(-4.3711e-08, 0, 0.999992, 0, 1, 0, -0.999992, 0, -4.3711e-08, 0, 0, 0)
+rotation_mode = 1
 loop = false

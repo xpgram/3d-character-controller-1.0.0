@@ -21,7 +21,7 @@ _data = {
 point_count = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jgvpm"]
-size = Vector3(15, 17, 10)
+size = Vector3(15, 15.5, 10)
 
 [sub_resource type="Curve3D" id="Curve3D_ufect"]
 _data = {
@@ -219,7 +219,7 @@ script = ExtResource("2_dbrvl")
 metadata/_custom_type_script = "uid://dbspgtoc6xewx"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRegion3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.75, -0.5)
 shape = SubResource("BoxShape3D_jgvpm")
 debug_color = Color(0.7, 0.7, 0, 1)
 
