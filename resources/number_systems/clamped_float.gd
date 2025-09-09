@@ -163,9 +163,3 @@ func _set_normalized_to_real_value() -> void:
 ## Sets the real value to a number reflecting the current normalized value.
 func _set_real_value_to_normalized() -> void:
    value = (normalized_value * _get_range()) + min_value
-
-
-## Ensures that real and normalized values are all within the set range.
-func _clamp_values() -> void:
-   value = clampf(value, min_value, max_value)
-   _set_normalized_to_real_value()
