@@ -2,8 +2,6 @@
 class_name ClampedFloat
 extends Resource
 
-# FIXME Infinite recursion where setters are concerned.
-
 
 ## Emitted when the real number value changes.
 signal value_changed(value: float)
@@ -30,41 +28,67 @@ signal meter_full()
       var old_value := value
       value = clampf(new_value, min_value, max_value)
       value_changed.emit(value)
-      _set_normalized_to_real_value()
+
+      if not _disable_recursive_property_editing:
+         _disable_recursive_property_editing = true
+         _set_normalized_to_real_value()
+         _disable_recursive_property_editing = false
+
       _emit_value_targets(value, old_value)
 
 ## The normalized value of this clamped float: a range between 0 and 1.
 @export var normalized_value: float = 0:
    set(new_value):
       var old_value := value
+
       normalized_value = clampf(new_value, 0.0, 1.0)
       value_normal_changed.emit(normalized_value)
-      _set_real_value_to_normalized()
+
+      if not _disable_recursive_property_editing:
+         _disable_recursive_property_editing = true
+         _set_real_value_to_normalized()
+         _disable_recursive_property_editing = false
+
       _emit_value_targets(value, old_value)
 
 ## The minimum real number value for this range.
 @export_range(0, 100, 0.1, 'or_greater; hide_slider') var min_value: float = 0:
    set(new_value):
       min_value = new_value
-
-      if min_value > max_value:
-         max_value = min_value
-      if min_value > value:
-         value = min_value
-
       min_value_changed.emit(min_value)
+
+      if not _disable_recursive_property_editing:
+         _disable_recursive_property_editing = true
+
+         if min_value > max_value:
+            max_value = min_value
+         if min_value > value:
+            value = min_value
+
+         _disable_recursive_property_editing = false
+
 
 ## The maximum real number value for this range.
 @export_range(0, 100, 0.1, 'or_greater; hide_slider') var max_value: float = 100:
    set(new_value):
       max_value = new_value
-
-      if max_value < min_value:
-         min_value = max_value
-      if max_value < value:
-         value = max_value
-
       max_value_changed.emit(max_value)
+
+      if not _disable_recursive_property_editing:
+         _disable_recursive_property_editing = true
+
+         if max_value < min_value:
+            min_value = max_value
+         if max_value < value:
+            value = max_value
+            
+         _disable_recursive_property_editing = false
+
+
+## If true, then properties like `normalized_value` being updated should not also update
+## other properties, such as `value`. Useful for updating the editor's config display
+## without triggering an infinite recursion.
+var _disable_recursive_property_editing := false
 
 
 func _init() -> void:
@@ -83,7 +107,7 @@ func _emit_value_targets(new_value: float, old_value: float) -> void:
 
    # IMPLEMENT Other, export-config–set target points, like 30%, etc.
    #  emission_points: Array[float] ## All normalized values
-   #  if old_value > emission_point and new_value < emission_point:
+   #  if sign(emission_point - old_value) != sign(emission_point - new_value):
    #     do()
 
 
@@ -94,7 +118,11 @@ func _get_range() -> float:
 
 ## Sets the normalized value to a number reflecting the current real value.
 func _set_normalized_to_real_value() -> void:
-   normalized_value = (value - min_value) / _get_range()
+   var value_range := _get_range()
+   normalized_value = (
+      1.0 if value_range == 0
+      else (value - min_value) / value_range
+   )
 
 
 ## Sets the real value to a number reflecting the current normalized value.
