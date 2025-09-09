@@ -125,23 +125,61 @@ func _init() -> void:
 
 
 ## Emits signals when the direct value changes to or beyond set threshhold targets.
+## Only emits a signal for one `direct_value_threshhold` at a time: the one whose value is
+## closest to `param new_value`.
+## Also emits signals for `meter_empty` and `meter_full`, regardless of any other
+## threshhold targets emitted.
 func _emit_direct_value_threshholds(new_value: float, old_value: float) -> void:
-   if new_value == min_direct_value:
+   if is_equal_approx(new_value, min_direct_value):
       meter_empty.emit()
-   if new_value == max_direct_value:
+   if is_equal_approx(new_value, max_direct_value):
       meter_full.emit()
 
-   # TODO Emit once, the threshhold closest to new_value.
-   for threshhold in direct_value_threshholds:
-      if sign(threshhold - new_value) != sign(threshhold - old_value):
-         meter_met_value.emit(threshhold, new_value)
+   var met_threshholds := _get_threshholds_met(direct_value_threshholds, new_value, old_value)
+
+   if len(met_threshholds) == 0:
+      return
+
+   var closest_threshhold := _get_closest_threshhold(met_threshholds, new_value)
+   meter_met_value.emit(closest_threshhold, new_value)
 
 
 ## Emits signals when the proportional value changes to or beyond set threshhold targets.
+## Only emits a signal for one `proportional_value_threshhold` at a time: the one whose
+## value is closest to `param new_value`.
 func _emit_proportional_value_threshholds(new_value: float, old_value: float) -> void:
-   for threshhold in proportional_value_threshholds:
-      if sign(threshhold - new_value) != sign(threshhold - old_value):
-         meter_met_proportion.emit(threshhold, new_value)
+   var met_threshholds := _get_threshholds_met(proportional_value_threshholds, new_value, old_value)
+
+   if len(met_threshholds) == 0:
+      return
+
+   var closest_threshhold := _get_closest_threshhold(met_threshholds, new_value)
+   meter_met_proportion.emit(closest_threshhold, new_value)
+
+
+## Given a list of threshhold numbers, returns a list of threshhold numbers within the
+## range defined by new_value and old_value.
+func _get_threshholds_met(threshholds: Array[float], new_value: float, old_value: float) -> Array[float]:
+   return threshholds.filter(
+      func (threshhold):
+         # If old_value is equal to threshhold, return false since this threshhold was
+         # already met previously.
+         return false if is_equal_approx(old_value, threshhold) \
+            else sign(threshhold - new_value) != sign(threshhold - old_value)
+   )
+
+
+## Given a list of threshhold numbers, returns the threshhold with the least distance to
+## the given value.
+func _get_closest_threshhold(threshholds: Array[float], value: float) -> float:
+   assert(not threshholds.is_empty(), '_get_closest_threshhold() must be given a list of 1 or more points.')
+
+   return threshholds.reduce(
+      func (closest, threshhold):
+         var threshhold_distance: float = abs(threshhold - value)
+         var closest_distance: float = abs(closest - value)
+         return threshhold if threshhold_distance < closest_distance else closest
+   )
 
 
 ## Returns the width of the range as a float.
@@ -153,7 +191,7 @@ func _get_range() -> float:
 func _set_proportional_to_direct_value() -> void:
    var value_range := _get_range()
    proportional_value = (
-      1.0 if value_range == 0
+      1.0 if is_zero_approx(value_range)
       else (direct_value - min_direct_value) / value_range
    )
 
