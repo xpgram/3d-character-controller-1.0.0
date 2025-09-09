@@ -130,9 +130,9 @@ func _init() -> void:
 ## Also emits signals for `meter_empty` and `meter_full`, regardless of any other
 ## threshhold targets emitted.
 func _emit_direct_value_threshholds(new_value: float, old_value: float) -> void:
-   if new_value == min_direct_value:
+   if is_equal_approx(new_value, min_direct_value):
       meter_empty.emit()
-   if new_value == max_direct_value:
+   if is_equal_approx(new_value, max_direct_value):
       meter_full.emit()
 
    var met_threshholds := _get_threshholds_met(direct_value_threshholds, new_value, old_value)
@@ -164,7 +164,7 @@ func _get_threshholds_met(threshholds: Array[float], new_value: float, old_value
       func (threshhold):
          # If old_value is equal to threshhold, return false since this threshhold was
          # already met previously.
-         return false if old_value == threshhold \
+         return false if is_equal_approx(old_value, threshhold) \
             else sign(threshhold - new_value) != sign(threshhold - old_value)
    )
 
@@ -193,7 +193,7 @@ func _get_range() -> float:
 func _set_proportional_to_direct_value() -> void:
    var value_range := _get_range()
    proportional_value = (
-      1.0 if value_range == 0.0
+      1.0 if is_equal_approx(value_range, 0.0)
       else (direct_value - min_direct_value) / value_range
    )
 
