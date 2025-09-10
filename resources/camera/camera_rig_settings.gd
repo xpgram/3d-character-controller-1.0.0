@@ -4,6 +4,11 @@ extends Resource
 
 @export_group('Transform')
 
+## If true, then the transform values set here will be instantly assumed by the camera
+## rig itself.
+@export
+var skip_animation := false
+
 ## The position of the rig object.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
 var rig_position := Vector3.ZERO
@@ -21,8 +26,8 @@ var pivot_rotation := Vector3.ZERO
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
 var arm_length: float = 0
 
-## The point describing where the camera is looking. Also used to inform the depth of
-## field system.
+## The point (using global coordinates) describing where the camera is looking. Also used
+## to inform the depth of field system.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
 var focal_point := Vector3.ZERO
 
