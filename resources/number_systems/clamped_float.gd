@@ -127,13 +127,15 @@ func _init() -> void:
 ## Emits signals when the direct value changes to or beyond set threshhold targets.
 ## Only emits a signal for one `direct_value_threshhold` at a time: the one whose value is
 ## closest to `param new_value`.
-## Also emits signals for `meter_empty` and `meter_full`, regardless of any other
-## threshhold targets emitted.
+## Also emits 'meter_empty` and 'meter_full`, assuming they are the closest if they are
+## met, with a bias toward `meter_empty` if both are met.
 func _emit_direct_value_threshholds(new_value: float, old_value: float) -> void:
    if is_equal_approx(new_value, min_direct_value):
       meter_empty.emit()
+      return
    if is_equal_approx(new_value, max_direct_value):
       meter_full.emit()
+      return
 
    var met_threshholds := _get_threshholds_met(direct_value_threshholds, new_value, old_value)
 
@@ -148,6 +150,12 @@ func _emit_direct_value_threshholds(new_value: float, old_value: float) -> void:
 ## Only emits a signal for one `proportional_value_threshhold` at a time: the one whose
 ## value is closest to `param new_value`.
 func _emit_proportional_value_threshholds(new_value: float, old_value: float) -> void:
+   # It is assumed that direct_value_threshholds will handle meter_empty and meter_full.
+   # If either empty or full are emitted, then middle threshholds should be skipped.
+   if is_equal_approx(new_value, 0.0) \
+      or is_equal_approx(new_value, 1.0):
+      return
+
    var met_threshholds := _get_threshholds_met(proportional_value_threshholds, new_value, old_value)
 
    if len(met_threshholds) == 0:
@@ -189,11 +197,11 @@ func _get_range() -> float:
 
 ## Sets the proportional value to a number reflecting the current direct value.
 ## In the rare case that `min_direct_value == max_direct_value`, the proportional value
-## will be set to 1.0.
+## will be set to 0.0.
 func _set_proportional_to_direct_value() -> void:
    var value_range := _get_range()
    proportional_value = (
-      1.0 if is_equal_approx(value_range, 0.0)
+      0.0 if is_equal_approx(value_range, 0.0)
       else (direct_value - min_direct_value) / value_range
    )
 
