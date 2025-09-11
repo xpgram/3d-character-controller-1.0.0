@@ -60,7 +60,8 @@ func _physics_process(delta: float) -> void:
       # camera_controller.operate_rig(delta, self)
 
    for behavior in camera_behaviors:
-      behavior.process(delta)
+      if behavior.enabled:
+         behavior.process(delta)
 
    _move_camera_rig(delta)
 
@@ -73,7 +74,8 @@ func _move_camera_rig(delta: float) -> void:
 
    # Sum all assigned camera behaviors into one transform.
    for behavior in camera_behaviors:
-      new_transform += behavior.get_rig_transform()
+      if behavior.enabled:
+         new_transform += behavior.get_rig_transform()
 
    # Apply new transform values to the rig's various transforms.
    position = new_transform.rig_position
