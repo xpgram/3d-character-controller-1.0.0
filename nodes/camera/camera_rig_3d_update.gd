@@ -19,7 +19,7 @@ const InputUtils = preload('uid://tl2nnbstems3')
 @export var camera_settings: CameraRigSettings3D
 
 ## A list of camera rig camera_behaviors to apply during the physics process step.
-@export var camera_behaviors: Array[CameraRigBehavior3D] = []
+@export var camera_behaviors: Array[ICameraRigBehavior3D] = []
 
 
 # TODO Make this a little more generic via a common CameraRigController interface.
@@ -75,7 +75,7 @@ func _move_camera_rig(delta: float) -> void:
    # Sum all assigned camera behaviors into one transform.
    for behavior in camera_behaviors:
       if behavior.enabled:
-         new_transform += behavior.get_rig_transform()
+         new_transform = new_transform.add(behavior.get_rig_transform())
 
    # Apply new transform values to the rig's various transforms.
    position = new_transform.rig_position
