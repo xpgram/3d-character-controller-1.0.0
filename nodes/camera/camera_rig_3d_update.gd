@@ -18,6 +18,9 @@ const InputUtils = preload('uid://tl2nnbstems3')
 ## and movement speeds.
 @export var camera_settings: CameraRigSettings3D
 
+## A list of camera rig camera_behaviors to apply during the physics process step.
+@export var camera_behaviors: Array[CameraRigBehavior3D] = []
+
 
 # TODO Make this a little more generic via a common CameraRigController interface.
 #  Not all will be stacks that listen for CameraRegion collisions.
@@ -56,7 +59,8 @@ func _physics_process(delta: float) -> void:
       var camera_controller := _camera_controller_service.get_controller()
       # camera_controller.operate_rig(delta, self)
 
-   # TODO Run assigned camera behavior update(delta) steps. (e.g., player tilt camera)
+   for behavior in camera_behaviors:
+      behavior.process(delta)
 
    _move_camera_rig(delta)
 
@@ -67,9 +71,11 @@ func _move_camera_rig(delta: float) -> void:
    camera_settings.lerp_transform(delta)
    var new_transform := camera_settings.get_actual_transform()
 
-   # TODO Sum all assigned camera behavior transforms into one transform.
+   # Sum all assigned camera behaviors into one transform.
+   for behavior in camera_behaviors:
+      new_transform += behavior.get_rig_transform()
 
-   # Apply transform values to the rig's various transforms.
+   # Apply new transform values to the rig's various transforms.
    position = new_transform.rig_position
    rotation = new_transform.rig_rotation
    _pivot.rotation = new_transform.pivot_rotation
