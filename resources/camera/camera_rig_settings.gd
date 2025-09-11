@@ -144,6 +144,8 @@ func lerp_transform(delta: float) -> void:
 
    _actual_transform.arm_length = lerp(_actual_transform.arm_length, arm_length, lerp_rate_arm_length * delta)
 
+   # TODO Far away focal points will still lerp slowly.
+   #  Should we snap the focal point and lerp the camera head's rotation instead?
    _actual_transform.focal_point.x = lerp(_actual_transform.focal_point.x, complete_focal_point.x, lerp_rate_focal_point.x * delta)
    _actual_transform.focal_point.y = lerp(_actual_transform.focal_point.y, complete_focal_point.y, lerp_rate_focal_point.y * delta)
    _actual_transform.focal_point.z = lerp(_actual_transform.focal_point.z, complete_focal_point.z, lerp_rate_focal_point.z * delta)
