@@ -40,6 +40,8 @@ func process(_delta: float, camera_rig: CameraRig3D) -> void:
    _rig_transform.arm_length = stick_input.length() * tilt_zoom_distance
 
    # FIXME This focal point behavior cannot be additive with any other. It must override.
+   #  Actually, not true. I still think this raises an architectural issue. What if a
+   #  script can't just add a vector but needs to assume direct control over a property?
    # FIXME This represents an architectural problem with what I'm attempting here.
    # FIXME Snap focal point to subject should probably be a seperate behavior.
    # Move the focal point to some distance between the subject and camera position.
