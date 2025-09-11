@@ -89,7 +89,7 @@ var pivot_arm_max_rotation := Vector3.ONE * PI
 
 ## How far the camera zooms in when the pivot arm is being rotated toward one of its axis
 ## limits. This means the actual zoom is proportional to the actual rotation.
-@export var camera_tilt_zoom_distance: float = 4.0
+@export var pivot_arm_tilt_zoom_distance: float = 4.0
 
 
 ## A transform that represents the Rig's actual position values. This is continuously
