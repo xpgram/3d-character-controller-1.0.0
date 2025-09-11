@@ -7,8 +7,10 @@ extends Resource
 var enabled := true
 
 
+# TODO How can I communicate the state surrounding the rig without awkwardly passing in
+#  camera state we shouldn't be able to modify from here?
 ## Updates this behavior's state.
-func process(_delta: float) -> void:
+func process(_delta: float, _camera_rig: CameraRig3D) -> void:
    pass
 
 
