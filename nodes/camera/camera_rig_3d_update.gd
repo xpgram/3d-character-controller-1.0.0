@@ -59,9 +59,9 @@ func _physics_process(delta: float) -> void:
       var camera_controller := _camera_controller_service.get_controller()
       # camera_controller.operate_rig(delta, self)
 
-   for behavior in camera_behaviors:
-      if behavior.enabled:
-         behavior.process(delta)
+   # for behavior in camera_behaviors:
+   #    if behavior.enabled:
+   #       behavior.process(delta, self)
 
    _move_camera_rig(delta)
 
