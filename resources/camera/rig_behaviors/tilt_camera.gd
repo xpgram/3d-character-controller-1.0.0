@@ -2,6 +2,10 @@ extends ICameraRigBehavior3D
 ## A camera behavior to allow players to use their camera input axes to tilt the camera
 ## along the level track.
 
+# FIXME This script can't be loaded into the ICameraRigBehavior3D array as a resource.
+#  I'm actually not sure why. I guess I kinda know why? I may have to work around this by
+#  making these Nodes.
+
 
 const InputUtils = preload('uid://tl2nnbstems3')
 
