@@ -79,7 +79,7 @@ var lerp_rate_focal_point := Vector3.ONE
 ## How far in degrees the pivot arm is allowed to rotate in each axis.
 ## A value of 180° or higher means there is no limit.
 @export_custom(PROPERTY_HINT_RANGE, '0, 180, or_greater, radians, suffix:°')
-var pivot_arm_max_rotation := Vector3.ONE * 180
+var pivot_arm_max_rotation := Vector3.ONE * PI
 
 ## How far the camera zooms in when the pivot arm is being rotated toward one of its axis
 ## limits. This means the actual zoom is proportional to the actual rotation.
