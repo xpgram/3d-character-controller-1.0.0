@@ -17,10 +17,6 @@ script = ExtResource("1_51kip")
 
 [node name="Level_MetroidFusion" parent="." instance=ExtResource("4_51kip")]
 
-[node name="Player3D" parent="." node_paths=PackedStringArray("camera_rig") instance=ExtResource("5_ascb7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
-camera_rig = NodePath("../CameraRig3D")
-
 [node name="CameraRig3D" parent="." node_paths=PackedStringArray("subject") instance=ExtResource("6_3uc2i")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -8, 5, 0)
 subject = NodePath("../Player3D")
@@ -28,3 +24,7 @@ subject = NodePath("../Player3D")
 [node name="CameraRigControllerStack3D" type="Node3D" parent="CameraRig3D"]
 script = ExtResource("10_q051v")
 metadata/_custom_type_script = "uid://bsyjuq3vn50jq"
+
+[node name="Player3D" parent="." node_paths=PackedStringArray("camera_rig") instance=ExtResource("5_ascb7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
+camera_rig = NodePath("../CameraRig3D")
