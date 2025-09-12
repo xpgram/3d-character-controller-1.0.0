@@ -53,7 +53,8 @@ func process(_delta: float, camera_rig: CameraRig3D) -> void:
 
    # FIXME Snap focal point to subject should probably be a seperate behavior.
    # Move the focal point to some distance between the subject and camera position.
-   _rig_transform.focal_point = camera_rig.subject.position.lerp(camera_rig.position, stick_input.length())
+   var from_position := camera_rig.subject if camera_rig.subject else camera_rig
+   _rig_transform.focal_point = from_position.lerp(camera_rig.position, stick_input.length())
 
    # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
    var focal_point_displacement := Vector3(
