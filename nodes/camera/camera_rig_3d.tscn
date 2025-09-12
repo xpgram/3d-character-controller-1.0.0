@@ -67,6 +67,7 @@ transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="Jostler" type="Node3D" parent="Pivot/CameraArm/CameraHead"]
 unique_name_in_owner = true
 script = ExtResource("5_8h5r4")
+global_active = false
 metadata/_custom_type_script = "uid://c2hgvtg5no4js"
 
 [node name="Camera3D" type="Camera3D" parent="Pivot/CameraArm/CameraHead/Jostler"]
