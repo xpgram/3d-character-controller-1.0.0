@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://say22yjgceb1"]
+[gd_scene load_steps=12 format=3 uid="uid://say22yjgceb1"]
 
 [ext_resource type="Script" uid="uid://dble35geeo1ca" path="res://nodes/camera/camera_rig_3d.gd" id="1_p8m6u"]
 [ext_resource type="Script" uid="uid://d1ius763a2b6p" path="res://resources/camera/camera_rig_settings.gd" id="2_coe7a"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://ekrrutix6sls" path="res://resources/camera/rig_behaviors/camera_behavior_snap_focal_to_subject.gd" id="3_coe7a"]
 [ext_resource type="Script" uid="uid://bp4614uha1mou" path="res://resources/camera/rig_behaviors/camera_behavior_tilt_camera.gd" id="4_ia0fq"]
 [ext_resource type="Script" uid="uid://c2hgvtg5no4js" path="res://player/camera/camera_jostler.gd" id="5_8h5r4"]
+[ext_resource type="FastNoiseLite" uid="uid://bbionoodp7ppj" path="res://player/camera/resources/jostle_noise.tres" id="7_8h5r4"]
+[ext_resource type="Curve" uid="uid://c0inn0bw3thjx" path="res://player/camera/resources/steadiness_curve.tres" id="8_72kc8"]
 
 [sub_resource type="Resource" id="Resource_ia0fq"]
 script = ExtResource("2_coe7a")
@@ -66,16 +68,23 @@ transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Jostler" type="Node3D" parent="Pivot/CameraArm/CameraHead"]
 unique_name_in_owner = true
+transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("5_8h5r4")
 global_active = false
+global_noise = ExtResource("7_8h5r4")
+rotation_steadiness_curve = ExtResource("8_72kc8")
+position_active = false
+position_steadiness_curve = ExtResource("8_72kc8")
 metadata/_custom_type_script = "uid://c2hgvtg5no4js"
 
 [node name="Camera3D" type="Camera3D" parent="Pivot/CameraArm/CameraHead/Jostler"]
 unique_name_in_owner = true
+transform = Transform3D(1, -4.35451e-28, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 fov = 40.0
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Pivot/CameraArm/CameraHead/Jostler"]
 unique_name_in_owner = true
+transform = Transform3D(1, -4.35451e-28, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 light_energy = 100.0
 light_bake_mode = 0
 spot_range = 50.0
