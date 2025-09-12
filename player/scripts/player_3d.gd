@@ -26,7 +26,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
    _state_machine.process_physics(delta)
-   
+
    # _move_character_body(delta)
 
    # # Animation steps
