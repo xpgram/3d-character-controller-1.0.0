@@ -23,6 +23,16 @@ extends Node3D
 ## (NULLABLE) An object which yields a [CameraRigController3D] when asked.
 var _camera_controller_service: CameraRigControllerStack3D
 
+# FIXME These @onready references force an initialization order among the Rig's siblings.
+#  If the subject is a Player3D, and it needs to know what direction the camera is facing
+#  to handle player input properly, in its own _ready step specifically, then it must
+#  _ready() after this Rig has finished readying. I cannot just assume `@onready %Children`
+#  are accessible any time.
+#  This is a really bothersome architectural issue, actually.
+#
+#  For now, this Rig is being ready'd before Player3D and its state_machine, so its
+#  temporarily manageable.
+
 ## The pivot joint used to rotate the camera arm.
 @onready var _pivot: Node3D = %Pivot
 
