@@ -13,14 +13,6 @@ extends Node3D
 ## A list of camera rig camera_behaviors to apply during the physics process step.
 @export var camera_behaviors: Array[ICameraRigBehavior3D] = []
 
-## The position of the rig object.
-@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
-var rig_position := Vector3.ZERO
-
-## The rotation of the rig object.
-@export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
-var rig_rotation := Vector3.ZERO
-
 ## The rotation of the pivot arm. Useful for managing a player's rotational input even
 ## while the rig itself is rotated.
 @export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
