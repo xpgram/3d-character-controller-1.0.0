@@ -7,8 +7,9 @@ extends ICameraRigBehavior3D
 
 const InputUtils = preload('uid://tl2nnbstems3')
 
-## Whether smooth movement animations should be disabled.
-@export var disable_animation := false
+
+## Whether smooth movement animations should be enabled.
+@export var enable_animation := true
 
 ## How far in degrees the camera's pivot arm tilts horizontally.
 @export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
@@ -53,10 +54,10 @@ func reset_behavior(_camera_rig: CameraRig3D) -> void:
 func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
    target_stick_input = InputUtils.get_camera_look_vector()
 
-   if disable_animation:
-      skip_animation()
-   else:
+   if enable_animation:
       _lerp_values(delta)
+   else:
+      skip_animation()
 
    _apply_state_to_rig(camera_rig)
 

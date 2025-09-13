@@ -3,6 +3,8 @@ extends Resource
 ## An interface for [CameraRig3D] behaviors.
 
 
+@export_group('ICameraRigBehavior3D')
+
 ## Whether this behavior should be processed and applied.
 @export var enabled := true
 

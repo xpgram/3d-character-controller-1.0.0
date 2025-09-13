@@ -5,8 +5,8 @@ extends ICameraRigBehavior3D
 ## This is a declarative focal point behavior.
 
 
-## Whether smooth movement animations should be disabled.
-@export var disable_animation := false
+## Whether smooth movement animations should be enabled.
+@export var enable_animation := true
 
 ## The vector displacement of the focal point from the subject's raw coordinates.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
@@ -44,10 +44,10 @@ func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
 
    target_focal_point = _get_focal_point(camera_rig)
 
-   if disable_animation:
-      skip_animation()
-   else:
+   if enable_animation:
       _lerp_actual_to_intended(delta)
+   else:
+      skip_animation()
 
    _apply_state_to_rig(camera_rig)
 
