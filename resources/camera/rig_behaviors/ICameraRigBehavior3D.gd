@@ -7,13 +7,24 @@ extends Resource
 @export var enabled := true
 
 
-## Processes behavior state and modifies a given [CameraRig3D].
-## `param delta` The time since last frame.
-## `param camera_rig` A reference to the camera rig being operated.
+## Setup initial conditions for this behavior.
+## `param camera_rig` A reference to the [CameraRig3D] being operated.
 ##   By convention, this should be modified additively to preserve changes made by other
 ##   behaviors. However, this format does allow overriding behavior as necessary.
-func update_camera_rig(
-   _delta: float,
-   _camera_rig: CameraRig3D
-) -> void:
+func reset_behavior(_camera_rig: CameraRig3D) -> void:
+   pass
+
+
+## Processes behavior state and modifies a given [CameraRig3D].
+## `param delta` The time since last frame.
+## `param camera_rig` A reference to the [CameraRig3D] being operated.
+##   By convention, this should be modified additively to preserve changes made by other
+##   behaviors. However, this format does allow overriding behavior as necessary.
+func update_camera_rig(_delta: float, _camera_rig: CameraRig3D) -> void:
+   pass
+
+
+## For behaviors that animate their values to some intended state, skip the animation and
+## assume the intended state immediately.
+func skip_animation() -> void:
    pass
