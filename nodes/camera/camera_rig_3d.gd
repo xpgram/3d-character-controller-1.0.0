@@ -60,7 +60,7 @@ var _camera_controller_service: CameraRigControllerStack3D
 @onready var camera_lense: Camera3D = %Camera3D
 
 ## A light attached to the camera, pointed in the same direction.
-@onready var camera_spotlight: SpotLight3D = %Spotlight3D
+@onready var camera_spotlight: SpotLight3D = %SpotLight3D
 
 
 func _ready() -> void:
