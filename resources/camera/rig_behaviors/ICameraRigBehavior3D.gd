@@ -4,17 +4,16 @@ extends Resource
 
 
 ## Whether this behavior should be processed and applied.
-var enabled := true
+@export var enabled := true
 
 
-# TODO How can I communicate the state surrounding the rig without awkwardly passing in
-#  camera state we shouldn't be able to modify from here?
-## Updates this behavior's state.
-func process(_delta: float, _camera_rig: CameraRig3D) -> void:
+## Processes behavior state and modifies a given [CameraRig3D].
+## `param delta` The time since last frame.
+## `param camera_rig` A reference to the camera rig being operated.
+##   By convention, this should be modified additively to preserve changes made by other
+##   behaviors. However, this format does allow overriding behavior as necessary.
+func update_camera_rig(
+   _delta: float,
+   _camera_rig: CameraRig3D
+) -> void:
    pass
-
-
-## Returns a set of transform values for this camera behavior representing its current
-## state.
-func get_rig_transform() -> CameraRigTransform3D:
-   return CameraRigTransform3D.new()
