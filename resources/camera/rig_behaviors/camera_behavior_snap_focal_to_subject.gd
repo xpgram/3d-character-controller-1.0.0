@@ -25,17 +25,17 @@ var lerp_rate_ground_plane := 1.0
 var lerp_rate_vertical := 1.0
 
 ## A point representing the current focal point position for this behavior.
-var actual_focal_point := Vector3()
+var actual_focal_point := Vector3.ZERO
 
 ## A point representing the desired focal point position for this behavior.
-var intended_focal_point := Vector3()
+var target_focal_point := Vector3.ZERO
 
 
 func reset_behavior(camera_rig: CameraRig3D) -> void:
    if not camera_rig.subject:
       return
 
-   intended_focal_point = _get_focal_point(camera_rig)
+   target_focal_point = _get_focal_point(camera_rig)
    skip_animation()
 
 
@@ -43,7 +43,7 @@ func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
    if not camera_rig.subject:
       return
 
-   intended_focal_point = _get_focal_point(camera_rig)
+   target_focal_point = _get_focal_point(camera_rig)
 
    if disable_animation:
       skip_animation()
@@ -54,7 +54,7 @@ func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
 
 
 func skip_animation() -> void:
-   actual_focal_point = intended_focal_point
+   actual_focal_point = target_focal_point
 
 
 ## Given a [CameraRig3D], return a [Vector3] representing where the next focal point
@@ -63,16 +63,16 @@ func _get_focal_point(camera_rig: CameraRig3D) -> Vector3:
    if camera_rig.subject:
       return camera_rig.subject.global_position + displacement_from_subject
 
-   return intended_focal_point
+   return target_focal_point
 
 
-## Animate this behavior's actual_focal_point to its intended_focal_point.
+## Animate this behavior's actual_focal_point to its target_focal_point.
 func _lerp_actual_to_intended(delta: float) -> void:
    var actual_ground_point := Vector2(actual_focal_point.x, actual_focal_point.z)
-   var intended_ground_point := Vector2(intended_focal_point.x, intended_focal_point.z)
+   var intended_ground_point := Vector2(target_focal_point.x, target_focal_point.z)
    actual_ground_point = actual_ground_point.lerp(intended_ground_point, lerp_rate_ground_plane * delta)
 
-   var actual_height := lerpf(actual_focal_point.y, intended_focal_point.y, lerp_rate_vertical * delta)
+   var actual_height := lerpf(actual_focal_point.y, target_focal_point.y, lerp_rate_vertical * delta)
 
    actual_focal_point = Vector3(
       actual_ground_point.x,
