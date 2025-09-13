@@ -2,6 +2,7 @@ class_name CameraBehavior_SnapFocalToSubject
 extends ICameraRigBehavior3D
 ## A camera behavior to snap the camera's focal point to its subject's position.
 ## If no subject exists, no focal point adjustments will occur.
+## This is a declarative focal point behavior.
 
 
 ## Whether smooth movement animations should be disabled.
@@ -23,10 +24,9 @@ var lerp_rate_ground_plane := 1.0
 @export_custom(PROPERTY_HINT_NONE, 'suffix:∝s')
 var lerp_rate_vertical := 1.0
 
-## A point representing the current focal point position for this behavior.
-var actual_focal_point := Vector3.ZERO
 
-## A point representing the desired focal point position for this behavior.
+## A point representing the position of the focal point.
+var actual_focal_point := Vector3.ZERO
 var target_focal_point := Vector3.ZERO
 
 
