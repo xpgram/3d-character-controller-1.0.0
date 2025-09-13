@@ -4,8 +4,7 @@ extends ICameraRigBehavior3D
 ## If no subject exists, no focal point adjustments will occur.
 
 
-## If true, the focal point will snap to its new position instead of being animated toward
-## it.
+## Whether smooth movement animations should be disabled.
 @export var disable_animation := false
 
 ## The vector displacement of the focal point from the subject's raw coordinates.
