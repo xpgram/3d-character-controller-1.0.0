@@ -61,14 +61,6 @@ func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
 
    _apply_state_to_rig(camera_rig)
 
-   # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
-   var focal_point_displacement := Vector3(
-      -actual_stick_input.x * max_look_ahead_hor,
-      -actual_stick_input.y * max_look_ahead_ver,
-      0.0,
-   )
-   camera_rig.focal_point += focal_point_displacement.rotated(Vector3.UP, camera_rig.rotation.y)
-
 
 func skip_animation() -> void:
    actual_stick_input = target_stick_input
@@ -91,3 +83,11 @@ func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
    )
    camera_rig.arm_length -= mix_weight * tilt_zoom_distance
    camera_rig.focal_point = camera_rig.focal_point.lerp(camera_rig.position, mix_weight)
+
+   # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
+   var focal_point_displacement := Vector3(
+      -actual_stick_input.x * max_look_ahead_hor,
+      -actual_stick_input.y * max_look_ahead_ver,
+      0.0,
+   )
+   camera_rig.focal_point += focal_point_displacement.rotated(Vector3.UP, camera_rig.rotation.y)
