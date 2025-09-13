@@ -107,16 +107,17 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
       next_progress += increment
 
    # Lerp the trackball to the new progress value.
-   trackball.progress = lerpf(trackball.progress, progress, 6.0 * delta)
+   trackball.progress = lerpf(trackball.progress, progress, 24.0 * delta)
+   # TODO If I'm lerping trackball progress, how do I separate horizontal from vertical lerp rates?
 
    # Set camera position.
-   camera_rig.position = trackball.global_position
+   camera_rig.global_position = trackball.global_position
 
    var new_rotation = trackball.global_rotation
    new_rotation.x = 0.0
    new_rotation.z = 0.0
    new_rotation.y -= PI / 2
-   camera_rig.rotation = new_rotation
+   camera_rig.global_rotation = new_rotation
 
 
 ## Returns a [Vector3] for the camera rig's subject's transform position in the camera

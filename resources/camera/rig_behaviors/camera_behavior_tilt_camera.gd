@@ -87,6 +87,8 @@ func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
    # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
    var focal_point_displacement := Vector3(
       # TODO Why does .rotated() below require this value be positive?
+      #  I'd think because the level is facing the wrong z-direction, but this positive
+      #  value works for all rig orientations. I think.
       actual_stick_input.x * max_look_ahead_hor,
       -actual_stick_input.y * max_look_ahead_ver,
       0.0,

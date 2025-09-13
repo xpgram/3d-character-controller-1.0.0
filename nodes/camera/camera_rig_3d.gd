@@ -91,8 +91,8 @@ func _physics_process(delta: float) -> void:
 
 # FIXME Have something else handle this process.
 func _reset_transforms() -> void:
-   position = Vector3.ZERO
-   rotation = Vector3.ZERO
+   # These are baselines for snap and tilt behaviors because the controller does not
+   # actually set them.
    pivot_rotation = Vector3.ZERO
    arm_length = 16.0
    focal_point = Vector3.ZERO
