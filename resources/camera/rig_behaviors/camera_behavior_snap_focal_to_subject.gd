@@ -12,13 +12,13 @@ extends ICameraRigBehavior3D
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
 var displacement_from_subject := Vector3.ZERO
 
-## A proportion of delta time, represents the speed at which the focal point follows the
+## A proportion of delta time. Represents the speed at which the focal point follows the
 ## camera rig subject over the ground plane.
 ## Due to how the lerp animation is implemented, this always follows an ease-in curve.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:∝s')
 var lerp_rate_ground_plane := 1.0
 
-## A proportion of delta time, represents the speed at which the focal point follows the
+## A proportion of delta time. Represents the speed at which the focal point follows the
 ## camera rig subject along the vertical axis.
 ## Due to how the lerp animation is implemented, this always follows an ease-in curve.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:∝s')
