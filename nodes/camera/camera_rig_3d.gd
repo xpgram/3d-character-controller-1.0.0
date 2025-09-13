@@ -10,16 +10,32 @@ extends Node3D
 ## ultimately up to the provided camera rig controller.
 @export var subject: Node3D
 
-# TODO Better name?
-## Various settings and configurations for this CameraRig3D, such as its ideal transform
-## and movement speeds.
-@export var camera_settings: CameraRigSettings3D
-
 ## A list of camera rig camera_behaviors to apply during the physics process step.
 @export var camera_behaviors: Array[ICameraRigBehavior3D] = []
 
-# TODO Make this a little more generic via a common CameraRigController interface.
-#  Not all will be stacks that listen for CameraRegion collisions.
+## The position of the rig object.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var rig_position := Vector3.ZERO
+
+## The rotation of the rig object.
+@export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
+var rig_rotation := Vector3.ZERO
+
+## The rotation of the pivot arm. Useful for managing a player's rotational input even
+## while the rig itself is rotated.
+@export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
+var pivot_rotation := Vector3.ZERO
+
+## The distance from the rig's position to where the camera head is located.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var arm_length: float = 0
+
+## A point in global space describing where the camera head is looking. Also used to
+## inform the depth of field system.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var focal_point := Vector3.ZERO
+
+# TODO Make this a parent node instead of a component I have to verify.
 ## (NULLABLE) An object which yields a [CameraRigController3D] when asked.
 var _camera_controller_service: CameraRigControllerStack3D
 
@@ -56,13 +72,13 @@ var _camera_controller_service: CameraRigControllerStack3D
 
 
 func _ready() -> void:
-   # TODO Provide a default controller_service instead of sifting through children.
+   # TODO If controller is a parent node, this shouldn't be necessary.
    for child in get_children():
       if child is CameraRigControllerStack3D:
          _camera_controller_service = child
          break
 
-   teleport_to_position()
+   _update_transforms()
 
 
 func _physics_process(delta: float) -> void:
@@ -72,34 +88,16 @@ func _physics_process(delta: float) -> void:
 
    for behavior in camera_behaviors:
       if behavior.enabled:
-         behavior.process(delta, self)
+         behavior.update_camera_rig(delta, self)
 
-   _move_camera_rig(delta)
+   _update_transforms()
 
 
-## Using the sum of this rig's transform settings and the provided transforms of each
-## assigned camera behavior, sets this rig's actual transform values.
-func _move_camera_rig(delta: float) -> void:
-   camera_settings.lerp_transform(delta)
-   var new_transform := camera_settings.get_actual_transform()
-
-   # Sum all assigned camera behaviors into one transform.
-   for behavior in camera_behaviors:
-      if behavior.enabled:
-         new_transform = new_transform.add(behavior.get_rig_transform())
-
-   # Apply new transform values to the rig's various transforms.
-   position = new_transform.rig_position
-   rotation = new_transform.rig_rotation
-   _pivot.rotation = new_transform.pivot_rotation
-   _camera_arm.position.z = new_transform.arm_length
-   _focal_point.global_position = new_transform.focal_point
+## Maps the rig's public API values to its component transforms.
+func _update_transforms() -> void:
+   _pivot.rotation = pivot_rotation
+   _camera_arm.position.z = arm_length
+   _focal_point.global_position = focal_point
 
    # Point the camera head at the focal point.
    _camera_head.look_at(_focal_point.global_position, Vector3.UP)
-
-
-## Moves the rig's actual transforms to their set values instantly, skipping all lerp
-## animations.
-func teleport_to_position() -> void:
-   camera_settings.skip_animation()
