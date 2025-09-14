@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bvc1xx2q0t45o"]
+[gd_scene load_steps=15 format=3 uid="uid://bvc1xx2q0t45o"]
 
 [ext_resource type="Script" uid="uid://bcxwagdd6v36k" path="res://game.gd" id="1_51kip"]
 [ext_resource type="PackedScene" uid="uid://ctrh2j33hfbgy" path="res://global_state/global_state.tscn" id="2_3uc2i"]
@@ -6,7 +6,47 @@
 [ext_resource type="PackedScene" uid="uid://db51xtuloclwg" path="res://levels/prototype/level_metroid_fusion.tscn" id="4_51kip"]
 [ext_resource type="PackedScene" uid="uid://bw2yt2kjem3le" path="res://player/player_3d.tscn" id="5_ascb7"]
 [ext_resource type="PackedScene" uid="uid://say22yjgceb1" path="res://nodes/camera/camera_rig_3d.tscn" id="6_3uc2i"]
+[ext_resource type="Script" uid="uid://1c7rth743kij" path="res://resources/camera/rig_behaviors/ICameraRigBehavior3D.gd" id="6_xgrio"]
+[ext_resource type="Script" uid="uid://cy7do1isou3fa" path="res://resources/camera/rig_behaviors/camera_behavior_reset_properties.gd" id="7_eydsl"]
+[ext_resource type="Script" uid="uid://ekrrutix6sls" path="res://resources/camera/rig_behaviors/camera_behavior_snap_focal_to_subject.gd" id="8_crnhc"]
+[ext_resource type="Script" uid="uid://bp4614uha1mou" path="res://resources/camera/rig_behaviors/camera_behavior_tilt_camera.gd" id="9_evd1j"]
 [ext_resource type="Script" uid="uid://bsyjuq3vn50jq" path="res://nodes/camera/camera_rig_controller_stack_3d.gd" id="10_q051v"]
+
+[sub_resource type="Resource" id="Resource_xdyyj"]
+script = ExtResource("7_eydsl")
+reset_rig_position = false
+reset_rig_rotation = false
+reset_pivot_rotation = true
+pivot_rotation = Vector3(0, 0, 0)
+reset_arm_length = true
+arm_length = 0.0
+reset_focal_point = false
+enabled = true
+metadata/_custom_type_script = "uid://cy7do1isou3fa"
+
+[sub_resource type="Resource" id="Resource_72kc8"]
+script = ExtResource("8_crnhc")
+enable_animation = true
+displacement_from_subject = Vector3(0, 2, 0)
+lerp_rate_ground_plane = 24.0
+lerp_rate_vertical = 24.0
+enabled = true
+metadata/_custom_type_script = "uid://ekrrutix6sls"
+
+[sub_resource type="Resource" id="Resource_1r6o3"]
+script = ExtResource("9_evd1j")
+enable_animation = true
+enable_input = true
+apply_additively = true
+max_tilt_hor = 0.261799
+max_tilt_ver = 0.261799
+max_look_ahead_hor = 4.0
+max_look_ahead_ver = 2.0
+max_arm_length = 16.0
+tilt_zoom_retraction_length = 4.0
+lerp_rate = 4.0
+enabled = true
+metadata/_custom_type_script = "uid://bp4614uha1mou"
 
 [node name="Game" type="Node"]
 script = ExtResource("1_51kip")
@@ -20,6 +60,7 @@ script = ExtResource("1_51kip")
 [node name="CameraRig3D" parent="." node_paths=PackedStringArray("subject") instance=ExtResource("6_3uc2i")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -8, 5, 0)
 subject = NodePath("../Player3D")
+camera_behaviors = Array[ExtResource("6_xgrio")]([SubResource("Resource_xdyyj"), SubResource("Resource_72kc8"), SubResource("Resource_1r6o3")])
 
 [node name="CameraRigControllerStack3D" type="Node3D" parent="CameraRig3D"]
 script = ExtResource("10_q051v")
