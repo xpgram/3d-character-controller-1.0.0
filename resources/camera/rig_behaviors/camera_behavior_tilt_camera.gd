@@ -57,14 +57,26 @@ var lerp_rate := 1.0
 var actual_stick_input := Vector2.ZERO
 var target_stick_input := Vector2.ZERO
 
+## A number representing how much the tilt effect is currently engaged.
+## Primarily, this maintains smoother transitions between left and right tilts when the
+## user input rapidly flicks between them.
+var actual_mix_weight := 0.0
+var target_mix_weight := 0.0
+
 
 func reset_behavior(_camera_rig: CameraRig3D) -> void:
    actual_stick_input = Vector2.ZERO
    target_stick_input = Vector2.ZERO
 
+   actual_mix_weight = 0.0
+   target_mix_weight = 0.0
+
 
 func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
    target_stick_input = InputUtils.get_camera_look_vector() if enable_input else Vector2.ZERO
+   # TODO Should this be dependent on actual_stick_input for smoother transitions instead?
+   #  If so, does actual need to be lerped first, or can we live with a 1-frame delay?
+   target_mix_weight = clampf(target_stick_input.length(), 0, 1)
 
    if enable_animation:
       _lerp_values(delta)
@@ -76,18 +88,18 @@ func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
 
 func skip_animation() -> void:
    actual_stick_input = target_stick_input
+   actual_mix_weight = target_mix_weight
 
 
 ## Animate actual values toward target values.
 func _lerp_values(delta: float) -> void:
    actual_stick_input.x = lerp_angle(actual_stick_input.x, target_stick_input.x, lerp_rate * delta)
    actual_stick_input.y = lerp_angle(actual_stick_input.y, target_stick_input.y, lerp_rate * delta)
+   actual_mix_weight = lerpf(actual_mix_weight, target_mix_weight, lerp_rate * delta)
 
 
 ## Applies this behavior's state to a [CameraRig3D].
 func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
-   var mix_weight = clampf(actual_stick_input.length(), 0, 1)
-
    # Determine additive component of new transforms.
    var additive_pivot_rotation := camera_rig.pivot_rotation if apply_additively else Vector3.ZERO
    var additive_arm_length := camera_rig.arm_length if apply_additively else 0.0
@@ -98,7 +110,7 @@ func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
       -actual_stick_input.x * max_tilt_ver,
       0.0,
    )
-   var new_arm_length := max_arm_length - (mix_weight * tilt_zoom_retraction_length)
+   var new_arm_length := max_arm_length - (actual_mix_weight * tilt_zoom_retraction_length)
 
    # Apply new transforms.
    camera_rig.pivot_rotation = additive_pivot_rotation + new_pivot_rotation
@@ -106,7 +118,7 @@ func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
    # Focal point lerping between actual position and rig position is not possible in
    # absolute mode.
    if not apply_additively:
-      camera_rig.focal_point = camera_rig.focal_point.lerp(camera_rig.position, mix_weight)
+      camera_rig.focal_point = camera_rig.focal_point.lerp(camera_rig.position, actual_mix_weight)
 
    # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
    var focal_point_displacement := Vector3(
