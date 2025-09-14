@@ -74,10 +74,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-   # FIXME Have something else handle this process.
-   #  I've stuck this in here as a temporary measure.
-   _reset_transforms()
-
    if _camera_controller_service:
       var camera_controller := _camera_controller_service.get_controller()
       camera_controller.operate_rig(delta, self)
@@ -87,15 +83,6 @@ func _physics_process(delta: float) -> void:
          behavior.update_camera_rig(delta, self)
 
    _update_transforms()
-
-
-# FIXME Have something else handle this process.
-func _reset_transforms() -> void:
-   # These are baselines for snap and tilt behaviors because the controller does not
-   # actually set them.
-   pivot_rotation = Vector3.ZERO
-   arm_length = 16.0
-   focal_point = Vector3.ZERO
 
 
 ## Maps the rig's public API values to its component transforms.

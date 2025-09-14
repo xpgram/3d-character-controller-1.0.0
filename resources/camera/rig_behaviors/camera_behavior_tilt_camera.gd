@@ -115,18 +115,18 @@ func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
    # Apply new transforms.
    camera_rig.pivot_rotation = additive_pivot_rotation + new_pivot_rotation
    camera_rig.arm_length = additive_arm_length + new_arm_length
-   # Focal point lerping between actual position and rig position is not possible in
-   # absolute mode.
-   if not apply_additively:
+
+   # Moving the focal point in an absolute context is not currently supported.
+   if apply_additively:
       camera_rig.focal_point = camera_rig.focal_point.lerp(camera_rig.position, actual_mix_weight)
 
-   # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
-   var focal_point_displacement := Vector3(
-      # TODO Why does .rotated() below require this value be positive?
-      #  I'd think because the level is facing the wrong z-direction, but this positive
-      #  value works for all rig orientations. I think.
-      actual_stick_input.x * max_look_ahead_hor,
-      -actual_stick_input.y * max_look_ahead_ver,
-      0.0,
-   )
-   camera_rig.focal_point += focal_point_displacement.rotated(Vector3.UP, camera_rig.rotation.y)
+      # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
+      var focal_point_displacement := Vector3(
+         # TODO Why does .rotated() below require this value be positive?
+         #  I'd think because the level is facing the wrong z-direction, but this positive
+         #  value works for all rig orientations. I think.
+         actual_stick_input.x * max_look_ahead_hor,
+         -actual_stick_input.y * max_look_ahead_ver,
+         0.0,
+      )
+      camera_rig.focal_point += focal_point_displacement.rotated(Vector3.UP, camera_rig.rotation.y)

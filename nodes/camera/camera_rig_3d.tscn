@@ -20,11 +20,14 @@ metadata/_custom_type_script = "uid://ekrrutix6sls"
 [sub_resource type="Resource" id="Resource_1r6o3"]
 script = ExtResource("4_ia0fq")
 enable_animation = true
+enable_input = true
+apply_additively = true
 max_tilt_hor = 0.261799
 max_tilt_ver = 0.261799
 max_look_ahead_hor = 4.0
 max_look_ahead_ver = 2.0
-tilt_zoom_distance = 4.0
+max_arm_length = 16.0
+tilt_zoom_retraction_length = 4.0
 lerp_rate = 4.0
 enabled = true
 metadata/_custom_type_script = "uid://bp4614uha1mou"
