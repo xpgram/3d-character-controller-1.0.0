@@ -35,7 +35,7 @@ var max_look_ahead_hor := 4.0
 ## How far vertically the focal point moves away from the subject in the direction of
 ## the camera tilt.
 @export_custom(PROPERTY_HINT_LINK, 'suffix:m')
-var max_look_ahead_ver := 2.0
+var max_look_ahead_ver := 2.5
 
 ## How far the camera normally sits when at minimum tilt.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
@@ -118,21 +118,21 @@ func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
 
    # Moving the focal point in an absolute context is not currently supported.
    if apply_additively:
-      # Lerp the focal point's context between its current behavior and this tilt behavior.
-      var rig_ground_plane_position := Vector3(
-         camera_rig.position.x,
-         camera_rig.focal_point.y,
-         camera_rig.position.z,
-      )
-      camera_rig.focal_point = camera_rig.focal_point.lerp(rig_ground_plane_position, actual_mix_weight)
+      var forward_vector := camera_rig.global_basis.z
+      var rightward_vector := camera_rig.global_basis.x
+      var upward_vector := camera_rig.global_basis.y
 
-      # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
-      var focal_point_displacement := Vector3(
-         # TODO Why does .rotated() below require this value be positive?
-         #  I'd think because the level is facing the wrong z-direction, but this positive
-         #  value works for all rig orientations. I think.
-         actual_stick_input.x * max_look_ahead_hor,
-         -actual_stick_input.y * max_look_ahead_ver,
-         0.0,
+      # Lerp the focal point between its current behavior and the camera's xy plane.
+      # At full tilt, it should feel like the focal point is obeying this system alone.
+      var vector_to_focal := camera_rig.focal_point - camera_rig.global_position
+      var projected_vector_to_focal := vector_to_focal.slide(forward_vector)
+      var projected_focal_point = projected_vector_to_focal + camera_rig.global_position
+
+      camera_rig.focal_point = camera_rig.focal_point.lerp(projected_focal_point, actual_mix_weight)
+
+      # Add extra tilt by moving the focal point laterally to the xy plane of the rig.
+      var extra_tilt := (
+         rightward_vector * actual_stick_input.x * max_look_ahead_hor
+         + upward_vector * -actual_stick_input.y * max_look_ahead_ver
       )
-      camera_rig.focal_point += focal_point_displacement.rotated(Vector3.UP, camera_rig.rotation.y)
+      camera_rig.focal_point += extra_tilt
