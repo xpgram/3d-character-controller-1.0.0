@@ -40,6 +40,13 @@ var reset_focal_point := true:
       notify_property_list_changed()
 var focal_point := Vector3.ZERO
 
+# Head Rotation
+var reset_head_rotation := true:
+   set(value):
+      reset_head_rotation = value
+      notify_property_list_changed()
+var head_rotation := Vector3.ZERO
+
 
 func _get_property_list() -> Array[Dictionary]:
    if not Engine.is_editor_hint():
@@ -72,7 +79,7 @@ func _get_property_list() -> Array[Dictionary]:
          'name': &'rig_rotation',
          'type': TYPE_VECTOR3,
          'hint': PROPERTY_HINT_NONE,
-         'hint_string': 'suffix:°'
+         'hint_string': 'radians, suffix:°'
       })
    properties.append({
       'name': &'reset_pivot_rotation',
@@ -83,7 +90,7 @@ func _get_property_list() -> Array[Dictionary]:
          'name': &'pivot_rotation',
          'type': TYPE_VECTOR3,
          'hint': PROPERTY_HINT_NONE,
-         'hint_string': 'suffix:°'
+         'hint_string': 'radians, suffix:°'
       })
    properties.append({
       'name': &'reset_arm_length',
@@ -107,6 +114,17 @@ func _get_property_list() -> Array[Dictionary]:
          'hint': PROPERTY_HINT_NONE,
          'hint_string': 'suffix:m'
       })
+   properties.append({
+      'name': &'reset_head_rotation',
+      'type': TYPE_BOOL,
+   })
+   if reset_head_rotation:
+      properties.append({
+         'name': &'head_rotation',
+         'type': TYPE_VECTOR3,
+         'hint': PROPERTY_HINT_NONE,
+         'hint_string': 'radians, suffix:°'
+      })
 
    return properties
 
@@ -122,3 +140,5 @@ func update_camera_rig(_delta: float, camera_rig: CameraRig3D) -> void:
       camera_rig.arm_length = arm_length
    if reset_focal_point:
       camera_rig.focal_point = focal_point
+   if reset_head_rotation:
+      camera_rig.head_rotation = head_rotation

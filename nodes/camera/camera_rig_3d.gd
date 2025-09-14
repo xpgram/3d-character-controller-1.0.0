@@ -27,6 +27,11 @@ var arm_length: float = 0
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
 var focal_point := Vector3.ZERO
 
+## The rotation of the camera away from its focal point. With the focal point at a natural
+## resting position, this property will behave like a typical rotation field.
+@export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
+var head_rotation := Vector3.ZERO
+
 # TODO Make this a parent node instead of a component I have to verify.
 ## (NULLABLE) An object which yields a [CameraRigController3D] when asked.
 var _camera_controller_service: CameraRigControllerStack3D
@@ -93,3 +98,4 @@ func _update_transforms() -> void:
 
    # Point the camera head at the focal point.
    _camera_head.look_at(_focal_point.global_position, Vector3.UP)
+   _camera_head.rotation += head_rotation

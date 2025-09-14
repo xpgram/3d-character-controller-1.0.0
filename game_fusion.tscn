@@ -21,6 +21,8 @@ pivot_rotation = Vector3(0, 0, 0)
 reset_arm_length = true
 arm_length = 0.0
 reset_focal_point = false
+reset_head_rotation = true
+head_rotation = null
 enabled = true
 metadata/_custom_type_script = "uid://cy7do1isou3fa"
 
@@ -41,7 +43,7 @@ apply_additively = true
 max_tilt_hor = 0.261799
 max_tilt_ver = 0.261799
 max_look_ahead_hor = 4.0
-max_look_ahead_ver = 2.0
+max_look_ahead_ver = 2.5
 max_arm_length = 16.0
 tilt_zoom_retraction_length = 4.0
 lerp_rate = 4.0
