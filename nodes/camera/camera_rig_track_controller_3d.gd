@@ -43,6 +43,9 @@ extends CameraRigController3D
 ## elastic-band system, but smaller numbers also demand much more work.
 @export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.05
 
+## How quickly the camera follows the subject position on the curve.
+@export var lerp_rate := 20.0
+
 ## A Path3D representing the track the camera rig should follow.
 @onready var track: Path3D = $Track
 
@@ -107,7 +110,7 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
       next_progress += increment
 
    # Lerp the trackball to the new progress value.
-   trackball.progress = lerpf(trackball.progress, progress, 24.0 * delta)
+   trackball.progress = lerpf(trackball.progress, progress, lerp_rate * delta)
    # TODO If I'm lerping trackball progress, how do I separate horizontal from vertical lerp rates?
 
    # Set camera position.

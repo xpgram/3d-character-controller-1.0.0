@@ -250,6 +250,7 @@ debug_color = Color(0.7, 0.7, 0, 1)
 
 [node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D"]
 script = ExtResource("3_lmxcu")
+lerp_rate = 6.0
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
