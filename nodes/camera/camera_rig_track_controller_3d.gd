@@ -43,6 +43,10 @@ extends CameraRigController3D
 ## elastic-band system, but smaller numbers also demand much more work.
 @export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.05
 
+# TODO Having some curves be 20.0 and some be 6.0 (the vertical ones) doesn't really
+#  give us vertical lag. I want to experiment with giving the camera its own lerp values
+#  in addition to the trackball being lerped, or maybe just letting the track ball be
+#  instant again.
 ## How quickly the camera follows the subject position on the curve.
 @export var lerp_rate := 20.0
 
