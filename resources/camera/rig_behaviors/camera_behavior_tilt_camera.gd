@@ -118,7 +118,13 @@ func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
 
    # Moving the focal point in an absolute context is not currently supported.
    if apply_additively:
-      camera_rig.focal_point = camera_rig.focal_point.lerp(camera_rig.position, actual_mix_weight)
+      # Lerp the focal point's context between its current behavior and this tilt behavior.
+      var rig_ground_plane_position := Vector3(
+         camera_rig.position.x,
+         camera_rig.focal_point.y,
+         camera_rig.position.z,
+      )
+      camera_rig.focal_point = camera_rig.focal_point.lerp(rig_ground_plane_position, actual_mix_weight)
 
       # Add extra tilt by moving the focal point laterally to the XY plane of the rig.
       var focal_point_displacement := Vector3(
