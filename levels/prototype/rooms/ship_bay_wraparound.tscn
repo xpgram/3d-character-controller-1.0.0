@@ -82,8 +82,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.25, 5, 1.5)
 shape = SubResource("BoxShape3D_o1gar")
 debug_color = Color(0.7, 0.7, 0, 1)
 
-[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D"]
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D" node_paths=PackedStringArray("track", "trackball", "perspective_node")]
 script = ExtResource("3_7egpu")
+track = NodePath("Track")
+trackball = NodePath("Track/TrackBall")
+perspective_node = NodePath("Track/TrackBall/CameraPerspective")
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
@@ -93,3 +96,6 @@ curve = SubResource("Curve3D_o5vah")
 [node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]
 transform = Transform3D(-4.3711e-08, 0, -0.999992, 0, 1, 0, 0.999992, 0, -4.3711e-08, 0, 0, 0)
 loop = false
+
+[node name="CameraPerspective" type="Node3D" parent="CameraRegion3D/CameraRigTrackController3D/Track/TrackBall"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)

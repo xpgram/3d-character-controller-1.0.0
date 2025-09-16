@@ -199,8 +199,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -0.5)
 shape = SubResource("BoxShape3D_ypp2v")
 debug_color = Color(0.7, 0.7, 0, 1)
 
-[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D"]
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D" node_paths=PackedStringArray("track", "trackball", "perspective_node")]
 script = ExtResource("3_bwy2i")
+track = NodePath("Track")
+trackball = NodePath("Track/TrackBall")
+perspective_node = NodePath("Track/TrackBall/CameraPerspective")
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
@@ -210,6 +213,9 @@ curve = SubResource("Curve3D_4tgpf")
 [node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]
 transform = Transform3D(-4.3711e-08, 1, -4.3711e-08, 0, -4.37114e-08, -0.999992, -0.999992, -4.37114e-08, 1.91067e-15, 0, 0, 0)
 loop = false
+
+[node name="CameraPerspective" type="Node3D" parent="CameraRegion3D/CameraRigTrackController3D/Track/TrackBall"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 
 [node name="CameraRegion3D2" type="Area3D" parent="."]
 collision_layer = 4
@@ -223,8 +229,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.75, -0.5)
 shape = SubResource("BoxShape3D_jgvpm")
 debug_color = Color(0.7, 0.7, 0, 1)
 
-[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D2"]
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D2" node_paths=PackedStringArray("track", "trackball", "perspective_node")]
 script = ExtResource("3_bwy2i")
+track = NodePath("Track")
+trackball = NodePath("Track/TrackBall")
+perspective_node = NodePath("Track/TrackBall/CameraPerspective")
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D2/CameraRigTrackController3D"]
@@ -234,3 +243,6 @@ curve = SubResource("Curve3D_ufect")
 [node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D2/CameraRigTrackController3D/Track"]
 transform = Transform3D(-4.3711e-08, 1, -4.3711e-08, 0, -4.37114e-08, -0.999992, -0.999992, -4.37114e-08, 1.91067e-15, 0, 0, 0)
 loop = false
+
+[node name="CameraPerspective" type="Node3D" parent="CameraRegion3D2/CameraRigTrackController3D/Track/TrackBall"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
