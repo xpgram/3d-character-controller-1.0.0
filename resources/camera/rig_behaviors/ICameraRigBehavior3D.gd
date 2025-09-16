@@ -3,18 +3,30 @@ extends Resource
 ## An interface for [CameraRig3D] behaviors.
 
 
+@export_group('ICameraRigBehavior3D')
+
 ## Whether this behavior should be processed and applied.
-var enabled := true
+@export var enabled := true
 
 
-# TODO How can I communicate the state surrounding the rig without awkwardly passing in
-#  camera state we shouldn't be able to modify from here?
-## Updates this behavior's state.
-func process(_delta: float, _camera_rig: CameraRig3D) -> void:
+## Setup initial conditions for this behavior.
+## `param camera_rig` A reference to the [CameraRig3D] being operated.
+##   By convention, this should be modified additively to preserve changes made by other
+##   behaviors. However, this format does allow overriding behavior as necessary.
+func reset_behavior(_camera_rig: CameraRig3D) -> void:
    pass
 
 
-## Returns a set of transform values for this camera behavior representing its current
-## state.
-func get_rig_transform() -> CameraRigTransform3D:
-   return CameraRigTransform3D.new()
+## Processes behavior state and modifies a given [CameraRig3D].
+## `param delta` The time since last frame.
+## `param camera_rig` A reference to the [CameraRig3D] being operated.
+##   By convention, this should be modified additively to preserve changes made by other
+##   behaviors. However, this format does allow overriding behavior as necessary.
+func update_camera_rig(_delta: float, _camera_rig: CameraRig3D) -> void:
+   pass
+
+
+## For behaviors that animate their values to some intended state, skip the animation and
+## assume the intended state immediately.
+func skip_animation() -> void:
+   pass

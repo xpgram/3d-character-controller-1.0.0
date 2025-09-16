@@ -1,9 +1,40 @@
-[gd_scene load_steps=2 format=3 uid="uid://say22yjgceb1"]
+[gd_scene load_steps=10 format=3 uid="uid://say22yjgceb1"]
 
 [ext_resource type="Script" uid="uid://dble35geeo1ca" path="res://nodes/camera/camera_rig_3d.gd" id="1_p8m6u"]
+[ext_resource type="Script" uid="uid://1c7rth743kij" path="res://resources/camera/rig_behaviors/ICameraRigBehavior3D.gd" id="2_oklhx"]
+[ext_resource type="Script" uid="uid://ekrrutix6sls" path="res://resources/camera/rig_behaviors/camera_behavior_snap_focal_to_subject.gd" id="3_coe7a"]
+[ext_resource type="Script" uid="uid://bp4614uha1mou" path="res://resources/camera/rig_behaviors/camera_behavior_tilt_camera.gd" id="4_ia0fq"]
+[ext_resource type="Script" uid="uid://c2hgvtg5no4js" path="res://player/camera/camera_jostler.gd" id="5_8h5r4"]
+[ext_resource type="FastNoiseLite" uid="uid://bbionoodp7ppj" path="res://player/camera/resources/jostle_noise.tres" id="7_8h5r4"]
+[ext_resource type="Curve" uid="uid://c0inn0bw3thjx" path="res://player/camera/resources/steadiness_curve.tres" id="8_72kc8"]
+
+[sub_resource type="Resource" id="Resource_72kc8"]
+script = ExtResource("3_coe7a")
+enable_animation = true
+displacement_from_subject = Vector3(0, 2, 0)
+lerp_rate_ground_plane = 24.0
+lerp_rate_vertical = 24.0
+enabled = true
+metadata/_custom_type_script = "uid://ekrrutix6sls"
+
+[sub_resource type="Resource" id="Resource_1r6o3"]
+script = ExtResource("4_ia0fq")
+enable_animation = true
+enable_input = true
+apply_additively = true
+max_tilt_hor = 0.261799
+max_tilt_ver = 0.261799
+max_look_ahead_hor = 4.0
+max_look_ahead_ver = 2.5
+max_arm_length = 16.0
+tilt_zoom_retraction_length = 4.0
+lerp_rate = 4.0
+enabled = true
+metadata/_custom_type_script = "uid://bp4614uha1mou"
 
 [node name="CameraRig3D" type="Node3D"]
 script = ExtResource("1_p8m6u")
+camera_behaviors = Array[ExtResource("2_oklhx")]([SubResource("Resource_72kc8"), SubResource("Resource_1r6o3")])
 
 [node name="FocalPoint" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -12,14 +43,39 @@ editor_description = "Describes where the Camera Head is pointing. This is also 
 [node name="Pivot" type="Node3D" parent="."]
 unique_name_in_owner = true
 editor_description = "Used to rotate the camera arm, and thus the entire rig. Useful for orbiting around a subject."
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 0, 0)
 
 [node name="CameraArm" type="Node3D" parent="Pivot"]
 unique_name_in_owner = true
 editor_description = "Manages distance between the camera head and the pivot. You can create dolly movement by operating the camera arm."
-transform = Transform3D(1, -1.05879e-22, -7.10543e-15, 0, 1, -1.49012e-08, 7.10543e-15, 1.49012e-08, 1, -4.76837e-07, 0, 16)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.76837e-07, 0, 16)
 
 [node name="CameraHead" type="Node3D" parent="Pivot/CameraArm"]
 unique_name_in_owner = true
 editor_description = "Used to rotate the camera mount and its accessories."
 transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Jostler" type="Node3D" parent="Pivot/CameraArm/CameraHead"]
+unique_name_in_owner = true
+transform = Transform3D(1, -9.66896e-44, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("5_8h5r4")
+global_active = false
+global_noise = ExtResource("7_8h5r4")
+rotation_steadiness_curve = ExtResource("8_72kc8")
+position_active = false
+position_steadiness_curve = ExtResource("8_72kc8")
+metadata/_custom_type_script = "uid://c2hgvtg5no4js"
+
+[node name="Camera3D" type="Camera3D" parent="Pivot/CameraArm/CameraHead/Jostler"]
+unique_name_in_owner = true
+transform = Transform3D(1, -4.35451e-28, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+fov = 40.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Pivot/CameraArm/CameraHead/Jostler"]
+unique_name_in_owner = true
+transform = Transform3D(1, -4.35451e-28, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+light_energy = 100.0
+light_bake_mode = 0
+spot_range = 50.0
+spot_attenuation = 1.8
+spot_angle = 50.0
+spot_angle_attenuation = 2.0

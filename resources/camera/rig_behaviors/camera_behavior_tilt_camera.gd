@@ -1,0 +1,138 @@
+class_name CameraBehavior_TiltCamera
+extends ICameraRigBehavior3D
+## A camera behavior to allow players to use their camera input axes to tilt the camera
+## along the level track. Assumes some other behavior sets independent camera transform
+## values.
+
+
+const InputUtils = preload('uid://tl2nnbstems3')
+
+
+## Whether smooth movement animations should be enabled.
+@export var enable_animation := true
+
+## Whether to accept user input. With no user input, a vector input of (0,0) is assumed.
+@export var enable_input := true
+
+## Whether this behavior should apply itself to a [CameraRig3D] additively, preserving
+## other behavior's output, or if false, that it should apply itself absolutely,
+## overwriting any previous output.
+@export var apply_additively := true
+
+## How far in degrees the camera's pivot arm tilts horizontally.
+@export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
+var max_tilt_hor := PI / 12
+
+## How far in degrees the camera's pivot arm tilts vertically.
+@export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
+var max_tilt_ver := PI / 12
+
+## How far horizontally the focal point moves away from the subject in the direction of
+## the camera tilt.
+@export_custom(PROPERTY_HINT_LINK, 'suffix:m')
+var max_look_ahead_hor := 4.0
+
+## How far vertically the focal point moves away from the subject in the direction of
+## the camera tilt.
+@export_custom(PROPERTY_HINT_LINK, 'suffix:m')
+var max_look_ahead_ver := 2.5
+
+## How far the camera normally sits when at minimum tilt.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var max_arm_length := 16.0
+
+## How far the camera zooms in when at max tilt. Zoom distance is proportional to input
+## vector length. The input vector is taken from the current input method's camera look
+## axes.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var tilt_zoom_retraction_length := 4.0
+
+## A proportion of delta time. Represents the speed at which this behavior lerps to its
+## desired state.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:∝s')
+var lerp_rate := 1.0
+
+
+## A point representing the effective input of the camera_look axes.
+var actual_stick_input := Vector2.ZERO
+var target_stick_input := Vector2.ZERO
+
+## A number representing how much the tilt effect is currently engaged.
+## Primarily, this maintains smoother transitions between left and right tilts when the
+## user input rapidly flicks between them.
+var actual_mix_weight := 0.0
+var target_mix_weight := 0.0
+
+
+func reset_behavior(_camera_rig: CameraRig3D) -> void:
+   actual_stick_input = Vector2.ZERO
+   target_stick_input = Vector2.ZERO
+
+   actual_mix_weight = 0.0
+   target_mix_weight = 0.0
+
+
+func update_camera_rig(delta: float, camera_rig: CameraRig3D) -> void:
+   target_stick_input = InputUtils.get_camera_look_vector() if enable_input else Vector2.ZERO
+   # TODO Should this be dependent on actual_stick_input for smoother transitions instead?
+   #  If so, does actual need to be lerped first, or can we live with a 1-frame delay?
+   target_mix_weight = clampf(target_stick_input.length(), 0, 1)
+
+   if enable_animation:
+      _lerp_values(delta)
+   else:
+      skip_animation()
+
+   _apply_state_to_rig(camera_rig)
+
+
+func skip_animation() -> void:
+   actual_stick_input = target_stick_input
+   actual_mix_weight = target_mix_weight
+
+
+## Animate actual values toward target values.
+func _lerp_values(delta: float) -> void:
+   actual_stick_input.x = lerp_angle(actual_stick_input.x, target_stick_input.x, lerp_rate * delta)
+   actual_stick_input.y = lerp_angle(actual_stick_input.y, target_stick_input.y, lerp_rate * delta)
+   actual_mix_weight = lerpf(actual_mix_weight, target_mix_weight, lerp_rate * delta)
+
+
+## Applies this behavior's state to a [CameraRig3D].
+func _apply_state_to_rig(camera_rig: CameraRig3D) -> void:
+   # Determine additive component of new transforms.
+   var additive_pivot_rotation := camera_rig.pivot_rotation if apply_additively else Vector3.ZERO
+   var additive_arm_length := camera_rig.arm_length if apply_additively else 0.0
+
+   # Determine this behavior's component of new transforms.
+   var new_pivot_rotation := Vector3(
+      -actual_stick_input.y * max_tilt_hor,
+      -actual_stick_input.x * max_tilt_ver,
+      0.0,
+   )
+   var new_arm_length := max_arm_length - (actual_mix_weight * tilt_zoom_retraction_length)
+
+   # Apply new transforms.
+   camera_rig.pivot_rotation = additive_pivot_rotation + new_pivot_rotation
+   camera_rig.arm_length = additive_arm_length + new_arm_length
+
+   # Moving the focal point in an absolute context is not currently supported.
+   if apply_additively:
+      var forward_vector := camera_rig.global_basis.z
+      var rightward_vector := camera_rig.global_basis.x
+      var upward_vector := camera_rig.global_basis.y
+
+      # Lerp the focal point between its current behavior and the camera's xy plane.
+      # At full tilt, it should feel like the focal point is obeying this system alone.
+      var vector_to_focal := camera_rig.focal_point - camera_rig.global_position
+      var projected_vector_to_focal := vector_to_focal.slide(forward_vector)
+      var projected_focal_point = projected_vector_to_focal + camera_rig.global_position
+
+      camera_rig.focal_point = camera_rig.focal_point.lerp(projected_focal_point, actual_mix_weight)
+
+      # Add extra tilt by moving the focal point laterally to the xy plane of the rig.
+      var extra_tilt := (
+         rightward_vector * actual_stick_input.x * max_look_ahead_hor
+         + upward_vector * -actual_stick_input.y * max_look_ahead_ver
+      )
+      camera_rig.focal_point += extra_tilt

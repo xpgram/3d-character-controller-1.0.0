@@ -18,7 +18,7 @@ size = Vector3(22, 3, 3)
 
 [sub_resource type="Curve3D" id="Curve3D_wmrdh"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5, 0, 0, -5, 0, 0, -5, 0, 0, 0, 0, 0, -5, 14, 0, 0, 0, 0, 0, 0, 0, 3, 14, 0),
+"points": PackedVector3Array(0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, -5, 0, 0, -5, 0, 0, -5, 0, 0, 1, 0, 0, -5, 14, 0, -1, 0, 0, 0, 0, 0, 3, 14, 0),
 "tilts": PackedFloat32Array(0, 0, 0, 0)
 }
 point_count = 4
@@ -147,8 +147,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 18, -3)
 shape = SubResource("BoxShape3D_ghwkc")
 debug_color = Color(0.7, 0.7, 0, 1)
 
-[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D"]
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D" node_paths=PackedStringArray("track", "trackball", "perspective_node")]
 script = ExtResource("3_iyb51")
+track = NodePath("Track")
+trackball = NodePath("Track/TrackBall")
+perspective_node = NodePath("Track/TrackBall/CameraPerspective")
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
@@ -156,6 +159,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4, -3)
 curve = SubResource("Curve3D_wmrdh")
 
 [node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]
-transform = Transform3D(-4.3711e-08, 0, 0.999992, 0, 1, 0, -0.999992, 0, -4.3711e-08, 0, 0, 0)
-rotation_mode = 1
+transform = Transform3D(0.99999, 0, 0, 0, 0.999987, 0, 0, 0, 0.999994, 0, 0, 0)
+rotation_mode = 0
 loop = false
+
+[node name="CameraPerspective" type="Node3D" parent="CameraRegion3D/CameraRigTrackController3D/Track/TrackBall"]

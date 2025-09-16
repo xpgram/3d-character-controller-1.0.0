@@ -14,19 +14,19 @@ extends CharacterBody3D
 
 # var _gravity := -30.0
 
-@export var camera: Camera3D
+@export var camera_rig: CameraRig3D
 
 @onready var _character_model: SophiaSkin = %SophiaSkin
 @onready var _state_machine = $Controllers/StateMachine
 
 
 func _ready() -> void:
-   _state_machine.init("Player Controller", self, camera)
+   _state_machine.init("Player Controller", self, camera_rig.camera_lense)
 
 
 func _physics_process(delta: float) -> void:
    _state_machine.process_physics(delta)
-   
+
    # _move_character_body(delta)
 
    # # Animation steps
@@ -79,7 +79,7 @@ func _handle_movement_input(delta: float) -> void:
    #       forward_vector * curved_input.y
    #       + rightward_vector * curved_input.x
    # )
-   # # Normalize the camera-angled movement vector onto the ground plane.
+   # # Normalize the camera_rig-angled movement vector onto the ground plane.
    # move_direction = move_direction.normalized() * curved_input.length()
 
    # # Calculate new velocity for this frame.
