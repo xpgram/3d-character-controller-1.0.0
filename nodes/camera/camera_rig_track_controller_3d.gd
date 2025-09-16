@@ -79,18 +79,17 @@ func _get_camera_rig_subject_local_position(camera_rig: CameraRig3D) -> Vector3:
 func _get_tipping_direction(subject_position: Vector3) -> float:
    var current_distance := trackball.position.distance_to(subject_position)
 
-   # 'Left' and 'right' here are just a semantic convenience.
-   var right_distance := track.curve \
+   var positive_dir_distance := track.curve \
       .sample_baked(trackball.progress + tipping_distance, trackball.cubic_interp) \
       .distance_to(subject_position)
-   var left_distance := track.curve \
+   var negative_dir_distance := track.curve \
       .sample_baked(trackball.progress - tipping_distance, trackball.cubic_interp) \
       .distance_to(subject_position)
 
-   if current_distance <= left_distance and current_distance <= right_distance:
+   if current_distance <= negative_dir_distance and current_distance <= positive_dir_distance:
       return 0
 
-   return tipping_distance if right_distance > left_distance else -tipping_distance
+   return tipping_distance if positive_dir_distance < negative_dir_distance else -tipping_distance
 
 
 ## Iterates from the current curve progress in the direction of `param increment` to find
@@ -119,5 +118,4 @@ func _get_closest_curve_progress(subject_position: Vector3, increment: float) ->
 ## Returns the distance to `param subject_position` for a point on the [Curve3D] as
 ## determined by `param progress` along the curve.
 func _get_distance_to_subject(subject_position: Vector3, progress: float) -> float:
-   progress = clampf(progress, 0.0, track.curve.get_baked_length())
    return track.curve.sample_baked(progress, trackball.cubic_interp).distance_to(subject_position)
