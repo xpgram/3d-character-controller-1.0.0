@@ -87,6 +87,7 @@ script = ExtResource("3_7egpu")
 track = NodePath("Track")
 trackball = NodePath("Track/TrackBall")
 perspective_node = NodePath("Track/TrackBall/CameraPerspective")
+controller_priority = 2
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
