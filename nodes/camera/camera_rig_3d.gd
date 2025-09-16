@@ -67,6 +67,9 @@ var _camera_controller_service: CameraRigControllerStack3D
 ## A light attached to the camera, pointed in the same direction.
 @onready var camera_spotlight: SpotLight3D = %SpotLight3D
 
+# TODO This is a patch solution until I make ControllerStack a parent node to this one.
+var _last_camera_controller: CameraRigController3D
+
 
 func _ready() -> void:
    # TODO If controller is a parent node, this shouldn't be necessary.
@@ -81,6 +84,11 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
    if _camera_controller_service:
       var camera_controller := _camera_controller_service.get_controller()
+
+      if _last_camera_controller != camera_controller:
+         camera_controller.setup_initial_rig_conditions(self)
+      _last_camera_controller = camera_controller
+
       camera_controller.operate_rig(delta, self)
 
    for behavior in camera_behaviors:
