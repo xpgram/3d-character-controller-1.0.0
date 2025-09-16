@@ -47,7 +47,10 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
       # Quit early: we're already at the closest position.
       return
 
-   trackball.progress = _get_closest_curve_progress(subject_position, increment)
+   # TODO We are double lerping, and this should be a problem (really slowing down camera
+   #  movement). Weirdly isn't. Investigate this.
+   var new_progress = _get_closest_curve_progress(subject_position, increment)
+   trackball.progress = lerpf(trackball.progress, new_progress, 20.0 * delta)
 
    # Assign new camera transform values.
    camera_rig.global_position = CameraUtils.lerp_position(
