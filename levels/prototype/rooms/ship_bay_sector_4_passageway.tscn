@@ -164,4 +164,4 @@ transform = Transform3D(-4.3711e-08, 0, -0.999992, 0, 1, 0, 0.999992, 0, -4.3711
 loop = false
 
 [node name="CameraPerspective" type="Node3D" parent="CameraRegion3D/CameraRigTrackController3D/Track/TrackBall"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
