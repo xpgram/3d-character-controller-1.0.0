@@ -22,7 +22,7 @@ reset_arm_length = true
 arm_length = 0.0
 reset_focal_point = false
 reset_head_rotation = true
-head_rotation = null
+head_rotation = Vector3(0, 0, 0)
 enabled = true
 metadata/_custom_type_script = "uid://cy7do1isou3fa"
 
