@@ -1,74 +1,32 @@
-@tool
 class_name CameraRigTrackController3D
 extends CameraRigController3D
 ## A camera controller script that takes a child [Path3D] and a grandchild [PathFollow3D],
 ## and moves the PathFollow3D along the Path3D to minimize the distance between itself and
-## a [CameraRig3D]'s subject. This "elastic band" system can be thought of as pulling a
-## track ball along a course via a string.
+## a [CameraRig3D]'s subject over short distances of the curve, not unlike pulling a track
+## ball along a course via a string.
 ## 
-## This does mean that curves in the Path3D as it relates to subject position may result
-## in local minima that the track ball may have difficulty getting out of.
+## This strategy does mean that curves in the Path3D as it relates to subject position may
+## result in local minima that the track ball may have difficulty getting out of.
 
 
-# TODO Implement the track controller:
-# Init:
-#  - Since a place on the Path3D is not known:
-#    - Check all baked-in points for distance to subject.
-#      - (Optional) Check the Path3D bezier points first to narrow down the range.
-#    - Pick the point with the shortest distance and align the camera.
-#      Use a transition, if you like. (Instant warp, lerp, fade out/in, etc.)
-#    - Save the point indice we picked, unless it's easy to figure out.
-# Update step:
-#  - Check the left and right adjacent Path3D points for distance.
-#  - If one is shorter than the current point, continue checking points in that
-#     direction until the distance increases from the last point checked.
-#  - This is your minimum distance to subject, and represents the new ideal camera
-#     position.
-#  - Lerp the track ball from its current point to the desired one.
-#    - travel_distance should be fine here, because I think Path3D allows this number to
-#       represent sub-pixel travel, i.e., I can describe distances between baked points
-#       and it will just pick the nearest one.
-#  - Use this new point to pick a pair of points: one closer to the target, one further
-#     away. This describes the subinterval range.
-#  - Using the Path3D's distance interval, find the remainder of the travel distance.
-#  - Using {remainder / interval}, get a normalized value for progress along the
-#     subinterval range.
-#  - Align the camera with whichever point was picked via lerp.
-#  - And finally, lerp the camera's position along the vector containing the distance
-#     remainder using the calculated subinterval range value.
+const CameraUtils = preload('uid://bj6uktkk7o67b')
+
+
+## A [Path3D] representing the track the camera rig should follow.
+@export var track: Path3D
+
+## A [PathFollow3D] to track position along the camera track.
+@export var trackball: PathFollow3D
+
+## A [Node3D] describing the camera rig's orientation at the point along the curve the
+## trackball is located.
+@export var perspective_node: Node3D
 
 ## The distance in 3D units used to determine which direction along the track the
 ## trackball must slide to maintain the shortest distance it can to its target.
 ## Local minima within distances smaller than this number may not be detected by the
 ## elastic-band system, but smaller numbers also demand much more work.
-@export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.05
-
-# TODO Having some curves be 20.0 and some be 6.0 (the vertical ones) doesn't really
-#  give us vertical lag. I want to experiment with giving the camera its own lerp values
-#  in addition to the trackball being lerped, or maybe just letting the track ball be
-#  instant again.
-## How quickly the camera follows the subject position on the curve.
-@export var lerp_rate := 20.0
-
-## A Path3D representing the track the camera rig should follow.
-@onready var track: Path3D = $Track
-
-## A PathFollow3D to track position along the camera track.
-@onready var trackball: PathFollow3D = $Track/TrackBall
-
-
-func _get_configuration_warnings() -> PackedStringArray:
-   var warnings: PackedStringArray = []
-
-   var track_node: Node = $Track
-   var ball_node: Node = $Track/TrackBall
-
-   if track_node is not Path3D:
-      warnings.append('This rig controller is missing a node at \'$Track\' of type Path3D.')
-   if ball_node is not PathFollow3D:
-      warnings.append('This rig controller is missing a node at \'$Track/TrackBall\' of type PathFollow3D.')
-
-   return warnings
+@export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.2
 
 
 func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
@@ -81,50 +39,28 @@ func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
    camera_rig.rotation = trackball.rotation
 
 
-# TODO Break these into several helper functions.
 func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
    var subject_position := _get_camera_rig_subject_local_position(camera_rig)
+   var increment := _get_tipping_direction(subject_position)
 
-   # Determine which direction to move along the curve in.
-   # TODO This block can be cleaned up, surely.
-   var z_distance := trackball.position.distance_to(subject_position)
-   var p_distance := track.curve \
-      .sample_baked(trackball.progress + tipping_distance, trackball.cubic_interp) \
-      .distance_to(subject_position)
-   var n_distance := track.curve \
-      .sample_baked(trackball.progress - tipping_distance, trackball.cubic_interp) \
-      .distance_to(subject_position)
+   if increment == 0:
+      # Quit early: we're already at the closest position.
+      return
 
-   if z_distance < p_distance and z_distance < n_distance:
-      return # Quit early: we're already at the closest position.
+   trackball.progress = _get_closest_curve_progress(subject_position, increment)
 
-   var increment := tipping_distance if p_distance < n_distance else -tipping_distance
-
-   # Iterate over the curve until we find a local minima.
-   var progress := trackball.progress
-   var next_progress := progress + increment
-
-   var next_is_shorter := func (a: float, b: float) -> bool:
-      var a_dist := track.curve.sample_baked(a, trackball.cubic_interp).distance_to(subject_position)
-      var b_dist := track.curve.sample_baked(b, trackball.cubic_interp).distance_to(subject_position)
-      return b_dist < a_dist
-
-   while next_is_shorter.call(progress, next_progress):
-      progress = next_progress
-      next_progress += increment
-
-   # Lerp the trackball to the new progress value.
-   trackball.progress = lerpf(trackball.progress, progress, lerp_rate * delta)
-   # TODO If I'm lerping trackball progress, how do I separate horizontal from vertical lerp rates?
-
-   # Set camera position.
-   camera_rig.global_position = trackball.global_position
-
-   var new_rotation = trackball.global_rotation
-   new_rotation.x = 0.0
-   new_rotation.z = 0.0
-   new_rotation.y -= PI / 2
-   camera_rig.global_rotation = new_rotation
+   # Assign new camera transform values.
+   camera_rig.global_position = CameraUtils.lerp_position(
+      camera_rig.global_position,
+      perspective_node.global_position,
+      Constants_Player.CAMERA_GROUND_LERP_RATE * delta,
+      Constants_Player.CAMERA_VERTICAL_LERP_RATE * delta,
+   )
+   camera_rig.global_rotation = CameraUtils.lerp_rotation(
+      camera_rig.global_rotation,
+      perspective_node.global_rotation,
+      Constants_Player.CAMERA_GROUND_LERP_RATE * delta,
+   )
 
 
 ## Returns a [Vector3] for the camera rig's subject's transform position in the camera
@@ -136,3 +72,52 @@ func _get_camera_rig_subject_local_position(camera_rig: CameraRig3D) -> Vector3:
    subject_position = track.to_local(subject_position)
    subject_position += Vector3.UP * 4 # TODO In place of any kind of displacement thing for now.
    return subject_position
+
+
+## Return a signed number (1, 0, or -1) representing which direction of the [Curve3D] has
+## a steeper incline toward the given `param subject_position`.
+func _get_tipping_direction(subject_position: Vector3) -> float:
+   var current_distance := trackball.position.distance_to(subject_position)
+
+   # 'Left' and 'right' here are just a semantic convenience.
+   var right_distance := track.curve \
+      .sample_baked(trackball.progress + tipping_distance, trackball.cubic_interp) \
+      .distance_to(subject_position)
+   var left_distance := track.curve \
+      .sample_baked(trackball.progress - tipping_distance, trackball.cubic_interp) \
+      .distance_to(subject_position)
+
+   if current_distance <= left_distance and current_distance <= right_distance:
+      return 0
+
+   return tipping_distance if right_distance > left_distance else -tipping_distance
+
+
+## Iterates from the current curve progress in the direction of `param increment` to find
+## a new progress value with the closest distance to `param subject_position`.
+## If `param increment` is zero, the current curve progress will be returned.
+func _get_closest_curve_progress(subject_position: Vector3, increment: float) -> float:
+   if is_zero_approx(increment):
+      return trackball.progress
+
+   var progress := trackball.progress
+   var next_progress := progress + increment
+
+   var progress_distance := _get_distance_to_subject(subject_position, progress)
+   var next_progress_distance := _get_distance_to_subject(subject_position, next_progress)
+
+   while next_progress_distance < progress_distance:
+      progress = next_progress
+      next_progress += increment
+
+      progress_distance = next_progress_distance
+      next_progress_distance = _get_distance_to_subject(subject_position, next_progress)
+
+   return progress
+
+
+## Returns the distance to `param subject_position` for a point on the [Curve3D] as
+## determined by `param progress` along the curve.
+func _get_distance_to_subject(subject_position: Vector3, progress: float) -> float:
+   progress = clampf(progress, 0.0, track.curve.get_baked_length())
+   return track.curve.sample_baked(progress, trackball.cubic_interp).distance_to(subject_position)
