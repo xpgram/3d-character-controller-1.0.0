@@ -26,7 +26,7 @@ const CameraUtils = preload('uid://bj6uktkk7o67b')
 ## trackball must slide to maintain the shortest distance it can to its target.
 ## Local minima within distances smaller than this number may not be detected by the
 ## elastic-band system, but smaller numbers also demand much more work.
-@export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.2
+@export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.05
 
 
 func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
