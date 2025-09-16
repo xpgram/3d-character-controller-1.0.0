@@ -35,8 +35,8 @@ func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
 
    trackball.progress = closest_offset
    
-   camera_rig.position = trackball.position
-   camera_rig.rotation = trackball.rotation
+   camera_rig.global_position = perspective_node.global_position
+   camera_rig.global_rotation = perspective_node.global_rotation
 
 
 func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
