@@ -271,7 +271,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 collision_layer = 4
 collision_mask = 0
 monitoring = false
-priority = 1
 script = ExtResource("2_71krn")
 metadata/_custom_type_script = "uid://dbspgtoc6xewx"
 
@@ -285,6 +284,7 @@ script = ExtResource("3_lmxcu")
 track = NodePath("Track")
 trackball = NodePath("Track/TrackBall")
 perspective_node = NodePath("Track/TrackBall/CameraPerspective")
+controller_priority = 1
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D2/CameraRigTrackController3D"]
