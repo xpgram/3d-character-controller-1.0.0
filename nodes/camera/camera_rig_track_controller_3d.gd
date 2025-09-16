@@ -31,7 +31,7 @@ const CameraUtils = preload('uid://bj6uktkk7o67b')
 
 func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
    var subject_position := _get_camera_rig_subject_local_position(camera_rig)
-   var closest_offset := track.curve.get_closest_offset(subject_position) # TODO What is an 'offset'?
+   var closest_offset := track.curve.get_closest_offset(subject_position)
 
    trackball.progress = closest_offset
    
