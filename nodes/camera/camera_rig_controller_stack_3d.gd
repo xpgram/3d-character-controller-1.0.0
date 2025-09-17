@@ -34,6 +34,11 @@ func _on_camera_region_entered(_target: CameraTarget3D, region: CameraRegion3D):
    _controllers.append(region.camera_controller)
    _resort_controllers()
 
+   # TODO on_enter and on_resume and on_exit
+   # var current_controller := get_controller()
+   # if current_controller == region.camera_controller:
+      # current_controller.on_enter_transition(camera_rig)
+
 
 func _on_camera_region_exited(_target: CameraTarget3D, region: CameraRegion3D):
    _controllers.erase(region.camera_controller)
