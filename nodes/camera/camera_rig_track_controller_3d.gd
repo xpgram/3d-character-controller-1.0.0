@@ -28,6 +28,55 @@ const CameraUtils = preload('uid://bj6uktkk7o67b')
 ## elastic-band system, but smaller numbers also demand much more work.
 @export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.05
 
+@export_group('Curved Plane Settings')
+
+## The up direction for the curve's plane orientation.
+##
+## Only the perpendicular component to the curve will be used to determine the up
+## direction, and specifically defines the orientation for the point at `progress == 0.0`;
+## this direction will rotate as the curve does to maintain a consistent box width.
+##
+## *WARNING:* This value should not be parallel to the curve at `progress == 0.0`.
+@export
+var up_direction := Vector3.UP
+
+## The distance above the curve that is considered a valid camera position.
+## 'Above' is determined via `property up_direction`.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var height_above_curve := 0.0
+
+## The distance below the curve that is considered a valid camera position.
+## 'Below' is determined via `property up_direction`.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var height_below_curve := 0.0
+
+## Whether the curve's tilt number controls the tilt of the camera plane's up direction
+## instead of the tilt for the camera itself.
+@export
+var tilt_controls_plane := false
+
+# TODO If height above == below == 0.0, skip box related operations. Or at least make them
+#  unnoticeable.
+# TODO Pseudo code:
+#  Get subject's nearest curve offset.
+#  Determine Up dimension.
+#  Get nearest point along Up dimension.
+#  Clamp to range defined by height above and below.
+#  This is your plane position.
+# TODO Plane curves with track curve.
+#  Height is always a distance perpendicular to the curve, in the direction of up_dir.
+#  Using the PathFollow's forward basis, slide the up_dir and normalize: this is the
+#  progress-relative up_dir.
+#  In case PathFollow rotation mode isn't XYZ, use curve.sample_baked_with_rotation()
+#  instead.
+# TODO Left and right side flare-outs.
+#  An inverse bevel to aid in blending smaller boxes into larger ones.
+#  NOTE: Experiment with sharp corners first to see if this is even necessary.
+#   If the player is traveling slowly, it shouldn't be.
+#   If the player is fast, then lerping the camera ought to create this effect anyway.
+#   Funnel-like rooms should probably just have a large box anyway. The camera is always
+#     clamped by the subject's actual range of movement.
+
 
 func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
    var subject_position := _get_camera_rig_subject_local_position(camera_rig)
@@ -35,6 +84,10 @@ func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
 
    trackball.progress = closest_offset
    
+   # TODO Setup initial conditions sets a lerp target, not an instant transition.
+   #  skip_animation() sets an instant transition.
+   #  These should be controllable by on_enter() and on_resume().
+   #  on_enter() should still be called if a region with the same priority is resumed, yes?
    camera_rig.global_position = perspective_node.global_position
    camera_rig.global_rotation = perspective_node.global_rotation
 
