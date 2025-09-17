@@ -76,6 +76,8 @@ var tilt_controls_plane := false
 #   If the player is fast, then lerping the camera ought to create this effect anyway.
 #   Funnel-like rooms should probably just have a large box anyway. The camera is always
 #     clamped by the subject's actual range of movement.
+# TODO Save these settings as a resource?
+#  So I can save and modify a standard "hallway_dimensions.tres" or some such.
 
 
 func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
