@@ -76,7 +76,7 @@ func _on_camera_region_entered(_target: CameraTarget3D, region: CameraRegion3D):
    else:
       assert(_last_chosen_controller == current_controller, \
          'Region entered was not selected as new camera controller, but controller changed anyway.')
-   
+
    # Update last controller reference
    _last_chosen_controller = current_controller
 
@@ -91,7 +91,7 @@ func _on_camera_region_exited(_target: CameraTarget3D, region: CameraRegion3D):
       _last_chosen_controller.on_exit_transition(_camera_rig)
       current_controller.setup_initial_rig_conditions(_camera_rig)
       current_controller.on_resume_transition(_camera_rig)
-   
+
    # Update last controller reference
    _last_chosen_controller = current_controller
 
