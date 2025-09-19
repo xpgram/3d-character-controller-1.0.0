@@ -32,10 +32,6 @@ var focal_point := Vector3.ZERO
 @export_custom(PROPERTY_HINT_NONE, 'radians, suffix:°')
 var head_rotation := Vector3.ZERO
 
-# TODO Make this a parent node instead of a component I have to verify.
-## (NULLABLE) An object which yields a [CameraRigController3D] when asked.
-var _camera_controller_service: CameraRigControllerStack3D
-
 # FIXME These @onready references force an initialization order among the Rig's siblings.
 #  If the subject is a Player3D, and it needs to know what direction the camera is facing
 #  to handle player input properly, in its own _ready step specifically, then it must
@@ -67,30 +63,12 @@ var _camera_controller_service: CameraRigControllerStack3D
 ## A light attached to the camera, pointed in the same direction.
 @onready var camera_spotlight: SpotLight3D = %SpotLight3D
 
-# TODO This is a patch solution until I make ControllerStack a parent node to this one.
-var _last_camera_controller: CameraRigController3D
-
 
 func _ready() -> void:
-   # TODO If controller is a parent node, this shouldn't be necessary.
-   for child in get_children():
-      if child is CameraRigControllerStack3D:
-         _camera_controller_service = child
-         break
-
    _update_transforms()
 
 
 func _physics_process(delta: float) -> void:
-   if _camera_controller_service:
-      var camera_controller := _camera_controller_service.get_controller()
-
-      if _last_camera_controller != camera_controller:
-         camera_controller.setup_initial_rig_conditions(self)
-      _last_camera_controller = camera_controller
-
-      camera_controller.operate_rig(delta, self)
-
    for behavior in camera_behaviors:
       if behavior.enabled:
          behavior.update_camera_rig(delta, self)
