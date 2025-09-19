@@ -29,7 +29,7 @@ var _controllers: Array[CameraRigController3D] = []
 
 ## (NULLABLE) The last known active camera controller. Used to determine whether on_enter
 ## or on_resume methods should fire.
-var _last_chosen_controller: CameraRigController3D
+var _last_chosen_controller: CameraRigController3D = _default_rig_controller
 
 ## A reference to the child [CameraRig3D] being controlled.
 @onready var _camera_rig: CameraRig3D = $CameraRig3D
