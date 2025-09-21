@@ -42,6 +42,14 @@ var plane_height := 0.0
 @export
 var tilt_controls_plane := false
 
+## A [Vector3] describing a displacement of camera position used to smoothly interpolate
+## between the last position of another camera controller and this one.
+var transition_displacement_position := Vector3.ZERO
+
+## A [Vector3] describing a displacement of camera rotation used to smoothly interpolate
+## between the last rotation of another camera controller and this one.
+var transition_displacement_rotation := Vector3.ZERO
+
 # TODO Left and right side flare-outs.
 #  An inverse bevel to aid in blending smaller boxes into larger ones.
 #  NOTE: Experiment with sharp corners first to see if this is even necessary.
@@ -61,8 +69,12 @@ func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
 
    var vertical_vector := _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
 
-   camera_rig.global_position = perspective_node.global_position + vertical_vector
-   camera_rig.global_rotation = perspective_node.global_rotation
+   var new_position := perspective_node.global_position + vertical_vector
+   var new_rotation := perspective_node.global_rotation
+
+   # Set vectors to old transforms.
+   transition_displacement_position = camera_rig.global_position - new_position
+   transition_displacement_rotation = camera_rig.global_rotation - new_rotation
 
 
 func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
@@ -74,16 +86,30 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
 
    var vertical_vector := _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
 
+   # Lerp transition vectors to zero.
+   # TODO Magic number
+   # TODO This should maybe go in another function.
+   # TODO Should this lerp-to pattern be handled in the parent class?
+   transition_displacement_position = transition_displacement_position.lerp(Vector3.ZERO, 6.0 * delta)
+   transition_displacement_rotation = CameraUtils.lerp_rotation(
+      transition_displacement_rotation,
+      Vector3.ZERO,
+      6.0 * delta,
+   )
+
    # Assign new camera transform values.
+   var new_global_position := perspective_node.global_position + vertical_vector + transition_displacement_position
+   var new_global_rotation := perspective_node.global_rotation + transition_displacement_rotation
+
    camera_rig.global_position = CameraUtils.lerp_position(
       camera_rig.global_position,
-      perspective_node.global_position + vertical_vector,
+      new_global_position,
       Constants_Player.CAMERA_GROUND_LERP_RATE * delta,
       Constants_Player.CAMERA_VERTICAL_LERP_RATE * delta,
    )
    camera_rig.global_rotation = CameraUtils.lerp_rotation(
       camera_rig.global_rotation,
-      perspective_node.global_rotation,
+      new_global_rotation,
       Constants_Player.CAMERA_GROUND_LERP_RATE * delta,
    )
 
