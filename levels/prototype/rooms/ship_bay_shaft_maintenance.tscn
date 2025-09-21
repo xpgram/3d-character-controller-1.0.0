@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://jked3u40a4d3"]
+[gd_scene load_steps=11 format=3 uid="uid://jked3u40a4d3"]
 
 [ext_resource type="Material" uid="uid://da188d7yrcfr8" path="res://level/platforms.tres" id="1_y8lal"]
 [ext_resource type="Script" uid="uid://dbspgtoc6xewx" path="res://nodes/camera/camera_region_3d.gd" id="2_lwxj3"]
@@ -11,17 +11,34 @@ alpha_antialiasing_mode = 0
 albedo_color = Color(0, 0, 0, 0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o7v8h"]
-size = Vector3(15.5, 17, 3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ghwkc"]
-size = Vector3(22, 3, 3)
+size = Vector3(4, 3, 3)
 
 [sub_resource type="Curve3D" id="Curve3D_wmrdh"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, -5, 0, 0, -5, 0, 0, -5, 0, 0, 1, 0, 0, -5, 14, 0, -1, 0, 0, 0, 0, 0, 3, 14, 0),
-"tilts": PackedFloat32Array(0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -3, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
 }
-point_count = 4
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lwxj3"]
+size = Vector3(8, 3, 3.5)
+
+[sub_resource type="Curve3D" id="Curve3D_iyb51"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -7, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iyb51"]
+size = Vector3(15, 17, 3)
+
+[sub_resource type="Curve3D" id="Curve3D_o7v8h"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -12, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="ShipBay_ShaftMaintenance" type="Node3D"]
 
@@ -138,13 +155,8 @@ script = ExtResource("2_lwxj3")
 metadata/_custom_type_script = "uid://dbspgtoc6xewx"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 9, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4, -3)
 shape = SubResource("BoxShape3D_o7v8h")
-debug_color = Color(0.7, 0.7, 0, 1)
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="CameraRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 18, -3)
-shape = SubResource("BoxShape3D_ghwkc")
 debug_color = Color(0.7, 0.7, 0, 1)
 
 [node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D" node_paths=PackedStringArray("track", "trackball", "perspective_node")]
@@ -164,3 +176,66 @@ rotation_mode = 0
 loop = false
 
 [node name="CameraPerspective" type="Node3D" parent="CameraRegion3D/CameraRigTrackController3D/Track/TrackBall"]
+
+[node name="CameraRegion3D2" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 14, 0)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_lwxj3")
+metadata/_custom_type_script = "uid://dbspgtoc6xewx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRegion3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, -3.25)
+shape = SubResource("BoxShape3D_lwxj3")
+debug_color = Color(0.7, 0.7, 0, 1)
+
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D2" node_paths=PackedStringArray("track", "trackball", "perspective_node")]
+script = ExtResource("3_iyb51")
+track = NodePath("Track")
+trackball = NodePath("Track/TrackBall")
+perspective_node = NodePath("Track/TrackBall/CameraPerspective")
+metadata/_custom_type_script = "uid://kqwmynse2i8e"
+
+[node name="Track" type="Path3D" parent="CameraRegion3D2/CameraRigTrackController3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 4.5, -4)
+curve = SubResource("Curve3D_iyb51")
+
+[node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D2/CameraRigTrackController3D/Track"]
+transform = Transform3D(0.99999, 0, 0, 0, 0.999987, 0, 0, 0, 0.999994, 0, 0, 0)
+rotation_mode = 0
+loop = false
+
+[node name="CameraPerspective" type="Node3D" parent="CameraRegion3D2/CameraRigTrackController3D/Track/TrackBall"]
+
+[node name="CameraRegion3D3" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("2_lwxj3")
+metadata/_custom_type_script = "uid://dbspgtoc6xewx"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRegion3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, -3)
+shape = SubResource("BoxShape3D_iyb51")
+debug_color = Color(0.7, 0.7, 0, 1)
+
+[node name="CameraRigTrackController3D" type="Node3D" parent="CameraRegion3D3" node_paths=PackedStringArray("track", "trackball", "perspective_node")]
+script = ExtResource("3_iyb51")
+track = NodePath("Track")
+trackball = NodePath("Track/TrackBall")
+perspective_node = NodePath("Track/TrackBall/CameraPerspective")
+plane_height = 14.0
+controller_priority = 1
+metadata/_custom_type_script = "uid://kqwmynse2i8e"
+
+[node name="Track" type="Path3D" parent="CameraRegion3D3/CameraRigTrackController3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 11.5, -4)
+curve = SubResource("Curve3D_o7v8h")
+
+[node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D3/CameraRigTrackController3D/Track"]
+transform = Transform3D(0.99999, 0, 0, 0, 0.999987, 0, 0, 0, 0.999994, 0, 0, 0)
+rotation_mode = 0
+loop = false
+
+[node name="CameraPerspective" type="Node3D" parent="CameraRegion3D3/CameraRigTrackController3D/Track/TrackBall"]
