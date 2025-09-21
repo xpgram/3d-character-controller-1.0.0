@@ -59,7 +59,9 @@ func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
 
    trackball.progress = closest_offset
 
-   camera_rig.global_position = perspective_node.global_position
+   var vertical_vector := _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
+
+   camera_rig.global_position = perspective_node.global_position + vertical_vector
    camera_rig.global_rotation = perspective_node.global_rotation
 
 
@@ -69,8 +71,8 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
 
    if increment != 0:
       trackball.progress = _get_closest_curve_progress(subject_position, increment)
-   
-   var vertical_vector = _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
+
+   var vertical_vector := _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
 
    # Assign new camera transform values.
    camera_rig.global_position = CameraUtils.lerp_position(
