@@ -15,7 +15,7 @@ size = Vector3(31, 9, 10)
 
 [sub_resource type="Curve3D" id="Curve3D_82d1h"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 20, 0, 0, 0, 0, 0, -8, 0, 0, 6, 0, 0, 24, 2, 0),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 24, 0, 0),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
@@ -114,6 +114,7 @@ script = ExtResource("3_e7g8y")
 track = NodePath("Track")
 trackball = NodePath("Track/TrackBall")
 perspective_node = NodePath("Track/TrackBall/CameraPerspective")
+plane_height = 4.0
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]

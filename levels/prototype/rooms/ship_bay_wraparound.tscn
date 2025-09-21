@@ -15,7 +15,7 @@ size = Vector3(3.5, 9, 14)
 
 [sub_resource type="Curve3D" id="Curve3D_o5vah"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 1.5, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0, 1, 2, 0, 4, 0, 0, -1, 0, 0, 2, 2, 0, 7, 1.5, 0, 0, 0, 0, 0, 0, 0, 11),
+"points": PackedVector3Array(0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 1, 0, 1, 0, 0, -1, 0, 0, 1, 1, 0, 8, 1, 0, 0, 0, 0, 0, 0, 0, 9),
 "tilts": PackedFloat32Array(0, 0, 0, 0)
 }
 point_count = 4
@@ -91,7 +91,7 @@ controller_priority = 2
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D/CameraRigTrackController3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4.5, -3)
 curve = SubResource("Curve3D_o5vah")
 
 [node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D/CameraRigTrackController3D/Track"]

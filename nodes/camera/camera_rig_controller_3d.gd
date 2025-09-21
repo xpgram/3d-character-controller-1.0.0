@@ -13,6 +13,8 @@ var controller_priority := 0
 #  they want, and the ControllerStack will actually process it. I'll probably need to
 #  write a new CameraTransition resource to handle the phase-in, setup, phase-out process.
 
+# TODO Should this be provided a reference to the 'from' Controller? In case the
+#  transition might depend on priority level or some such.
 ## To be run when this controller is given control of a [CameraRig3D] at the same time
 ## that a [CameraTarget3D] entered this node's parent [CameraRegion3D].
 func on_enter_transition(_camera_rig: CameraRig3D) -> void:

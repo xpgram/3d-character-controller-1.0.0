@@ -28,14 +28,40 @@ const CameraUtils = preload('uid://bj6uktkk7o67b')
 ## elastic-band system, but smaller numbers also demand much more work.
 @export_range(0.0, 0.5, 0.01, 'or_greater') var tipping_distance := 0.05
 
+@export_group('Curved Plane Settings')
+
+## The distance above and below the curve that is considered a valid camera position.
+## The orientation of this plane, the up and down directions, are taken from the basis
+## vectors of the `property perspective_node`.
+@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
+var plane_height := 0.0
+
+## Whether the curve's tilt number controls the tilt of the camera plane's up direction
+## instead of the tilt for the camera itself.
+## This value does not prevent [Curve3D] tilt from angling the camera perspective.
+@export
+var tilt_controls_plane := false
+
+# TODO Left and right side flare-outs.
+#  An inverse bevel to aid in blending smaller boxes into larger ones.
+#  NOTE: Experiment with sharp corners first to see if this is even necessary.
+#   If the player is traveling slowly, it shouldn't be.
+#   If the player is fast, then lerping the camera ought to create this effect anyway.
+#   Funnel-like rooms should probably just have a large box anyway. The camera is always
+#     clamped by the subject's actual range of movement.
+# TODO Save these settings as a resource?
+#  So I can save and modify a standard "hallway_dimensions.tres" or some such.
+
 
 func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
    var subject_position := _get_camera_rig_subject_local_position(camera_rig)
    var closest_offset := track.curve.get_closest_offset(subject_position)
 
    trackball.progress = closest_offset
-   
-   camera_rig.global_position = perspective_node.global_position
+
+   var vertical_vector := _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
+
+   camera_rig.global_position = perspective_node.global_position + vertical_vector
    camera_rig.global_rotation = perspective_node.global_rotation
 
 
@@ -46,10 +72,12 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
    if increment != 0:
       trackball.progress = _get_closest_curve_progress(subject_position, increment)
 
+   var vertical_vector := _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
+
    # Assign new camera transform values.
    camera_rig.global_position = CameraUtils.lerp_position(
       camera_rig.global_position,
-      perspective_node.global_position,
+      perspective_node.global_position + vertical_vector,
       Constants_Player.CAMERA_GROUND_LERP_RATE * delta,
       Constants_Player.CAMERA_VERTICAL_LERP_RATE * delta,
    )
@@ -110,6 +138,32 @@ func _get_closest_curve_progress(subject_position: Vector3, increment: float) ->
       next_progress_distance = _get_distance_to_subject(subject_position, next_progress)
 
    return progress
+
+
+## From a point on the curve at `param curve_progress`, return the nearest point to
+## `param subject_position` on its local vertical axis.
+func _get_vertical_vector_at_curve_progress(subject_position: Vector3, curve_progress: float) -> Vector3:
+   if plane_height == 0.0:
+      return Vector3.ZERO
+
+   var sampled_transform := track.curve.sample_baked_with_rotation(
+      curve_progress,
+      trackball.cubic_interp,
+      tilt_controls_plane,
+   )
+   var forward_vector := sampled_transform.basis.z
+   var rightward_vector := sampled_transform.basis.x
+
+   # From a point on the curve, get a point on its local vertical axis.
+   var vertical_vector := subject_position - sampled_transform.origin
+   vertical_vector = vertical_vector.slide(forward_vector)
+   vertical_vector = vertical_vector.slide(rightward_vector)
+
+   # Cap the point to the length limit. The vector's distance along the vertical axis can
+   # be positive or negative, so we use half the plane height.
+   vertical_vector = vertical_vector.limit_length(plane_height * 0.5)
+
+   return vertical_vector
 
 
 ## Returns the distance to `param subject_position` for a point on the [Curve3D] as
