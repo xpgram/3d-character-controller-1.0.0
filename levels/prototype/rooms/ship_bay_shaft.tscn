@@ -288,7 +288,7 @@ controller_priority = 1
 metadata/_custom_type_script = "uid://kqwmynse2i8e"
 
 [node name="Track" type="Path3D" parent="CameraRegion3D2/CameraRigTrackController3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 4, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 4.5, -3)
 curve = SubResource("Curve3D_xk8nw")
 
 [node name="TrackBall" type="PathFollow3D" parent="CameraRegion3D2/CameraRigTrackController3D/Track"]
