@@ -30,45 +30,18 @@ const CameraUtils = preload('uid://bj6uktkk7o67b')
 
 @export_group('Curved Plane Settings')
 
-## The up direction for the curve's plane orientation.
-##
-## Only the perpendicular component to the curve will be used to determine the up
-## direction, and specifically defines the orientation for the point at `progress == 0.0`;
-## this direction will rotate as the curve does to maintain a consistent box width.
-##
-## *WARNING:* This value should not be parallel to the curve at `progress == 0.0`.
-@export
-var up_direction := Vector3.UP
-
-## The distance above the curve that is considered a valid camera position.
-## 'Above' is determined via `property up_direction`.
+## The distance above and below the curve that is considered a valid camera position.
+## The orientation of this plane, the up and down directions, are taken from the basis
+## vectors of the `property perspective_node`.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:m')
-var height_above_curve := 0.0
-
-## The distance below the curve that is considered a valid camera position.
-## 'Below' is determined via `property up_direction`.
-@export_custom(PROPERTY_HINT_NONE, 'suffix:m')
-var height_below_curve := 0.0
+var plane_height := 0.0
 
 ## Whether the curve's tilt number controls the tilt of the camera plane's up direction
 ## instead of the tilt for the camera itself.
+## This value does not prevent [Curve3D] tilt from angling the camera perspective.
 @export
 var tilt_controls_plane := false
 
-# TODO If height above == below == 0.0, skip box related operations. Or at least make them
-#  unnoticeable.
-# TODO Pseudo code:
-#  Get subject's nearest curve offset.
-#  Determine Up dimension.
-#  Get nearest point along Up dimension.
-#  Clamp to range defined by height above and below.
-#  This is your plane position.
-# TODO Plane curves with track curve.
-#  Height is always a distance perpendicular to the curve, in the direction of up_dir.
-#  Using the PathFollow's forward basis, slide the up_dir and normalize: this is the
-#  progress-relative up_dir.
-#  In case PathFollow rotation mode isn't XYZ, use curve.sample_baked_with_rotation()
-#  instead.
 # TODO Left and right side flare-outs.
 #  An inverse bevel to aid in blending smaller boxes into larger ones.
 #  NOTE: Experiment with sharp corners first to see if this is even necessary.
@@ -85,11 +58,7 @@ func setup_initial_rig_conditions(camera_rig: CameraRig3D) -> void:
    var closest_offset := track.curve.get_closest_offset(subject_position)
 
    trackball.progress = closest_offset
-   
-   # TODO Setup initial conditions sets a lerp target, not an instant transition.
-   #  skip_animation() sets an instant transition.
-   #  These should be controllable by on_enter() and on_resume().
-   #  on_enter() should still be called if a region with the same priority is resumed, yes?
+
    camera_rig.global_position = perspective_node.global_position
    camera_rig.global_rotation = perspective_node.global_rotation
 
@@ -100,11 +69,13 @@ func operate_rig(delta: float, camera_rig: CameraRig3D) -> void:
 
    if increment != 0:
       trackball.progress = _get_closest_curve_progress(subject_position, increment)
+   
+   var vertical_vector = _get_vertical_vector_at_curve_progress(subject_position, trackball.progress)
 
    # Assign new camera transform values.
    camera_rig.global_position = CameraUtils.lerp_position(
       camera_rig.global_position,
-      perspective_node.global_position,
+      perspective_node.global_position + vertical_vector,
       Constants_Player.CAMERA_GROUND_LERP_RATE * delta,
       Constants_Player.CAMERA_VERTICAL_LERP_RATE * delta,
    )
@@ -165,6 +136,32 @@ func _get_closest_curve_progress(subject_position: Vector3, increment: float) ->
       next_progress_distance = _get_distance_to_subject(subject_position, next_progress)
 
    return progress
+
+
+## From a point on the curve at `param curve_progress`, return the nearest point to
+## `param subject_position` on its local vertical axis.
+func _get_vertical_vector_at_curve_progress(subject_position: Vector3, curve_progress: float) -> Vector3:
+   if plane_height == 0.0:
+      return Vector3.ZERO
+
+   var sampled_transform := track.curve.sample_baked_with_rotation(
+      curve_progress,
+      trackball.cubic_interp,
+      tilt_controls_plane,
+   )
+   var forward_vector := sampled_transform.basis.z
+   var rightward_vector := sampled_transform.basis.x
+
+   # From a point on the curve, get a point on its local vertical axis.
+   var vertical_vector := subject_position - sampled_transform.origin
+   vertical_vector = vertical_vector.slide(forward_vector)
+   vertical_vector = vertical_vector.slide(rightward_vector)
+
+   # Cap the point to the length limit. The vector's distance along the vertical axis can
+   # be positive or negative, so we use half the plane height.
+   vertical_vector = vertical_vector.limit_length(plane_height * 0.5)
+
+   return vertical_vector
 
 
 ## Returns the distance to `param subject_position` for a point on the [Curve3D] as
