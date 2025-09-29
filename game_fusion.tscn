@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bvc1xx2q0t45o"]
+[gd_scene load_steps=16 format=3 uid="uid://bvc1xx2q0t45o"]
 
 [ext_resource type="Script" uid="uid://bcxwagdd6v36k" path="res://game.gd" id="1_51kip"]
 [ext_resource type="PackedScene" uid="uid://ctrh2j33hfbgy" path="res://global_state/global_state.tscn" id="2_3uc2i"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://ekrrutix6sls" path="res://resources/camera/rig_behaviors/camera_behavior_snap_focal_to_subject.gd" id="8_crnhc"]
 [ext_resource type="Script" uid="uid://bp4614uha1mou" path="res://resources/camera/rig_behaviors/camera_behavior_tilt_camera.gd" id="9_evd1j"]
 [ext_resource type="Script" uid="uid://bsyjuq3vn50jq" path="res://nodes/camera/camera_rig_controller_stack_3d.gd" id="10_q051v"]
+[ext_resource type="Script" uid="uid://dq0r5wyevowek" path="res://resources/camera/crc3d.gd" id="12_evd1j"]
 
 [sub_resource type="Resource" id="Resource_xdyyj"]
 script = ExtResource("7_eydsl")
@@ -71,3 +72,6 @@ camera_behaviors = Array[ExtResource("6_xgrio")]([SubResource("Resource_xdyyj"),
 [node name="Player3D" parent="." node_paths=PackedStringArray("camera_rig") instance=ExtResource("5_ascb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -1)
 camera_rig = NodePath("../CameraRigControllerStack3D/CameraRig3D")
+
+[node name="CRC3D" type="Node3D" parent="."]
+script = ExtResource("12_evd1j")
